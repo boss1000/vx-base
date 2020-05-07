@@ -77,23 +77,5 @@
     "svg-sprite-loader": "^4.1.6",
     "svgtofont": "^1.5.1",
     "webpack-spritesmith": "^1.0.2"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.+(js|ts|tsx|md|css|sass|less|graphql|yml|yaml|scss|json|vue)": [
-      "git add"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-customizable"
-    },
-    "cz-customizable": {
-      "config": "./.cz-config.js"
-    }
   }
 }
