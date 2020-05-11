@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import 'vant/lib/index.less'
 // 1.Tabbar
 import { Tabbar, TabbarItem } from 'vant'
 Vue.use(Tabbar).use(TabbarItem)
