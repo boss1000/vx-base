@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <van-nav-bar class="commonTitle" title="登陆" />
     <div class="loginBox">
       <div class="auth-form">
         <van-tabs v-model="active" animated>
@@ -139,8 +140,36 @@ export default {
       countDown: 0, // 倒计时
       active: 0,
       login: {
-        title: "登陆",
-        resgin: "注册"
+        title: "登录",
+        phoneNumber: "手机号",
+        phoneNumberNotCorrect: "手机号格式不正确",
+        phoneNumberNotEmpty: "手机号不能为空",
+        passNumberNotEmpty: "密码不能为空",
+        phoneInput: "请输入手机号",
+        pass: "密码",
+        passTip: "请输入密码",
+        varify: "请输入验证码",
+        otherMethods: "其他登录方式",
+        wechat: "微信登录",
+        qqchant: "QQ登录",
+        tipTile: "温馨提示：",
+        tipContent: "未注册的手机号，登录时将自动注册，且代表同意",
+        tip: "用户协议",
+        tipProcy: "隐私策略",
+        login: "登录",
+        resgin: "注册",
+        passTip2: "请输入密码(不少于6位)",
+        sendVerify: "发送验证码",
+        hasSend: "已发送",
+        phoneVerify: "账号密码登录",
+        smsMessage: "短信验证码登录",
+        switchLoginMsg: "账号密码登录",
+        messageSuccess: "验证码获取成功,请在输入框输入",
+        pleaseInputCorrectPhoneNumber: "请输入正确的手机号",
+        pleaseInputCorrectVerifyumber: "请输入正确的验证码",
+        otherWechat: "微信登录-暂未完成",
+        otherQQ: "QQ登录-暂未完成",
+        message: "验证码:"
       },
       login_userName: "", // 用户名
       login_password: "", // 用户密码
@@ -343,21 +372,25 @@ export default {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
+  background-color: #e4dada80;
+  display: flex;
+  flex-direction: column;
+  .commonTitle {
+    margin-bottom: 15px;
+  }
   .loginBox {
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: center;
-    position: fixed;
+    flex: 1;
     opacity: 0.95;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     z-index: 500;
+    background-color: #fff;
     .auth-form {
       position: relative;
-      padding: 2rem;
-      width: 26.5rem;
+      top: 100px;
+      padding: 1rem;
+      width: 28.5rem;
       max-width: 90%;
       font-size: 1.167rem;
       background-color: #fff;
