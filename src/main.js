@@ -10,10 +10,12 @@ import waterfall from 'vue-waterfall2'
 import '@/plugins/vant'
 // 全局引入rem
 import '@/config/rem'
-// 全局引入 Reset-css
-import 'reset-css'
+// 移动端适配
+import 'lib-flexible/flexible.js'
 //  全局引入 过滤器
 import '@/config/filter'
+// import './assets/iconfont/iconfont.css'
+import './icons' // icon
 
 Vue.config.productionTip = false
 

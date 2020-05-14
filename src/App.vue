@@ -22,5 +22,6 @@ window.onload = function () {
 #app {
   width: 100%;
   height: 100%;
+  font-family: Helvetica;
 }
 </style>

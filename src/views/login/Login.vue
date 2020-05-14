@@ -388,8 +388,8 @@ export default {
     background-color: #fff;
     .auth-form {
       position: relative;
-      top: 100px;
-      padding: 1rem;
+      top: 20px;
+      padding: 18px;
       width: 28.5rem;
       max-width: 90%;
       font-size: 1.167rem;
@@ -424,7 +424,7 @@ export default {
     }
     .switchLogin {
       margin-top: 1rem;
-      font-size: 0.78rem;
+      font-size: 16px;
     }
   }
 }
