@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../views/Home.vue'
 
 import state from '../store/index';
 Vue.use(Router)
@@ -11,16 +10,35 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-const routes = [
-  {
+const routes = [{
     path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/About.vue')
+    redirect: '/dashboard',
+    // 是否数据缓存
+    meta: {
+      keepAlive: true
+    }
+  }, {
+    // 根页面 
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../views/dashboard'),
+    children: [{
+      path: '/dashboard',
+      redirect: '/dashboard/home',
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      },
+    }, {
+      // 主页
+      path: 'home',
+      name: 'home',
+      component: () => import('../views/home'),
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
+    }]
   },
   {
     // 注册登录
