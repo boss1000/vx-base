@@ -210,3 +210,12 @@ import {
   Overlay
 } from 'vant'
 Vue.use(Overlay)
+
+import { Col, Row } from 'vant';
+
+Vue.use(Col);
+Vue.use(Row);
+
+import { Image as VanImage } from 'vant';
+
+Vue.use(VanImage);

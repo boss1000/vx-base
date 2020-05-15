@@ -1,8 +1,14 @@
 <template>
   <div id="dashboard">
+    <!-- 缓存界面选择加载 -->
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" />
     <van-tabbar
       v-model="active"
       :safe-area-inset-bottom="true"
+      :placeholder="true"
       @change="tabchange"
       class="tabbarNav"
     >
@@ -13,12 +19,6 @@
         </template>
       </van-tabbar-item>
     </van-tabbar>
-
-    <!-- 缓存界面选择加载 -->
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive" />
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive" />
   </div>
 </template>
 
@@ -96,7 +96,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .tabbarNav {
-  padding-top: 10px;
+  // padding-top: 10px;
   border-top: solid 1px #ccc;
 }
 /*转场动画*/
