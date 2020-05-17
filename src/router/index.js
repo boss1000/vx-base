@@ -28,68 +28,77 @@ const router = new Router({
     }
   },
   routes: [{
-      path: '/',
-      redirect: '/dashboard',
+    path: '/',
+    redirect: '/dashboard',
+    // 是否数据缓存
+    meta: {
+      keepAlive: true
+    }
+  }, {
+    // 根页面 
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../views/dashboard'),
+    children: [{
+      path: '/dashboard',
+      redirect: '/dashboard/home',
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      },
+    }, {
+      // 主页
+      path: 'home',
+      name: 'home',
+      component: Home,
       // 是否数据缓存
       meta: {
         keepAlive: true
       }
     }, {
-      // 根页面 
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('../views/dashboard'),
-      children: [{
-        path: '/dashboard',
-        redirect: '/dashboard/home',
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        },
-      }, {
-        // 主页
-        path: 'home',
-        name: 'home',
-        component: Home,
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 楼盘
-        path: 'build',
-        name: 'build',
-        component: Build,
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 地图找房
-        path: 'location',
-        name: 'location',
-        component: Location,
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 用户中心
-        path: 'mine',
-        name: 'mine',
-        component: Mine,
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }]
-    },
-    {
-      // 注册登录
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/login/Login.vue')
-    }
+      // 楼盘
+      path: 'build',
+      name: 'build',
+      component: Build,
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
+    }, {
+      // 地图找房
+      path: 'location',
+      name: 'location',
+      component: Location,
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
+    }, {
+      // 用户中心
+      path: 'mine',
+      name: 'mine',
+      component: Mine,
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      },
+    }, {
+      // 最新资讯
+      path: 'newInfo',
+      name: 'newInfo',
+      component: () => import('../views/newInfo'),
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
+    }]
+  },
+  {
+    // 注册登录
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/login/Login.vue')
+  }
   ]
 })
 

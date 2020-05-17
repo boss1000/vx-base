@@ -219,3 +219,16 @@ Vue.use(Row);
 import { Image as VanImage } from 'vant';
 
 Vue.use(VanImage);
+
+import { Search } from 'vant';
+
+Vue.use(Search)
+
+import { DropdownMenu, DropdownItem } from 'vant';
+
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+
+import { List } from 'vant';
+
+Vue.use(List);

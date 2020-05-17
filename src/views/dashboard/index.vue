@@ -97,7 +97,11 @@ export default {
 <style lang="less" scoped>
 .tabbarNav {
   // padding-top: 10px;
-  border-top: solid 1px #ccc;
+  margin-top: 20px;
+  height: 1.3rem !important;
+  /deep/ .van-hairline--top-bottom {
+    border-top: solid 1px #ccc;
+  }
 }
 /*转场动画*/
 .router-slider-enter-active,
