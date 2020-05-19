@@ -46,20 +46,20 @@ export default {
       active: 0,
       tabbars: [
         {
-          name: "home",
-          title: "首页",
+          name: "project",
+          title: "项目",
           normal: "home",
           active: "home-active"
         },
         {
-          name: "build",
-          title: "楼盘",
+          name: "account",
+          title: "账号",
           normal: "build",
           active: "build-active"
         },
         {
           name: "location",
-          title: "地图找房",
+          title: "数据",
           normal: "location",
           active: "location-active"
         },
@@ -84,8 +84,8 @@ export default {
     },
     tabbarSelected(item) {
       const mapType = {
-        home: 0,
-        build: 1,
+        project: 0,
+        account: 1,
         location: 2,
         mine: 3
       };

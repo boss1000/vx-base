@@ -3,118 +3,95 @@
     <van-nav-bar class="commonTitle" title="登陆" />
     <div class="loginBox">
       <div class="auth-form">
-        <van-tabs v-model="active" animated>
-          <van-tab :title="login.title">
+        <van-tabs v-model="active">
+          <van-tab :title="loginPage.title">
             <!-- 账号密码登录 -->
-            <van-cell-group v-show="!isShowSMSLogin">
-              <van-field
-                v-model="login_userName"
-                required
-                clearable
-                :label="login.phoneNumber"
-                maxlength="11"
-                :error-message="phoneNumberRight?'':login.phoneNumberNotCorrect"
-                :placeholder="login.phoneInput"
-              />
-              <van-field
-                v-model="login_password"
-                type="password"
-                :label="login.pass"
-                :placeholder="login.passTip"
-                required
-                autocomplete
-              />
-              <van-field
-                v-model="imgCaptcha"
-                center
-                clearable
-                maxlength="4"
-                :placeholder="login.varify"
-              >
-                <img
-                  class="verificationImage"
-                  src="http://demo.itlike.com/web/xlmc/api/captcha"
-                  alt="captcha"
-                  @click.prevent="getCaptcha"
-                  ref="imgCaptcha"
-                  slot="button"
+            <van-form validate-first @submit="loginForm">
+              <van-cell-group>
+                <van-field
+                  v-model="loginData.userName"
+                  label="账号"
+                  maxlength="11"
+                  placeholder="请输入账号"
+                  :rules="[{ validator: phoneValidator, message: validator.phoneMessage }]"
                 />
-              </van-field>
-              <!-- 手机号快捷登录 -->
-            </van-cell-group>
-            <van-cell-group v-show="isShowSMSLogin">
-              <van-field
-                v-model="login_phone"
-                required
-                clearable
-                maxlength="11"
-                :label="login.phoneNumber"
-                :placeholder="login.phoneInput"
-                :error-message="phoneNumberRight?'':login.phoneNumberNotCorrect"
-              />
-              <van-field
-                center
-                clearable
-                required
-                :label="login.varify"
-                maxlength="6"
-                v-model="smsCaptcha"
-                :placeholder="login.varify"
-              >
-                <van-button
-                  slot="button"
-                  size="small"
-                  type="primary"
-                  v-if="!countDown"
-                  :disabled="captchaDisable"
-                  @click="sendVerifyCode"
-                >{{login.sendVerify}}</van-button>
-                <van-button
-                  slot="button"
-                  size="small"
-                  type="primary"
-                  disabled
-                  v-model="smsCaptcha"
-                  v-else
-                >{{login.hasSend}}{{countDown}}s</van-button>
-              </van-field>
-            </van-cell-group>
-            <van-button
-              type="info"
-              size="large"
-              style="margin-top:1rem"
-              @click="login"
-            >{{login.login}}</van-button>
-            <div
-              class="switchLogin"
-              @click="switchLogin"
-            >{{this.isShowSMSLogin?login.phoneVerify:login.smsMessage}}</div>
+                <van-field
+                  v-model="loginData.password"
+                  type="password"
+                  label="密码"
+                  placeholder="请输入密码"
+                  :rules="[{ validator: passValidator, message: validator.passeMessage }]"
+                />
+              </van-cell-group>
+              <van-button type="info" size="large" style="margin-top:1rem" native-type="submit">登录</van-button>
+            </van-form>
           </van-tab>
           <!-- 注册 -->
-          <van-tab :title="login.resgin">
-            <van-cell-group>
-              <van-field
-                v-model="register_userName"
-                clearable
-                maxlength="11"
-                :label="login.phoneNumber"
-                :placeholder="login.phoneInput"
-                required
-              />
-              <van-field
-                v-model="register_pwd"
-                type="password"
-                :label="login.pass"
-                :placeholder="login.passTip2"
-                required
-              />
-            </van-cell-group>
-            <van-button
-              type="info"
-              size="large"
-              style="margin-top:1rem"
-              @click="register"
-            >{{login.resgin}}</van-button>
+          <van-tab :title="loginPage.resgin">
+            <van-form validate-first @submit="registerForm">
+              <van-cell-group>
+                <van-field
+                  v-model="register.phone"
+                  maxlength="11"
+                  label="手机号"
+                  type="number"
+                  placeholder="请输入手机号"
+                  :rules="[{ validator: phoneValidator, message: validator.phoneMessage }]"
+                >
+                  <van-button
+                    slot="button"
+                    size="small"
+                    type="primary"
+                    v-if="!countDown"
+                    native-type="button"
+                    @click="sendVerifyCode"
+                  >发送验证码</van-button>
+                  <van-button
+                    slot="button"
+                    size="small"
+                    type="primary"
+                    disabled
+                    v-model="smsCaptcha"
+                    v-else
+                  >已发送{{countDown}}s</van-button>
+                </van-field>
+                <van-field
+                  v-model="register.verification"
+                  type="text"
+                  label="验证码"
+                  placeholder="请输入验证码"
+                  :rules="[{ required: true, message: '请输入验证码' }]"
+                />
+                <van-field
+                  v-model="register.name"
+                  type="text"
+                  label="姓名"
+                  placeholder="请输入姓名"
+                  :rules="[{ required: true, message: '请输入姓名' }]"
+                />
+                <van-field
+                  v-model="register.store"
+                  type="text"
+                  label="门店"
+                  placeholder="请输入门店"
+                  :rules="[{ required: true, message: '请输入门店' }]"
+                />
+                <van-field
+                  v-model="register.idcard"
+                  type="text"
+                  label="身份证"
+                  placeholder="请输入身份证号码"
+                  :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
+                />
+                <van-field
+                  v-model="register.passwrod"
+                  type="text"
+                  label="登录密码"
+                  placeholder="请输入密码"
+                />
+              </van-cell-group>
+              <van-button type="info" size="large" style="margin-top:1rem" native-type="submit">注册</van-button>
+            </van-form>
           </van-tab>
         </van-tabs>
       </div>
@@ -125,13 +102,7 @@
 <script type="text/javascript">
 // 引入Vant的组件
 import { Toast, Dialog } from "vant";
-// 引入API调用接口
-// import {
-//   getPhoneCaptcha,
-//   phoneCaptchaLogin,
-//   pwdLogin
-// } from "../../serve/api/index.js";
-// 引入vuex
+import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
@@ -139,50 +110,30 @@ export default {
     return {
       countDown: 0, // 倒计时
       active: 0,
-      login: {
+      loginPage: {
         title: "登录",
-        phoneNumber: "手机号",
-        phoneNumberNotCorrect: "手机号格式不正确",
-        phoneNumberNotEmpty: "手机号不能为空",
-        passNumberNotEmpty: "密码不能为空",
-        phoneInput: "请输入手机号",
-        pass: "密码",
-        passTip: "请输入密码",
-        varify: "请输入验证码",
-        otherMethods: "其他登录方式",
-        wechat: "微信登录",
-        qqchant: "QQ登录",
-        tipTile: "温馨提示：",
-        tipContent: "未注册的手机号，登录时将自动注册，且代表同意",
-        tip: "用户协议",
-        tipProcy: "隐私策略",
-        login: "登录",
-        resgin: "注册",
-        passTip2: "请输入密码(不少于6位)",
-        sendVerify: "发送验证码",
-        hasSend: "已发送",
-        phoneVerify: "账号密码登录",
-        smsMessage: "短信验证码登录",
-        switchLoginMsg: "账号密码登录",
-        messageSuccess: "验证码获取成功,请在输入框输入",
-        pleaseInputCorrectPhoneNumber: "请输入正确的手机号",
-        pleaseInputCorrectVerifyumber: "请输入正确的验证码",
-        otherWechat: "微信登录-暂未完成",
-        otherQQ: "QQ登录-暂未完成",
-        message: "验证码:"
+        resgin: "注册"
       },
-      login_userName: "", // 用户名
-      login_password: "", // 用户密码
-      login_phone: "", // 手机号码
-
-      register_userName: "", // 注册用户名
-      register_pwd: "", // 注册密码
-
+      validator: {
+        phoneMessage: "",
+        passeMessage: "请输入密码",
+        cardMessage: ""
+      },
+      loginData: {
+        userName: "", // 用户名
+        password: "" // 用户密码
+      },
+      register: {
+        phone: "", // 手机号
+        verification: "", // 验证码
+        name: "", // 用户名
+        store: "", // 门店
+        idcard: "", // 身份证
+        passwrod: "" // 密码
+      },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
       isShowSMSLogin: true, // 是否短信登录
-      // switchLoginMsg: this.$t("login.switchLoginMsg"),
-      // imageURL: require("./../../images/login/normal.png"),
       smsCaptchaResult: null,
       userInfo: null
     };
@@ -233,130 +184,63 @@ export default {
       }, 1000);
 
       // 4.2 获取短信验证码
-      let result = await getPhoneCaptcha(this.login_phone);
-      if (result.success_code == 200) {
-        this.smsCaptchaResult = result.data.code;
-        // 4.3  获取验证码成功
-        Dialog.alert({
-          title: this.$t("login.tipTile"),
-          message: this.$t("login.message") + result.data.code
-        }).then(() => {});
-      }
+      // let result = await getPhoneCaptcha(this.login_phone);
+      // if (result.success_code == 200) {
+      //   this.smsCaptchaResult = result.data.code;
+      //   // 4.3  获取验证码成功
+      //   Dialog.alert({
+      //     title: this.loginPage.tipTile,
+      //     message: this.loginPage.message + result.data.code
+      //   }).then(() => {});
+      // }
     },
     // 5.登录
-    async login() {
-      if (this.isShowSMSLogin) {
-        // 5.1手机验证码登录
-        // 5.1.1 验证手机号
-        if (!this.phoneNumberRight || this.login_phone.length < 10) {
-          Toast({
-            message: this.$t("login.pleaseInputCorrectPhoneNumber"),
-            duration: 800
-          });
-          return;
-        } else if (
-          this.smsCaptcha < 7 ||
-          this.smsCaptcha != Number(this.smsCaptchaResult)
-        ) {
-          // 5.1.2 验证验证码
-          Toast({
-            message: this.$t("login.pleaseInputCorrectVerifyNumber"),
-            duration: 800
-          });
-          return;
-        }
-        // 5.1.3 请求后台登录接口
-        let ref = await phoneCaptchaLogin(this.login_phone, this.smsCaptcha);
-        // 设置userInfo 保存到vuex和本地
-        this.syncuserInfo(ref.data);
-        this.$router.back();
-      } else {
-        // 5.2 账号密码登录
-        // 5.2.1 验证输入框
-        if (this.login_userName.length < 1) {
-          Toast({
-            message: this.$t("login.phoneNumber"),
-            duration: 800
-          });
-          return;
-        } else if (!this.phoneRegex(this.login_userName)) {
-          Toast({
-            message: this.$t("login.phoneNumberNotCorrect"),
-            duration: 800
-          });
-          return;
-        } else if (this.login_password.length < 1) {
-          Toast({
-            message: this.$t("login.passNumberNotCorrect"),
-            duration: 800
-          });
-          return;
-        } else if (this.imgCaptcha.length < 1) {
-          Toast({
-            message: this.$t("login.pleaseInputCorrectVerifyNumber"),
-            duration: 800
-          });
-          return;
-        }
-        // 5.2.2 请求后台
-        let ref = await phoneCaptchaLogin(
-          this.login_userName,
-          this.login_password
-        );
-        this.syncuserInfo(ref.data);
-        this.$router.back();
-      }
+    async loginForm() {
+      Toast({
+        message: "密码错误",
+        duration: 800
+      });
     },
     // 6.注册
-    async register() {
-      if (this.register_userName.length < 1) {
-        Toast({
-          message: this.$t("login.phoneNumberNotEmpty"),
-          duration: 800
-        });
-      } else if (!this.phoneRegex(this.register_userName)) {
-        Toast({
-          message: this.$t("login.phoneNumberNotCorrect"),
-          duration: 800
-        });
-      } else if (this.register_pwd.length < 0) {
-        Toast({
-          message: this.$t("login.passTip"),
-          duration: 800
-        });
-      } else if (this.register_pwd.length < 6) {
-        Toast({
-          message: this.$t("login.passTip2"),
-          duration: 800
-        });
-      } else {
-        // 6.1 请求后台登录接口
-        let ref = await phoneCaptchaLogin(
-          this.register_userName,
-          this.register_pwd
-        );
-        // 设置userInfo 保存到vuex和本地
-        this.syncuserInfo(ref.data);
-        this.$router.back();
-      }
-    },
+    async registerForm() {},
     // 7.用户协议
-    agreement(index) {
-      if (index == 0) {
-        Toast({
-          message: this.$t("login.tip"),
-          duration: 800
-        });
-      } else {
-        Toast({
-          message: this.$t("login.tipProcy"),
-          duration: 800
-        });
-      }
-    },
+    agreement(index) {},
     // 8.关闭
     close() {
       this.$router.back();
+    },
+    // 正则验证
+    phoneValidator(value, rule) {
+      let name = this.active == 1 ? "手机号" : "账号";
+      if (value.length > 0) {
+        let isTest = /[1][3,4,5,6,7,8][0-9]{9}$/.test(value);
+        this.validator.phoneMessage = !isTest ? `${name}错误，请检查` : "";
+        return isTest;
+      } else {
+        this.validator.phoneMessage = `请输入${name}`;
+        return false;
+      }
+    },
+    passValidator(value, rule) {
+      this.validator.passeMessage = "请输入密码";
+      if (value.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    cardValidator(value, rule) {
+      if (value.length > 0) {
+        let isTest = IdCardValidate(value);
+        this.validator.cardMessage = !isTest ? "请请检查身份证号码" : "";
+        return isTest;
+      } else {
+        this.validator.cardMessage = "请输入身份证号码";
+        return false;
+      }
+    },
+    onFailed(errorInfo) {
+      console.log("failed", errorInfo);
     }
   }
 };
@@ -389,13 +273,16 @@ export default {
     .auth-form {
       position: relative;
       top: 20px;
-      padding: 18px;
+      margin: 18px;
       width: 28.5rem;
       max-width: 90%;
       font-size: 1.167rem;
       background-color: #fff;
       border-radius: 8px;
       box-sizing: border-box;
+      /deep/ .van-tabs__content {
+        margin-top: 20px;
+      }
     }
     img {
       position: absolute;

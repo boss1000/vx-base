@@ -39,8 +39,8 @@ export default {
     margin-top: 10px;
     // border-bottom: solid 1px #ccc;
     .imageSize {
-      width: 600px;
-      height: 80px;
+      width: 150px;
+      height: 40px;
     }
     .buildContent {
       flex-grow: 1;

@@ -232,3 +232,7 @@ Vue.use(DropdownItem);
 import { List } from 'vant';
 
 Vue.use(List);
+
+import { Form } from 'vant';
+
+Vue.use(Form);
