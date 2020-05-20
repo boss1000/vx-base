@@ -41,6 +41,15 @@ export function validLowerCase(str) {
  * @param {string} str
  * @returns {Boolean}
  */
+export function validPhone(str) {
+  const reg = /[1][3,4,5,6,7,8][0-9]{9}$/
+  return reg.test(str)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
 export function validUpperCase(str) {
   const reg = /^[A-Z]+$/
   return reg.test(str)

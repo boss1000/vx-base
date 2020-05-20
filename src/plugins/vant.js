@@ -71,12 +71,6 @@ import {
 } from 'vant'
 Vue.use(Checkbox).use(CheckboxGroup)
 
-// 12.提示框
-import {
-  Dialog
-} from 'vant'
-Vue.use(Dialog)
-
 // 13.单元格
 import {
   Cell,
@@ -211,28 +205,50 @@ import {
 } from 'vant'
 Vue.use(Overlay)
 
-import { Col, Row } from 'vant';
+import {
+  Col,
+  Row
+} from 'vant';
 
 Vue.use(Col);
 Vue.use(Row);
 
-import { Image as VanImage } from 'vant';
+import {
+  Image as VanImage
+} from 'vant';
 
 Vue.use(VanImage);
 
-import { Search } from 'vant';
+import {
+  Search
+} from 'vant';
 
 Vue.use(Search)
 
-import { DropdownMenu, DropdownItem } from 'vant';
+import {
+  DropdownMenu,
+  DropdownItem
+} from 'vant';
 
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 
-import { List } from 'vant';
+import {
+  List
+} from 'vant';
 
 Vue.use(List);
 
-import { Form } from 'vant';
+import {
+  Form
+} from 'vant';
 
 Vue.use(Form);
+
+// 12.提示框
+import { Dialog } from 'vant';
+Vue.use(Dialog);
+
+import { Calendar } from 'vant';
+
+Vue.use(Calendar);

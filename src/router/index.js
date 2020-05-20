@@ -87,6 +87,11 @@ const router = new Router({
           keepAlive: true
         }
       }]
+    }, {
+      // 项目报备
+      path: '/report',
+      name: 'report',
+      component: () => import('../views/reportproject/report.vue')
     },
     {
       // 注册登录
