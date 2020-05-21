@@ -1,11 +1,11 @@
 <template>
-  <div id="report">
-    <van-nav-bar class="commonTitle" title="一手项目报备" />
-    <van-form class="loginBox auth-form">
+  <div id="report" class="commonBase">
+    <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" title="一手项目报备" />
+    <van-form class="auth-form" @submit="postForm">
       <van-row>
         <van-col span="24">
           提交报备代表您已经阅读并同意
-          <span class="redcol">《联动规则》</span>
+          <span class="redcol" @click="openReport">《联动规则》</span>
         </van-col>
       </van-row>
       <van-row>
@@ -34,7 +34,7 @@
         name="客户电话"
         label="客户电话"
         placeholder="客户电话"
-        :rules="[{ validator: phoneValidator, message: validator.phoneMessage }]"
+        :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-row class="datetime">
         <van-col span="18">
@@ -43,11 +43,12 @@
             clickable
             name="datetimePicker"
             :value="fromData.preparietaldate"
+            :rules="[{ required: true, message: '请选择预约来访日期' }]"
             label="预约来访日期"
             placeholder="预约来访日期"
             @click="showDate = true"
           />
-          <van-calendar v-model="showDate" title="预约来访日期" @confirm="onConfirm" :round="false" />
+          <van-calendar v-model="showDate" title="请选择来访日期" @confirm="onConfirm" :round="false" />
         </van-col>
         <van-col span="6">
           <van-field
@@ -57,6 +58,7 @@
             :value="fromData.preparietaltime"
             placeholder="时间"
             @click="showPicker = true"
+            :rules="[{ required: true, message: '请选择时间' }]"
           />
         </van-col>
       </van-row>
@@ -79,7 +81,7 @@
         name="报备人电话"
         label="报备人电话"
         placeholder="报备人电话"
-        :rules="[{ validator: phoneValidator, message: validator.phoneMessage }]"
+        :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
         v-model="fromData.reportname"
@@ -103,36 +105,46 @@
         placeholder="请输入备注"
         :rules="[{ required: true, message: '请输入备注' }]"
       />
-      <van-button type="info" block>提交报备</van-button>
+      <van-button type="info" block native-type="submit">提交报备</van-button>
 
       <van-row style="padding-top: 25px;">
         <van-col span="24">
           提交报备代表您已经阅读并同意
-          <span class="redcol">《联动规则》</span>
+          <span class="redcol" @click="openReport">《联动规则》</span>
         </van-col>
       </van-row>
     </van-form>
-    <van-popup v-model="showPicker" position="bottom" :style="{ height: '40%' }">
+    <van-popup v-model="showPicker" position="bottom" :style="{ height: '30%' }">
       <van-datetime-picker
         type="time"
-        :item-height="60"
+        :item-height="80"
         :visible-item-count="10"
+        :min-hour="8"
+        :max-hour="20"
         @confirm="onConfirm"
         @cancel="showPicker = false"
       />
     </van-popup>
+    <van-dialog v-model="reportShow" title="联动规则" confirmButtonText="同意" show-cancel-button>
+      <linkageRules></linkageRules>
+    </van-dialog>
   </div>
 </template>
 
 <script type="text/javascript">
 import { Dialog } from "vant";
 import { validPhone } from "../../utils/validate";
+import linkageRules from "../../components/linkageRules";
 export default {
   name: "report",
+  components: {
+    linkageRules
+  },
   data() {
     return {
       showDate: false,
       showPicker: false,
+      reportShow: false,
       fromData: {
         title: this.$route.params.title || "", // 项目
         username: this.$route.params.username || "", // 负责人
@@ -148,7 +160,7 @@ export default {
         remark: "" //备注
       },
       validator: {
-        phoneMessage: ""
+        phoneMessage: "请输入手机号码"
       }
     };
   },
@@ -178,63 +190,36 @@ export default {
         return false;
       }
     },
-    onConfirm() {}
+    onConfirm() {},
+    postForm() {
+      console.log(123);
+    },
+    openReport(item) {
+      this.reportShow = true;
+    },
+    onClickLeft() {
+      this.$router.go(-1); //返回上一层
+    }
   }
 };
 </script>
 <style lang="less" scoped>
 #report {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-attachment: fixed;
-  background-color: #e4dada80;
-  display: flex;
-  flex-direction: column;
-  .commonTitle {
-    margin-bottom: 15px;
-  }
-  .loginBox {
-    flex-grow: 1;
-    opacity: 0.95;
-    z-index: 500;
-    background-color: #fff;
-    &.auth-form {
-      overflow: auto;
-      padding: 18px;
-      font-size: 14px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-sizing: border-box;
-      /deep/ .van-tabs__content {
-        margin-top: 20px;
-      }
-      .van-row {
-        padding-bottom: 15px;
-      }
-      /deep/ .van-cell {
-        padding: 0;
-        padding-bottom: 15px;
-        .van-field__value .van-field__control {
-          border: solid 1px #ccc;
-          padding-left: 5px;
-        }
-      }
-      .datetime {
-        /deep/ .van-cell {
-          padding-bottom: 0px;
-        }
-        /deep/ .van-col:first-child .van-field__control {
-          border-right: none;
-        }
+  .datetime {
+    &.van-row {
+      padding-bottom: 0px;
+    }
+    /deep/ .van-cell {
+      padding-bottom: 24px;
+      &.van-field--error {
+        padding-bottom: 0px;
       }
     }
+    /deep/ .van-col:first-child .van-field__control {
+      border-right: none;
+    }
   }
+
   .redcol {
     color: #ff0000;
   }

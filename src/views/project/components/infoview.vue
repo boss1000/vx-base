@@ -47,7 +47,7 @@
           </van-row>
           <van-row>
             <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">报备</van-button>
-            <van-button type="info" size="small">详情</van-button>
+            <van-button type="info" size="small" @click="opendetail(item)">详情</van-button>
           </van-row>
         </div>
       </div>
@@ -100,6 +100,17 @@ export default {
     openReport(item) {
       this.currReport = item;
       this.reportShow = true;
+    },
+    opendetail(item) {
+      this.$router.push({
+        name: "projectdetail",
+        params: {
+          id: this.currReport.id,
+          title: this.currReport.title,
+          username: this.currReport.username,
+          userphone: this.currReport.userphone
+        }
+      });
     },
     agreeReportShow() {
       this.$router.push({

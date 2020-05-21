@@ -77,21 +77,17 @@ const router = new Router({
         meta: {
           keepAlive: true
         },
-      }, {
-        // 最新资讯
-        path: 'newInfo',
-        name: 'newInfo',
-        component: () => import('../views/newInfo'),
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
       }]
     }, {
       // 项目报备
       path: '/report',
       name: 'report',
       component: () => import('../views/reportproject/report.vue')
+    }, {
+      // 项目报备
+      path: '/projectdetail',
+      name: 'projectdetail',
+      component: () => import('../views/projectdetail/index.vue')
     },
     {
       // 注册登录

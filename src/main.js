@@ -16,6 +16,7 @@ import 'lib-flexible/flexible.js'
 import '@/config/filter'
 // import './assets/iconfont/iconfont.css'
 import './icons' // icon
+import './assets/scss/base.scss'
 
 Vue.config.productionTip = false
 

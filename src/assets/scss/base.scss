@@ -1,4 +1,4 @@
-@import "./sprites.scss";
+// @import "./sprites.scss";
 html {
   font-size: 14px;
   width: 100%;
@@ -43,11 +43,13 @@ a {
 
 .clearfix {
   *zoom: 1;
+
   &::before,
   &::after {
     content: "";
     display: table;
   }
+
   &::after {
     clear: both;
     overflow: hidden;
@@ -63,5 +65,60 @@ a {
 }
 
 img {
-  content: normal !important; 
+  content: normal !important;
+}
+
+.commonBase {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-color: #e4dada80;
+  display: flex;
+  flex-direction: column;
+
+  .commonTitle {
+    margin-bottom: 15px;
+  }
+
+  .auth-form {
+    flex-grow: 1;
+    opacity: 0.95;
+    z-index: 500;
+    background-color: #fff;
+    overflow: auto;
+    padding: 18px;
+    font-size: 14px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+
+    /deep/ .van-tabs__content {
+      margin-top: 20px;
+    }
+
+    .van-row {
+      padding-bottom: 24px;
+    }
+
+    /deep/ .van-cell {
+      padding: 0;
+      padding-bottom: 24px;
+
+      .van-field__value .van-field__control {
+        border: solid 1px #ccc;
+        padding-left: 5px;
+      }
+
+      &.van-field--error {
+        padding-bottom: 0px;
+      }
+    }
+
+  }
 }
