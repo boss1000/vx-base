@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       center: { lng: 0, lat: 0 },
-      zoom: 15
+      zoom: 20
     };
   },
   methods: {
@@ -37,6 +37,6 @@ export default {
 <style>
 .map {
   width: 100%;
-  height: 400px;
+  height: 150px;
 }
 </style>
