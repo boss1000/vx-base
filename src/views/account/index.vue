@@ -1,10 +1,33 @@
 <template>
   <div>
-    <van-search v-model="searchData.searchlabel" placeholder="请输入搜索关键词" @search="onSearch" />
+    <van-search v-model="searchData.searchlabel" show-action placeholder="请输入搜索关键词">
+      <template #action>
+        <!-- <span @click="onSearch">搜索</span> -->
+        <van-button class="searchBoxbutton" size="small" hairline type="info">搜索</van-button>
+        <!-- <span @click="onSearch">添加</span> -->
+        <van-button class="searchBoxbutton" size="small" hairline type="info">添加</van-button>
+      </template>
+    </van-search>
+
     <van-dropdown-menu>
-      <van-dropdown-item v-model="searchData.region" :options="option1" title="地区" @change="changeDropdown"/>
-      <van-dropdown-item v-model="searchData.type" :options="option1" title="类型"  @change="changeDropdown"/>
-      <van-dropdown-item v-model="searchData.price" :options="option1" title="价格" @change="changeDropdown"/>
+      <van-dropdown-item
+        v-model="searchData.region"
+        :options="option1"
+        title="地区"
+        @change="changeDropdown"
+      />
+      <van-dropdown-item
+        v-model="searchData.type"
+        :options="option1"
+        title="类型"
+        @change="changeDropdown"
+      />
+      <van-dropdown-item
+        v-model="searchData.price"
+        :options="option1"
+        title="价格"
+        @change="changeDropdown"
+      />
     </van-dropdown-menu>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <buildPreview class="mainContent" :buildList="buildList" :showTag="false"></buildPreview>
@@ -84,6 +107,13 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.searchBoxbutton {
+  min-width: 32px;
+  margin-right: 5px;
+}
+.searchBoxbutton:last-child {
+  margin-right: 0px;
+}
 .mainContent {
   margin: 0 15px;
 }

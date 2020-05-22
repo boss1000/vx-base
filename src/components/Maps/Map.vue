@@ -1,42 +1,141 @@
 <template>
-  <div class="map-warp">
-    <baidu-map
-      class="map"
-      ak="ufeGpwfCdo4WLZKtSVoOQXfMwykKkyov"
-      :center="center"
-      :zoom="zoom"
-      @ready="handler"
-    ></baidu-map>
+  <div :class="['dituContent',{'bigMap':!isSalce}]">
+    <div class="mapZindex mapBox" v-if="isSalce" @click="openBig"></div>
+    <div class="mapBox" :id="getId"></div>
   </div>
 </template>
 
 <script>
-import BaiduMap from "vue-baidu-map/components/map/Map";
-
 export default {
-  name: "BaiDuMap",
-  components: {
-    BaiduMap
-  },
   data() {
     return {
-      center: { lng: 0, lat: 0 },
-      zoom: 20
+      map: null
     };
   },
+  computed: {
+    getId() {
+      return `dituContent${this.isSalce ? "small" : "big"}`;
+    }
+  },
+  props: {
+    isSalce: {
+      type: Boolean,
+      default: true
+    }
+  },
+  mounted() {
+    this.initMap();
+  },
   methods: {
-    handler({ BMap, map }) {
-      console.log(BMap, map);
-      this.center.lng = 118.835;
-      this.center.lat = 32.0835479;
+    //这几个地方加this
+    initMap() {
+      this.createMap(); //创建地图
+      this.setMapEvent(); //设置地图事件
+      if (!this.isSalce) {
+        this.addMapControl(); //向地图添加控件
+      }
+      this.addMarker(); //向地图中添加marker
+    },
+    createMap() {
+      this.map = new BMap.Map(this.getId); //在百度地图容器中创建一个地图
+      // var point = new BMap.Point(120.328033, 31.686802); //定义一个中心点坐标
+      // map.centerAndZoom(point, 18); //设定地图的中心点和坐标并将地图显示在地图容器中
+    },
+    setMapEvent() {
+      if (this.isSalce) {
+        this.map.disableDoubleClickZoom();
+        this.map.disablePinchToZoom();
+        this.map.disableDragging(); //禁止拖拽
+        this.map.disableScrollWheelZoom(); //禁止缩放
+      } else {
+        this.map.enableDragging(); //启用地图拖拽事件，默认启用(可不写)
+        this.map.enableScrollWheelZoom(); //启用地图滚轮放大缩小
+        this.map.enableDoubleClickZoom(); //启用鼠标双击放大，默认启用(可不写)
+        this.map.enableKeyboard(); //启用键盘上下左右键移动地图
+      }
+    },
+    addMapControl() {
+      //向地图中添加缩放控件
+      var ctrl_nav = new BMap.NavigationControl({
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        type: BMAP_NAVIGATION_CONTROL_LARGE
+      });
+      this.map.addControl(ctrl_nav);
+      //向地图中添加缩略图控件
+      var ctrl_ove = new BMap.OverviewMapControl({
+        anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+        isOpen: 1
+      });
+      this.map.addControl(ctrl_ove);
+      //向地图中添加比例尺控件
+      var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+      this.map.addControl(ctrl_sca);
+    },
+    //创建marker
+    addMarker() {
+      const markerArr = [
+        {
+          title: "无锡云熵动力科技有限公司",
+          content: "地址：无锡市惠山经济开发区智慧路18号<br/>电话：15061509527",
+          point: ["120.32801", "31.686872"],
+          isOpen: 1
+        }
+      ];
+      for (var i = 0; i < markerArr.length; i++) {
+        let point = new BMap.Point(
+          markerArr[i].point[0],
+          markerArr[i].point[1]
+        );
+        let marker = new BMap.Marker(point); // 创建标注
+        this.map.addOverlay(marker); // 将标注添加到地图中
+        this.map.centerAndZoom(point, 15);
+
+        let opts = {
+          width: 500, // 信息窗口宽度
+          height: 250, // 信息窗口高度
+          title: '<h3 style="float: left">海底捞王府井店</h3>', // 信息窗口标题
+          message: "亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~",
+          enableCloseOnClick: false
+        };
+        var infoWindow = new BMap.InfoWindow(
+          "地址：北京市东城区王府井大街88号乐天银泰百货八层",
+          opts
+        ); // 创建信息窗口对象
+        marker.addEventListener("click", function() {
+          this.map.openInfoWindow(infoWindow, point); //开启信息窗口
+        });
+        if (markerArr[i].isOpen == 1) {
+          setTimeout(() => {
+            this.map.openInfoWindow(infoWindow, point); //开启信息窗口
+          }, 300);
+        }
+      }
+    },
+    openBig() {
+      this.$emit("openBigMap");
     }
   }
 };
 </script>
-
-<style>
-.map {
+<style lang="less" scoped>
+.dituContent {
   width: 100%;
   height: 150px;
+  overflow: hidden;
+  margin: 0px auto;
+  font-family: "微软雅黑";
+  position: relative;
+  .mapBox {
+    height: 100%;
+    width: 100%;
+  }
+  .mapZindex {
+    position: absolute;
+    opacity: 0;
+    z-index: 100;
+  }
+  &.bigMap {
+    height: 100%;
+  }
 }
 </style>

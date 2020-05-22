@@ -259,9 +259,7 @@ export default {
   background-color: #e4dada80;
   display: flex;
   flex-direction: column;
-  .commonTitle {
-    margin-bottom: 15px;
-  }
+
   .loginBox {
     display: flex;
     // align-items: center;

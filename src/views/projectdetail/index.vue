@@ -65,9 +65,16 @@
         </van-row>
 
         <van-row>
-          <Map></Map>
+          <Map @openBigMap="openBigMap"></Map>
         </van-row>
       </div>
+
+      <van-popup v-model="showbigMap" :style="{ height: '80%',width: '100%' }">
+        <div class="bigMapbox">
+          <Map v-if="showbigMap" @openBigMap="openBigMap" :isSalce="false" />
+        </div>
+      </van-popup>
+
       <van-dialog
         v-model="reportShow"
         title="联动规则"
@@ -81,13 +88,14 @@
   </div>
 </template>
 <script>
-import { ImagePreview } from "vant";
+import { ImagePreview, Popup } from "vant";
 import linkageRules from "../../components/linkageRules";
 import Map from "../../components/Maps/Map";
 export default {
   data() {
     return {
       reportShow: false,
+      showbigMap: false,
       detailForm: {
         id: this.$route.params.id,
         title: this.$route.params.title || "万科新都会", // 项目
@@ -101,7 +109,7 @@ export default {
         openquotation: "最新2020年8月20",
         commission: "120m²以上30000,120m²以下0.9%",
         notice:
-          "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
+          "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
       }
     };
   },
@@ -132,6 +140,9 @@ export default {
           userphone: this.detailForm.userphone
         }
       });
+    },
+    openBigMap() {
+      this.showbigMap = true;
     }
   }
 };
@@ -153,6 +164,10 @@ export default {
   .imageSize {
     height: 200px;
     width: 100%;
+  }
+  .bigMapbox {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
