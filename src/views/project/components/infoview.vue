@@ -5,7 +5,9 @@
       :key="index"
       :class="['infoBox', (index + 1 !== infoList.length ) ? 'van-hairline--bottom' : '']"
     >
-      <van-image class="imageSize" fit="contain" lazy-load :src="item.image" />
+      <div class="imageSize">
+        <van-image class="imageSize" fit="contain" lazy-load :src="item.image" />
+      </div>
       <div class="buildContent">
         <div class="contentBox">
           <van-row>
@@ -135,7 +137,7 @@ export default {
     margin-top: 10px;
     // border-bottom: solid 1px #ccc;
     .imageSize {
-      width: 280px;
+      width: 90px;
       height: 90px;
     }
     .buildContent {

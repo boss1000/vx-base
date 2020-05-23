@@ -8,76 +8,42 @@
         <van-button class="searchBoxbutton" size="small" hairline type="info">添加</van-button>
       </template>
     </van-search>
-
     <van-dropdown-menu>
       <van-dropdown-item
-        v-model="searchData.region"
+        v-model="searchData.accountsate"
         :options="option1"
-        title="地区"
-        @change="changeDropdown"
-      />
-      <van-dropdown-item
-        v-model="searchData.type"
-        :options="option1"
-        title="类型"
-        @change="changeDropdown"
-      />
-      <van-dropdown-item
-        v-model="searchData.price"
-        :options="option1"
-        title="价格"
+        title="账号状态"
         @change="changeDropdown"
       />
     </van-dropdown-menu>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <buildPreview class="mainContent" :buildList="buildList" :showTag="false"></buildPreview>
+      <accountView class="mainContent" :accountList="accountList"></accountView>
     </van-list>
   </div>
 </template>
 <script>
-import buildPreview from "../../components/buildPreview";
+import accountView from "./components/accountView";
 export default {
-  components: { buildPreview },
+  components: { accountView },
   data() {
     return {
       searchData: {
         searchlabel: "",
-        region: "",
-        type: "",
-        price: ""
+        accountsate: ""
       },
       loading: false,
       finished: false,
       option1: [
-        { text: "全部商品", value: 0 },
-        { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 },
-        { text: "全部商品", value: 3 },
-        { text: "新款商品", value: 4 }
+        { text: "启用", value: 1 },
+        { text: "停用", value: 0 }
       ],
-      buildList: [
+      accountList: [
         {
-          name: "新鹿城",
-          size: "102-140",
-          tag: ["瓯海第一盘", "瓯海第一盘"],
-          address: "路程区牛山北路（百里亭公交站）",
-          price: "240",
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg"
-        },
-        {
-          name: "新鹿城",
-          size: "102-140",
-          tag: ["瓯海第一盘"],
-          address: "路程区牛山北路（百里亭公交站）",
-          price: "240",
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg"
-        },
-        {
-          name: "新鹿城",
-          size: "102-140",
-          address: "路程区牛山北路（百里亭公交站）",
-          price: "240",
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg"
+          account: "13798761234",
+          name: "来建平",
+          system: "传成",
+          state: '1',
+          project: ["大都会", "富力城"]
         }
       ]
     };
@@ -85,22 +51,22 @@ export default {
   methods: {
     onSearch() {},
     onLoad() {
-      this.buildList = this.buildList.concat([
-        {
-          name: "新鹿城2121",
-          size: "102-140",
-          address: "路程区牛山北路（百里亭公交站）",
-          price: "240",
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg"
-        }
-      ]);
+      // this.buildList = this.buildList.concat([
+      //   {
+      //     name: "新鹿城2121",
+      //     size: "102-140",
+      //     address: "路程区牛山北路（百里亭公交站）",
+      //     price: "240",
+      //     image: "https://img.yzcdn.cn/vant/apple-1.jpg"
+      //   }
+      // ]);
       // 加载状态结束
       this.loading = false;
-
+      this.finished = true;
       // 数据全部加载完成
-      if (this.buildList.length == 4) {
-        this.finished = true;
-      }
+      // if (this.buildList.length == 4) {
+      //   this.finished = true;
+      // }
     },
     changeDropdown() {}
   }
