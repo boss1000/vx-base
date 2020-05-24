@@ -30,22 +30,41 @@
             </van-col>
           </van-row>
           <van-row class="controlBox" type="flex" justify="end">
-            <van-button
-              class="buttonRight"
-              type="danger"
-              size="small"
-              @click="openReport(item)"
-            >重置密码</van-button>
-            <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">修改</van-button>
+            <van-button class="buttonRight" type="danger" size="small" @click="resetPass">重置密码</van-button>
+            <van-button class="buttonRight" type="info" size="small" @click="modifyData(item)">修改</van-button>
             <van-button type="info" size="small" @click="opendetail(item)">数据</van-button>
           </van-row>
         </div>
       </div>
     </div>
+    <van-dialog
+      v-model="showModify"
+      show-cancel-button
+      confirm-button-text="确认修改"
+      :before-close="onBeforeClose"
+      @confirm="postModify"
+    >
+      <van-form ref="postModify" class="auth-form">
+        <van-field
+          v-model="modify.name"
+          name="姓名"
+          label="姓名"
+          placeholder="请输入姓名"
+          :rules="[{ required: true, message: '请输入姓名' }]"
+        />
+        <van-field
+          v-model="modify.system"
+          name="门店"
+          label="门店"
+          placeholder="请输入门店"
+          :rules="[{ required: true, message: '请输入门店' }]"
+        />
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 <script>
-import { Dialog } from "vant";
+import { Dialog, Toast } from "vant";
 export default {
   name: "accountList",
   props: {
@@ -56,9 +75,25 @@ export default {
   },
   data() {
     return {
-      reportShow: false,
-      currReport: {}
+      showModify: false,
+      currReport: {},
+      modify: {
+        name: "",
+        system: ""
+      }
     };
+  },
+  watch: {
+    showModify() {
+      if (!this.showModify) {
+        this.modify = Object.assign(
+          {},
+          this.$data.modify,
+          this.$options.data().modify
+        );
+        this.$refs["postModify"].resetValidation();
+      }
+    }
   },
   mounted() {},
   methods: {
@@ -74,31 +109,39 @@ export default {
           // on cancel
         });
     },
-    openReport(item) {
-      this.currReport = item;
-      this.reportShow = true;
-    },
     opendetail(item) {
       this.$router.push({
-        name: "projectdetail",
+        name: "accountReport",
         params: {
-          id: this.currReport.id,
-          title: this.currReport.title,
-          username: this.currReport.username,
-          userphone: this.currReport.userphone
+          id: item.id,
+          name: item.name
         }
       });
     },
-    agreeReportShow() {
-      this.$router.push({
-        name: "report",
-        params: {
-          id: this.currReport.id,
-          title: this.currReport.title,
-          username: this.currReport.username,
-          userphone: this.currReport.userphone
-        }
-      });
+    resetPass() {
+      Toast("密码重置成功");
+    },
+    modifyData(item) {
+      this.showModify = true;
+    },
+    onBeforeClose(action, done) {
+      if (action === "confirm") {
+        return done(false);
+      } else {
+        // 重置表单校验
+
+        this.$refs["postModify"].resetValidation();
+        return done();
+      }
+    },
+    postModify() {
+      this.$refs["postModify"]
+        .validate()
+        .then(() => {
+          this.showModify = false;
+          console.log(this.modify);
+        })
+        .catch(() => {});
     }
   }
 };
@@ -164,6 +207,15 @@ export default {
   .reprotSet {
     width: 80%;
     height: 80%;
+  }
+}
+.auth-form {
+  padding-bottom: 0;
+  .van-cell:last-child {
+    padding: 0;
+  }
+  /deep/ .van-field__label {
+    width: 50px;
   }
 }
 </style>

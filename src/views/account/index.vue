@@ -5,7 +5,7 @@
         <!-- <span @click="onSearch">搜索</span> -->
         <van-button class="searchBoxbutton" size="small" hairline type="info">搜索</van-button>
         <!-- <span @click="onSearch">添加</span> -->
-        <van-button class="searchBoxbutton" size="small" hairline type="info">添加</van-button>
+        <van-button class="searchBoxbutton" size="small" hairline type="info" @click="accountAdd">新增</van-button>
       </template>
     </van-search>
     <van-dropdown-menu>
@@ -42,7 +42,7 @@ export default {
           account: "13798761234",
           name: "来建平",
           system: "传成",
-          state: '1',
+          state: "1",
           project: ["大都会", "富力城"]
         }
       ]
@@ -68,6 +68,12 @@ export default {
       //   this.finished = true;
       // }
     },
+    accountAdd() {
+      this.$router.push({
+        name: "accountAdd",
+        params: {}
+      });
+    },
     changeDropdown() {}
   }
 };
@@ -79,8 +85,5 @@ export default {
 }
 .searchBoxbutton:last-child {
   margin-right: 0px;
-}
-.mainContent {
-  margin: 0 15px;
 }
 </style>

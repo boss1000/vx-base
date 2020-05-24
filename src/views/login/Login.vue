@@ -232,7 +232,7 @@ export default {
     cardValidator(value, rule) {
       if (value.length > 0) {
         let isTest = IdCardValidate(value);
-        this.validator.cardMessage = !isTest ? "请请检查身份证号码" : "";
+        this.validator.cardMessage = !isTest ? "请检查身份证号码" : "";
         return isTest;
       } else {
         this.validator.cardMessage = "请输入身份证号码";

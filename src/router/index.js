@@ -23,78 +23,88 @@ const router = new Router({
     }
   },
   routes: [{
-      path: '/',
-      redirect: '/dashboard',
+    path: '/',
+    redirect: '/dashboard',
+    // 是否数据缓存
+    meta: {
+      keepAlive: true
+    }
+  }, {
+    // 根页面 
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../views/dashboard'),
+    children: [{
+      path: '/dashboard',
+      redirect: '/dashboard/project',
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      },
+    }, {
+      // 项目
+      path: 'project',
+      name: 'project',
+      component: () => import('../views/project'),
       // 是否数据缓存
       meta: {
         keepAlive: true
       }
     }, {
-      // 根页面 
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('../views/dashboard'),
-      children: [{
-        path: '/dashboard',
-        redirect: '/dashboard/project',
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        },
-      }, {
-        // 项目
-        path: 'project',
-        name: 'project',
-        component: () => import('../views/project'),
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 账号
-        path: 'account',
-        name: 'account',
-        component: () => import('../views/account'),
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 数据
-        path: 'location',
-        name: 'location',
-        component: () => import('../views/location'),
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        }
-      }, {
-        // 用户中心
-        path: 'mine',
-        name: 'mine',
-        component: () => import('../views/mine'),
-        // 是否数据缓存
-        meta: {
-          keepAlive: true
-        },
-      }]
+      // 账号
+      path: 'account',
+      name: 'account',
+      component: () => import('../views/account'),
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
     }, {
-      // 项目报备
-      path: '/report',
-      name: 'report',
-      component: () => import('../views/reportproject/report.vue')
+      // 数据
+      path: 'location',
+      name: 'location',
+      component: () => import('../views/location'),
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      }
     }, {
-      // 项目报备
-      path: '/projectdetail',
-      name: 'projectdetail',
-      component: () => import('../views/projectdetail/index.vue')
-    },
-    {
-      // 注册登录
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/login/Login.vue')
-    }
+      // 用户中心
+      path: 'mine',
+      name: 'mine',
+      component: () => import('../views/mine'),
+      // 是否数据缓存
+      meta: {
+        keepAlive: true
+      },
+    }]
+  }, {
+    // 项目报备
+    path: '/report',
+    name: 'report',
+    component: () => import('../views/reportproject/report.vue')
+  }, {
+    // 账号 - 数据
+    path: '/accountReport',
+    name: 'accountReport',
+    component: () => import('../views/account/components/accountReport.vue')
+  }, {
+    // 账号 - 新增
+    path: '/accountAdd',
+    name: 'accountAdd',
+    component: () => import('../views/account/components/accountAdd.vue')
+  }, {
+    // 项目报备
+    path: '/projectdetail',
+    name: 'projectdetail',
+    component: () => import('../views/projectdetail/index.vue')
+  },
+  {
+    // 注册登录
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/login/Login.vue')
+  }
   ]
 })
 

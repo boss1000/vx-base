@@ -26,18 +26,18 @@
         v-model="fromData.customername"
         name="客户姓名"
         label="客户姓名"
-        placeholder="客户姓名"
+        placeholder="请输入客户姓名"
         :rules="[{ required: true, message: '请填写客户姓名' }]"
       />
       <van-field
         v-model="fromData.customerphone"
         name="客户电话"
         label="客户电话"
-        placeholder="客户电话"
+        placeholder="请输入客户电话"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-row class="datetime">
-        <van-col span="18">
+        <van-col span="16">
           <van-field
             readonly
             clickable
@@ -45,18 +45,18 @@
             :value="fromData.preparietaldate"
             :rules="[{ required: true, message: '请选择预约来访日期' }]"
             label="预约来访日期"
-            placeholder="预约来访日期"
+            placeholder="请输入预约来访日期"
             @click="showDate = true"
           />
-          <van-calendar v-model="showDate" title="请选择来访日期" @confirm="onConfirm" :round="false" />
+          <van-calendar v-model="showDate" title="来访日期" @confirm="onConfirm" :round="false" />
         </van-col>
-        <van-col span="6">
+        <van-col span="8">
           <van-field
             readonly
             clickable
             name="datetimePicker"
             :value="fromData.preparietaltime"
-            placeholder="时间"
+            placeholder="请输入时间"
             @click="showPicker = true"
             :rules="[{ required: true, message: '请选择时间' }]"
           />
@@ -97,14 +97,6 @@
         placeholder="请输入备注"
         :rules="[{ required: true, message: '请输入备注' }]"
       />
-
-      <van-field
-        v-model="fromData.reportname"
-        name="备注"
-        label="备注"
-        placeholder="请输入备注"
-        :rules="[{ required: true, message: '请输入备注' }]"
-      />
       <van-button type="info" block native-type="submit">提交报备</van-button>
 
       <van-row style="padding-top: 25px;">
@@ -117,11 +109,9 @@
     <van-popup v-model="showPicker" position="bottom" :style="{ height: '30%' }">
       <van-datetime-picker
         type="time"
-        :item-height="80"
-        :visible-item-count="10"
         :min-hour="8"
         :max-hour="20"
-        @confirm="onConfirm"
+        @confirm="confirmDate"
         @cancel="showPicker = false"
       />
     </van-popup>
@@ -190,7 +180,27 @@ export default {
         return false;
       }
     },
-    onConfirm() {},
+    onConfirm(date) {
+      this.fromData.preparietaldate = this.formatter(date);
+      this.showDate = false;
+    },
+    confirmDate(date) {
+      this.fromData.preparietaltime = date;
+      this.showPicker = false;
+    },
+    formatter(date) {
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = `0${month}`;
+      }
+      if (day >= 1 && day <= 9) {
+        day = `0${day}`;
+      }
+      let timeValue = `${year}-${month}-${day}`;
+      return timeValue;
+    },
     postForm() {
       console.log(123);
     },
@@ -210,9 +220,9 @@ export default {
       padding-bottom: 0px;
     }
     /deep/ .van-cell {
-      padding-bottom: 24px;
+      padding-bottom: 18px;
       &.van-field--error {
-        padding-bottom: 0px;
+        // padding-bottom: 0px;
       }
     }
     /deep/ .van-col:first-child .van-field__control {

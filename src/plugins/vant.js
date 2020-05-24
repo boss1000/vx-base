@@ -252,3 +252,7 @@ Vue.use(Dialog);
 import { Calendar } from 'vant';
 
 Vue.use(Calendar);
+
+import { Picker } from 'vant';
+
+Vue.use(Picker);
