@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router from '@/router'
 import md5 from 'js-md5'
@@ -38,42 +38,13 @@ const actions = {
   login({ commit }, userInfo) {
     const { account, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ account: account.trim(), password: md5(password) }).then(response => {
+      login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data)
         setToken(data)
         resolve()
       }).catch(error => {
         console.log(error)
-        reject(error)
-      })
-    })
-  },
-
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo({ token: state.token }).then(response => {
-        const { data } = response
-
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-        // 获取登陆信息 userDuty 权限  userName 用户名
-        const { account, userDuty, userName, userImage, userDept } = data
-
-        // roles must be a non-empty array
-        // if (!roles || roles.length <= 0) {
-        //   reject('getInfo: roles must be a non-null array!')
-        // }
-
-        commit('SET_ACCOUNT', account)
-        commit('SET_ROLES', userDuty)
-        commit('SET_NAME', userName)
-        commit('SET_AVATAR', userImage)
-        commit('SET_INTRODUCTION', userDept)
-        resolve(data)
-      }).catch(error => {
         reject(error)
       })
     })
@@ -110,28 +81,6 @@ const actions = {
     })
   },
 
-  // dynamically modify permissions
-  changeRoles({ commit, dispatch }, role) {
-    return new Promise(async resolve => {
-      const token = role + '-token'
-
-      commit('SET_TOKEN', token)
-      setToken(token)
-
-      const { roles } = await dispatch('getInfo')
-
-      // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
-
-      // dynamically add accessible routes
-      router.addRoutes(accessRoutes)
-
-      // reset visited views and cached views
-      dispatch('tagsView/delAllViews', null, { root: true })
-
-      resolve()
-    })
-  }
 }
 
 export default {

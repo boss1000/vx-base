@@ -6,10 +6,10 @@
         <van-tabs v-model="active">
           <van-tab :title="loginPage.title">
             <!-- 账号密码登录 -->
-            <van-form validate-first @submit="loginForm">
+            <van-form @submit="loginForm">
               <van-cell-group>
                 <van-field
-                  v-model="loginData.userName"
+                  v-model="loginData.account"
                   label="账号"
                   maxlength="11"
                   placeholder="请输入账号"
@@ -20,7 +20,7 @@
                   type="password"
                   label="密码"
                   placeholder="请输入密码"
-                  :rules="[{ validator: passValidator, message: validator.passeMessage }]"
+                  :rules="[{ required: true, message: '请输入密码' }]"
                 />
               </van-cell-group>
               <van-button type="info" size="large" style="margin-top:1rem" native-type="submit">登录</van-button>
@@ -28,15 +28,15 @@
           </van-tab>
           <!-- 注册 -->
           <van-tab :title="loginPage.resgin">
-            <van-form validate-first @submit="registerForm">
+            <van-form ref="registerPage">
               <van-cell-group>
                 <van-field
-                  v-model="register.phone"
+                  v-model="register.mobile"
                   maxlength="11"
                   label="手机号"
                   type="number"
                   placeholder="请输入手机号"
-                  :rules="[{ validator: phoneValidator, message: validator.phoneMessage }]"
+                  :rules="[{ required: true,validator: phoneValidator, message: validator.phoneMessage }]"
                 >
                   <van-button
                     slot="button"
@@ -56,41 +56,48 @@
                   >已发送{{countDown}}s</van-button>
                 </van-field>
                 <van-field
-                  v-model="register.verification"
+                  v-model="register.code"
                   type="text"
                   label="验证码"
                   placeholder="请输入验证码"
                   :rules="[{ required: true, message: '请输入验证码' }]"
                 />
                 <van-field
-                  v-model="register.name"
+                  v-model="register.userName"
                   type="text"
                   label="姓名"
                   placeholder="请输入姓名"
                   :rules="[{ required: true, message: '请输入姓名' }]"
                 />
                 <van-field
-                  v-model="register.store"
+                  v-model="register.storeName"
                   type="text"
                   label="门店"
                   placeholder="请输入门店"
                   :rules="[{ required: true, message: '请输入门店' }]"
                 />
                 <van-field
-                  v-model="register.idcard"
+                  v-model="register.idCard"
                   type="text"
                   label="身份证"
                   placeholder="请输入身份证号码"
-                  :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
+                  :rules="[{ required: true, validator: cardValidator, message: validator.cardMessage }]"
                 />
                 <van-field
-                  v-model="register.passwrod"
+                  v-model="register.passWord"
                   type="text"
                   label="登录密码"
                   placeholder="请输入密码"
+                  :rules="[{ required: true, message: '请输入密码' }]"
                 />
               </van-cell-group>
-              <van-button type="info" size="large" style="margin-top:1rem" native-type="submit">注册</van-button>
+              <van-button
+                type="info"
+                size="large"
+                style="margin-top:1rem"
+                native-type="submit"
+                @click="registerForm"
+              >注册</van-button>
             </van-form>
           </van-tab>
         </van-tabs>
@@ -104,6 +111,7 @@
 import { Toast, Dialog } from "vant";
 import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { register, getCode } from "../../api/user";
 
 export default {
   data() {
@@ -115,21 +123,21 @@ export default {
         resgin: "注册"
       },
       validator: {
-        phoneMessage: "",
+        phoneMessage: "请输入手机号",
         passeMessage: "请输入密码",
-        cardMessage: ""
+        cardMessage: "请输入身份证号码"
       },
       loginData: {
-        userName: "", // 用户名
+        account: "", // 用户名
         password: "" // 用户密码
       },
       register: {
-        phone: "", // 手机号
-        verification: "", // 验证码
-        name: "", // 用户名
-        store: "", // 门店
-        idcard: "", // 身份证
-        passwrod: "" // 密码
+        mobile: "13587985146", // 手机号
+        code: "123", // 验证码
+        userName: "12123", // 用户名
+        storeName: "412", // 门店
+        idCard: "330326199307064111", // 身份证
+        passWord: "123456" // 密码
       },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
@@ -184,7 +192,8 @@ export default {
       }, 1000);
 
       // 4.2 获取短信验证码
-      // let result = await getPhoneCaptcha(this.login_phone);
+      let result = await getCode({ Mobile: this.register.mobile });
+      console.log(result)
       // if (result.success_code == 200) {
       //   this.smsCaptchaResult = result.data.code;
       //   // 4.3  获取验证码成功
@@ -196,13 +205,32 @@ export default {
     },
     // 5.登录
     async loginForm() {
-      Toast({
-        message: "密码错误",
-        duration: 800
-      });
+      this.$store
+        .dispatch("user/login", this.loginData)
+        .then(data => {})
+        .catch(error => {
+          Toast({
+            message: "账号或密码错误"
+          });
+        });
     },
     // 6.注册
-    async registerForm() {},
+    async registerForm() {
+      this.$refs.registerPage
+        .validate()
+        .then(() => {
+          register(this.register)
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     // 7.用户协议
     agreement(index) {},
     // 8.关闭
@@ -221,22 +249,13 @@ export default {
         return false;
       }
     },
-    passValidator(value, rule) {
-      this.validator.passeMessage = "请输入密码";
-      if (value.length > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     cardValidator(value, rule) {
       if (value.length > 0) {
         let isTest = IdCardValidate(value);
-        this.validator.cardMessage = !isTest ? "请检查身份证号码" : "";
+        if (!isTest) {
+          this.validator.cardMessage = "请检查身份证号码";
+        }
         return isTest;
-      } else {
-        this.validator.cardMessage = "请输入身份证号码";
-        return false;
       }
     },
     onFailed(errorInfo) {

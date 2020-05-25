@@ -27,7 +27,8 @@ const router = new Router({
     redirect: '/dashboard',
     // 是否数据缓存
     meta: {
-      keepAlive: true
+      keepAlive: true,
+      requireAuth: true
     }
   }, {
     // 根页面 
@@ -39,7 +40,8 @@ const router = new Router({
       redirect: '/dashboard/project',
       // 是否数据缓存
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        requireAuth: true
       },
     }, {
       // 项目
@@ -48,7 +50,8 @@ const router = new Router({
       component: () => import('../views/project'),
       // 是否数据缓存
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        requireAuth: true
       }
     }, {
       // 账号
@@ -57,7 +60,8 @@ const router = new Router({
       component: () => import('../views/account'),
       // 是否数据缓存
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        requireAuth: true
       }
     }, {
       // 数据
@@ -66,7 +70,8 @@ const router = new Router({
       component: () => import('../views/location'),
       // 是否数据缓存
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        requireAuth: true
       }
     }, {
       // 用户中心
@@ -75,7 +80,8 @@ const router = new Router({
       component: () => import('../views/mine'),
       // 是否数据缓存
       meta: {
-        keepAlive: true
+        keepAlive: true,
+        requireAuth: true
       },
     }]
   }, {
@@ -111,7 +117,7 @@ const router = new Router({
 //路由守卫
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    if (store.getters.token) {
+    if (state.getters.token) {
       next()
     } else {
       next({
