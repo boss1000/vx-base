@@ -38,13 +38,13 @@ const actions = {
   login({ commit }, userInfo) {
     const { account, password } = userInfo
     return new Promise((resolve, reject) => {
+      console.log({ Account: account.trim(), PassWord: md5(password) })
       login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data)
-        setToken(data)
+        const { Result } = response
+        commit('SET_TOKEN', Result.access_token)
+        setToken(Result.access_token)
         resolve()
       }).catch(error => {
-        console.log(error)
         reject(error)
       })
     })

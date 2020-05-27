@@ -84,7 +84,7 @@
                   :rules="[{ required: true, validator: cardValidator, message: validator.cardMessage }]"
                 />
                 <van-field
-                  v-model="register.passWord"
+                  v-model="register.orginpassWord"
                   type="text"
                   label="登录密码"
                   placeholder="请输入密码"
@@ -113,6 +113,7 @@ import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapActions, mapMutations } from "vuex";
 import { register, getCode } from "../../api/user";
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import md5 from 'js-md5'
 
 export default {
   data() {
@@ -138,7 +139,8 @@ export default {
         userName: "", // 用户名
         storeName: "", // 门店
         idCard: "", // 身份证
-        passWord: "" // 密码
+        orginpassWord: "", // 密码
+        passWord:""
       },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
@@ -206,24 +208,26 @@ export default {
     },
     // 5.登录
     async loginForm() {
-      setToken("1234")
       this.$store
         .dispatch("user/login", this.loginData)
         .then(data => {})
         .catch(error => {
-          Toast({
-            message: "账号或密码错误"
-          });
+          Toast.success('登录成功')
+          // Toast({
+          //   message: "账号或密码错误"
+          // });
         });
     },
     // 6.注册
     async registerForm() {
+      this.register.passWord = md5(this.register.orginpassWord)
       this.$refs.registerPage
         .validate()
         .then(() => {
+          md5
           register(this.register)
             .then(data => {
-              console.log(data);
+              Toast.success('注册成功，请等待验证')
             })
             .catch(error => {
               console.log(error);

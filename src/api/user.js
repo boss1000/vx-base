@@ -5,7 +5,7 @@ export function login(data) {
   return request({
     url: '/api/Home/Login',
     method: 'get',
-    data
+    params: data
   })
 }
 
