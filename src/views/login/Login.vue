@@ -112,6 +112,7 @@ import { Toast, Dialog } from "vant";
 import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapActions, mapMutations } from "vuex";
 import { register, getCode } from "../../api/user";
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 export default {
   data() {
@@ -132,12 +133,12 @@ export default {
         password: "" // 用户密码
       },
       register: {
-        mobile: "13587985146", // 手机号
-        code: "123", // 验证码
-        userName: "12123", // 用户名
-        storeName: "412", // 门店
-        idCard: "330326199307064111", // 身份证
-        passWord: "123456" // 密码
+        mobile: "", // 手机号
+        code: "", // 验证码
+        userName: "", // 用户名
+        storeName: "", // 门店
+        idCard: "", // 身份证
+        passWord: "" // 密码
       },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
@@ -193,7 +194,7 @@ export default {
 
       // 4.2 获取短信验证码
       let result = await getCode({ Mobile: this.register.mobile });
-      console.log(result)
+      console.log(result);
       // if (result.success_code == 200) {
       //   this.smsCaptchaResult = result.data.code;
       //   // 4.3  获取验证码成功
@@ -205,6 +206,7 @@ export default {
     },
     // 5.登录
     async loginForm() {
+      setToken("1234")
       this.$store
         .dispatch("user/login", this.loginData)
         .then(data => {})
@@ -242,11 +244,11 @@ export default {
       let name = this.active == 1 ? "手机号" : "账号";
       if (value.length > 0) {
         let isTest = /[1][3,4,5,6,7,8][0-9]{9}$/.test(value);
-        this.validator.phoneMessage = !isTest ? `${name}错误，请检查` : "";
+        if (!isTest) {
+          this.validator.phoneMessage = `${name}错误，请检查`;
+        }
+
         return isTest;
-      } else {
-        this.validator.phoneMessage = `请输入${name}`;
-        return false;
       }
     },
     cardValidator(value, rule) {

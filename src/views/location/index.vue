@@ -22,7 +22,7 @@
           <van-col span="2" class="spiltRow">-</van-col>
           <van-col span="8">
             <van-field :value="searchForm.timeEnd" placeholder="截至" @click="timeEnd = true" />
-            <!-- <van-calendar v-model="timeEnd" title="截至" @confirm="onConfirm"/> -->
+            <van-calendar v-model="timeEnd" title="截至" @confirm="onConfirm"/>
           </van-col>
         </van-row>
       </van-cell-group>
@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.hanlersateList);
+    // console.log(this.hanlersateList);
   },
   methods: {
     onConfirm(value) {

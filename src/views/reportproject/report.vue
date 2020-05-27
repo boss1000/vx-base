@@ -111,6 +111,7 @@
         type="time"
         :min-hour="8"
         :max-hour="20"
+        item-height="80"
         @confirm="confirmDate"
         @cancel="showPicker = false"
       />
@@ -222,7 +223,7 @@ export default {
     /deep/ .van-cell {
       padding-bottom: 18px;
       &.van-field--error {
-        // padding-bottom: 0px;
+        padding-bottom: 0px;
       }
     }
     /deep/ .van-col:first-child .van-field__control {
