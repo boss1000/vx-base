@@ -42,7 +42,7 @@ const actions = {
       login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
         const { Result } = response
         commit('SET_TOKEN', Result.access_token)
-        // commit("SET_ROLES",)
+        commit("SET_ROLES",Result.profile.account_type)
         setToken(Result.access_token)
         resolve()
       }).catch(error => {

@@ -112,8 +112,8 @@ import { Toast, Dialog } from "vant";
 import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapActions, mapMutations } from "vuex";
 import { register, getCode } from "../../api/user";
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import md5 from 'js-md5'
+import { getToken, setToken, removeToken } from "@/utils/auth";
+import md5 from "js-md5";
 
 export default {
   data() {
@@ -140,7 +140,7 @@ export default {
         storeName: "", // 门店
         idCard: "", // 身份证
         orginpassWord: "", // 密码
-        passWord:""
+        passWord: ""
       },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
@@ -210,9 +210,12 @@ export default {
     async loginForm() {
       this.$store
         .dispatch("user/login", this.loginData)
-        .then(data => {})
+        .then(data => {
+          Toast.success("登录成功");
+          this.$router.push({ path: "/" });
+        })
         .catch(error => {
-          Toast.success('登录成功')
+          console.log(error);
           // Toast({
           //   message: "账号或密码错误"
           // });
@@ -220,14 +223,14 @@ export default {
     },
     // 6.注册
     async registerForm() {
-      this.register.passWord = md5(this.register.orginpassWord)
+      this.register.passWord = md5(this.register.orginpassWord);
       this.$refs.registerPage
         .validate()
         .then(() => {
-          md5
+          md5;
           register(this.register)
             .then(data => {
-              Toast.success('注册成功，请等待验证')
+              Toast.success("注册成功，请等待验证");
             })
             .catch(error => {
               console.log(error);
