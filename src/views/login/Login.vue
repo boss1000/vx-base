@@ -110,7 +110,7 @@
 // 引入Vant的组件
 import { Toast, Dialog } from "vant";
 import { IdCardValidate } from "../../utils/validate";
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { register, getCode } from "../../api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import md5 from "js-md5";
@@ -167,7 +167,8 @@ export default {
       } else {
         return true;
       }
-    }
+    },
+    ...mapGetters(["roles"])
   },
   methods: {
     switchLogin() {

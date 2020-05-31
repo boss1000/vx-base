@@ -49,7 +49,13 @@
           </van-row>
           <van-row>
             <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">报备</van-button>
-            <van-button type="info" size="small" @click="opendetail(item)">详情</van-button>
+            <van-button
+              :class="{buttonRight: roles == '2'}"
+              type="info"
+              size="small"
+              @click="opendetail(item)"
+            >详情</van-button>
+            <van-button v-if="roles == '2'" type="info" size="small" @click="changeData(item)">修改</van-button>
           </van-row>
         </div>
       </div>
@@ -67,7 +73,10 @@
 </template>
 <script>
 import { Dialog } from "vant";
+import { mapState, mapGetters, mapActions } from "vuex";
+import { Toast } from "vant";
 import linkageRules from "../../../components/linkageRules";
+import { isPhone } from "@/utils/common.js";
 export default {
   name: "infoview",
   props: {
@@ -82,8 +91,12 @@ export default {
   data() {
     return {
       reportShow: false,
+      isPhone: isPhone(),
       currReport: {}
     };
+  },
+  computed: {
+    ...mapGetters(["roles"])
   },
   mounted() {},
   methods: {
@@ -124,6 +137,15 @@ export default {
           userphone: this.currReport.userphone
         }
       });
+    },
+    changeData() {
+      if (isPhone) {
+        Toast({
+          message: "请使用电脑端操作该功能"
+        });
+      } else {
+        console.loh('使用电脑')
+      }
     }
   }
 };

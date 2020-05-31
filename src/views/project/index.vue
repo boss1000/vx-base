@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-search v-model="searchData.searchlabel" placeholder="请输入搜索关键词" @search="onSearch" />
+    <van-search v-model="searchData.searchlabel" placeholder="请输入搜索关键词" @search="onSearch" ></van-search>
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.region"

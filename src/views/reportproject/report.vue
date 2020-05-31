@@ -84,14 +84,14 @@
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
-        v-model="fromData.reportname"
+        v-model="fromData.store"
         name="所在门店"
         label="所在门店"
         placeholder="请输入所在门店"
         :rules="[{ required: true, message: '请输入所在门店' }]"
       />
       <van-field
-        v-model="fromData.reportname"
+        v-model="fromData.remark"
         name="备注"
         label="备注"
         placeholder="请输入备注"

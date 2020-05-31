@@ -24,23 +24,9 @@
 
 <script type="text/javascript">
 import { setLocalStore, getLocalStore } from "../../config/global.js";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   name: "DashBoard",
-  mounted() {},
-  created() {
-    //通过路由跳转绑定Tabbar的选中
-    this.tabbarSelected(this.$route.name);
-  },
-  watch: {
-    // 监听路由变化,保证路由跳转Tabbar选中正常
-    $route: {
-      handler(val, oldval) {
-        this.tabbarSelected(val.name);
-      }
-    },
-    deep: true
-  },
   data() {
     return {
       active: 0,
@@ -72,23 +58,51 @@ export default {
       ]
     };
   },
-  components: {},
-  mounted() {},
-  computed: {
-    ...mapState(["userInfo"])
+  watch: {
+    // 监听路由变化,保证路由跳转Tabbar选中正常
+    $route: {
+      handler(val, oldval) {
+        this.tabbarSelected(val.name);
+      }
+    },
+    deep: true
   },
+  components: {},
+  computed: {
+    ...mapGetters(["roles"])
+  },
+  created() {
+    this.setRoles()
+    //通过路由跳转绑定Tabbar的选中
+    this.tabbarSelected(this.$route.name);
+  },
+  mounted() {},
   methods: {
+    setRoles() {
+      switch (this.roles) {
+        case "1":
+          // 公司账户
+          break;
+        case "2":
+          // 项目驻场
+          this.tabbars.splice(1, 1);
+          break;
+        case "3":
+          this.tabbars.splice(1, 1);
+        // 中介
+        default:
+          break;
+      }
+    },
     // 1.点击tabbar触发的方法
     tabchange(num) {
       this.$router.push(this.tabbars[num].name);
     },
     tabbarSelected(item) {
-      const mapType = {
-        project: 0,
-        account: 1,
-        location: 2,
-        mine: 3
-      };
+      let mapType = {};
+      this.tabbars.map((item, index) => {
+        mapType[item.name] = index;
+      });
       this.active = mapType[item];
     }
   }
