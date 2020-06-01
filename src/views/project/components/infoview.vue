@@ -48,14 +48,15 @@
             <van-col class="content" span="16">{{item.notice}}</van-col>
           </van-row>
           <van-row>
-            <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">报备</van-button>
+            <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
+            <van-button class="buttonRight" type="info" size="mini" @click="followStart(item)">关注</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
               type="info"
-              size="small"
+              size="mini"
               @click="opendetail(item)"
             >详情</van-button>
-            <van-button v-if="roles == '2'" type="info" size="small" @click="changeData(item)">修改</van-button>
+            <van-button v-if="roles == '2'" type="info" size="mini" @click="changeData(item)">修改</van-button>
           </van-row>
         </div>
       </div>
@@ -77,6 +78,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import { Toast } from "vant";
 import linkageRules from "../../../components/linkageRules";
 import { isPhone } from "@/utils/common.js";
+import { FollowProject, EditProject } from "@/api/project";
 export default {
   name: "infoview",
   props: {
@@ -144,8 +146,23 @@ export default {
           message: "请使用电脑端操作该功能"
         });
       } else {
-        console.loh('使用电脑')
+        EditProject({ projectId: item.id })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
+    },
+    followStart(item) {
+      FollowProject({ projectId: item.id })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
@@ -186,7 +203,7 @@ export default {
           color: #ff0000;
         }
         .buttonRight {
-          margin-right: 15px;
+          margin-right: 2px;
         }
       }
     }

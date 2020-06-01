@@ -91,6 +91,7 @@
 import { ImagePreview, Popup } from "vant";
 import linkageRules from "../../components/linkageRules";
 import Map from "../../components/Maps/Map";
+import { AddProject } from "@/api/project";
 export default {
   data() {
     return {

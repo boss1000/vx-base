@@ -1,23 +1,17 @@
 <template>
   <div>
-    <van-search v-model="searchData.searchlabel" placeholder="请输入搜索关键词" @search="onSearch" ></van-search>
+    <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @search="changeDropdown"></van-search>
     <van-dropdown-menu>
       <van-dropdown-item
-        v-model="searchData.region"
+        v-model="searchData.Area"
         :options="option1"
         title="地区"
         @change="changeDropdown"
       />
       <van-dropdown-item
-        v-model="searchData.type"
-        :options="option1"
+        v-model="searchData.orderType"
+        :options="option2"
         title="类型"
-        @change="changeDropdown"
-      />
-      <van-dropdown-item
-        v-model="searchData.price"
-        :options="option1"
-        title="价格"
         @change="changeDropdown"
       />
     </van-dropdown-menu>
@@ -34,15 +28,15 @@
 </template>
 <script>
 import infoview from "./components/infoview";
+import { getProjectList } from "@/api/project";
 export default {
   components: { infoview },
   data() {
     return {
       searchData: {
-        searchlabel: "",
-        region: "",
-        type: "",
-        price: ""
+        ProjectName: "",
+        Area: "",
+        orderType: 1
       },
       loading: false,
       finished: false,
@@ -52,6 +46,20 @@ export default {
         { text: "活动商品", value: 2 },
         { text: "全部商品", value: 3 },
         { text: "新款商品", value: 4 }
+      ],
+      option2: [
+        {
+          text: "默认",
+          value: 1
+        },
+        {
+          text: "日期排序",
+          value: 2
+        },
+        {
+          text: "热度",
+          value: 3
+        }
       ],
       infoList: [
         {
@@ -87,8 +95,10 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.changeDropdown()
+  },
   methods: {
-    onSearch() {},
     onLoad() {
       // this.infoList = this.infoList.concat([
 
@@ -101,10 +111,17 @@ export default {
       //   this.finished = true;
       // }
     },
-    changeDropdown() {}
+    changeDropdown() {
+      getProjectList(this.searchData)
+        .then(data => {
+          console.log(data)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>
 <style lang="less" scoped>
-
 </style>
