@@ -6,50 +6,63 @@
       :class="['infoBox', (index + 1 !== infoList.length ) ? 'van-hairline--bottom' : '']"
     >
       <div class="imageSize">
-        <van-image class="imageSize" fit="contain" lazy-load :src="item.image" />
+        <van-image class="imageSize" fit="contain" lazy-load :src="item.ImgUrl" />
       </div>
       <div class="buildContent">
         <div class="contentBox">
           <van-row>
-            <van-col class="title" span="12">{{item.title}}</van-col>
+            <van-col class="title" span="12">{{item.ProjectName}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">报备数</van-col>
-            <van-col class="content" span="16">{{item.reportnum}}</van-col>
+            <van-col class="content" span="16">{{item.ReportCount}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">负责人</van-col>
             <van-col class="content" span="16">
-              {{item.username}} -
+              {{item.PrincipalerName}} -
               <span
                 class="phone"
-                @click="openphone(item.userphone)"
-              >{{item.userphone}}</span>
+                @click="openphone(item.PrincipalerMobile)"
+              >{{item.PrincipalerMobile}}</span>
             </van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">折扣</van-col>
-            <van-col class="content" span="16">{{item.discount}}</van-col>
+            <van-col class="content" span="16">{{item.Discount}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">开发商</van-col>
-            <van-col class="content" span="16">{{item.developers}}</van-col>
+            <van-col class="content" span="16">{{item.Developer}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">开盘时间</van-col>
-            <van-col class="content" span="16">{{item.openquotation}}</van-col>
+            <van-col class="content" span="16">{{item.OpeningTime}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">佣金</van-col>
-            <van-col class="content" span="16">{{item.commission}}</van-col>
+            <van-col class="content" span="16">{{item.Commission}}</van-col>
           </van-row>
           <van-row>
             <van-col class="name" span="8">特别说明</van-col>
-            <van-col class="content" span="16">{{item.notice}}</van-col>
+            <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <van-row>
             <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
-            <van-button class="buttonRight" type="info" size="mini" @click="followStart(item)">关注</van-button>
+            <van-button
+              class="buttonRight"
+              v-if="item.IsFollow == true"
+              type="info"
+              size="mini"
+              @click="followStart(item)"
+            >取消关注</van-button>
+            <van-button
+              class="buttonRight"
+              v-else
+              type="info"
+              size="mini"
+              @click="followStart(item)"
+            >关注</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
               type="info"
@@ -98,7 +111,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles", "ruleData"])
   },
   mounted() {},
   methods: {
@@ -115,8 +128,11 @@ export default {
         });
     },
     openReport(item) {
+      this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.currReport = item;
-      this.reportShow = true;
+      this.$nextTick(() => {
+        this.reportShow = true;
+      });
     },
     opendetail(item) {
       this.$router.push({
@@ -130,13 +146,19 @@ export default {
       });
     },
     agreeReportShow() {
+      let {
+        Id,
+        ProjectName,
+        PrincipalerName,
+        PrincipalerMobile
+      } = this.currReport;
       this.$router.push({
         name: "report",
         params: {
-          id: this.currReport.id,
-          title: this.currReport.title,
-          username: this.currReport.username,
-          userphone: this.currReport.userphone
+          Id,
+          ProjectName,
+          PrincipalerName,
+          PrincipalerMobile
         }
       });
     },
@@ -156,9 +178,20 @@ export default {
       }
     },
     followStart(item) {
-      FollowProject({ projectId: item.id })
+      // 1 为关注 2 取消关系
+      FollowProject({ ProjectId: item.Id, Type: item.IsFollow ? "2" : "1" })
         .then(res => {
-          console.log(res);
+          if (item.IsFollow) {
+            Toast({
+              message: "已取消关注"
+            });
+          } else {
+            Toast({
+              message: "已关注"
+            });
+          }
+
+          item.IsFollow = !item.IsFollow;
         })
         .catch(error => {
           console.log(error);
@@ -198,6 +231,9 @@ export default {
         }
         .content {
           // margin-top: 10px;
+        }
+        .notice {
+          white-space: break-spaces;
         }
         .phone {
           color: #ff0000;

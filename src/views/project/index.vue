@@ -28,7 +28,7 @@
 </template>
 <script>
 import infoview from "./components/infoview";
-import { getProjectList } from "@/api/project";
+import { getProjectList, GetAreaList } from "@/api/project";
 export default {
   components: { infoview },
   data() {
@@ -40,13 +40,7 @@ export default {
       },
       loading: false,
       finished: false,
-      option1: [
-        { text: "全部商品", value: 0 },
-        { text: "新款商品", value: 1 },
-        { text: "活动商品", value: 2 },
-        { text: "全部商品", value: 3 },
-        { text: "新款商品", value: 4 }
-      ],
+      option1: [],
       option2: [
         {
           text: "默认",
@@ -61,42 +55,12 @@ export default {
           value: 3
         }
       ],
-      infoList: [
-        {
-          id: 1,
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg",
-          title: "万科新都会",
-          reportnum: "5123",
-          username: "林海静",
-          userphone: "13698761234",
-          discount:
-            "首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折",
-          developers: "万科",
-          openquotation: "最新2020年8月20",
-          commission: "120m²以上30000,120m²以下0.9%",
-          notice:
-            "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
-        },
-        {
-          id: 2,
-          image: "https://img.yzcdn.cn/vant/apple-1.jpg",
-          title: "万科新都会",
-          reportnum: "5123",
-          username: "林海静",
-          userphone: "13698761234",
-          discount:
-            "首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折",
-          developers: "万科",
-          openquotation: "最新2020年8月20",
-          commission: "120m²以上30000,120m²以下0.9%",
-          notice:
-            "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
-        }
-      ]
+      infoList: []
     };
   },
   mounted() {
-    this.changeDropdown()
+    this.changeDropdown();
+    this.getAreaList();
   },
   methods: {
     onLoad() {
@@ -111,10 +75,16 @@ export default {
       //   this.finished = true;
       // }
     },
+    getAreaList() {
+      GetAreaList().then(data => {
+        this.option1 = data.Result;
+      });
+    },
     changeDropdown() {
       getProjectList(this.searchData)
         .then(data => {
-          console.log(data)
+          this.infoList = data.Result;
+          console.log(data);
         })
         .catch(error => {
           console.log(error);

@@ -10,27 +10,27 @@
       </van-row>
       <van-row>
         <van-col span="6">报备项目</van-col>
-        <van-col span="18">{{ fromData.title }}</van-col>
+        <van-col span="18">{{ fromData.ProjectName }}</van-col>
       </van-row>
       <van-row>
         <van-col span="6">负责人</van-col>
         <van-col span="16">
-          {{fromData.username}} -
+          {{fromData.PrincipalerName}} -
           <span
             class="redcol"
-            @click="openphone(fromData.userphone)"
-          >{{fromData.userphone}}</span>
+            @click="openphone(fromData.PrincipalerMobile)"
+          >{{fromData.PrincipalerMobile}}</span>
         </van-col>
       </van-row>
       <van-field
-        v-model="fromData.customername"
+        v-model="fromData.CustomerName"
         name="客户姓名"
         label="客户姓名"
         placeholder="请输入客户姓名"
         :rules="[{ required: true, message: '请填写客户姓名' }]"
       />
       <van-field
-        v-model="fromData.customerphone"
+        v-model="fromData.ustomerMobile"
         name="客户电话"
         label="客户电话"
         placeholder="请输入客户电话"
@@ -42,7 +42,7 @@
             readonly
             clickable
             name="datetimePicker"
-            :value="fromData.preparietaldate"
+            :value="preparietaldate"
             :rules="[{ required: true, message: '请选择预约来访日期' }]"
             label="预约来访日期"
             placeholder="请输入预约来访日期"
@@ -55,7 +55,7 @@
             readonly
             clickable
             name="datetimePicker"
-            :value="fromData.preparietaltime"
+            :value="preparietaltime"
             placeholder="请输入时间"
             @click="showPicker = true"
             :rules="[{ required: true, message: '请选择时间' }]"
@@ -63,35 +63,42 @@
         </van-col>
       </van-row>
       <van-field
-        v-model="fromData.system"
+        v-model="fromData.CompanyName"
         name="体系"
         label="体系"
         placeholder="请输入体系"
         :rules="[{ required: true, message: '请输入体系' }]"
       />
       <van-field
-        v-model="fromData.reportname"
+        v-model="fromData.ReporterName"
         name="报备人"
         label="报备人"
         placeholder="请输入报备人"
         :rules="[{ required: true, message: '请输入报备人' }]"
       />
       <van-field
-        v-model="fromData.reportphone"
+        v-model="fromData.ReporterMobile"
         name="报备人电话"
         label="报备人电话"
         placeholder="报备人电话"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
-        v-model="fromData.store"
+        v-model="fromData.CustomerIdCard"
+        name="身份证号码"
+        label="身份证号码"
+        placeholder="请输入身份证号码"
+        :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
+      />
+      <van-field
+        v-model="fromData.StoreName"
         name="所在门店"
         label="所在门店"
         placeholder="请输入所在门店"
         :rules="[{ required: true, message: '请输入所在门店' }]"
       />
       <van-field
-        v-model="fromData.remark"
+        v-model="fromData.Remark"
         name="备注"
         label="备注"
         placeholder="请输入备注"
@@ -124,7 +131,8 @@
 
 <script type="text/javascript">
 import { Dialog } from "vant";
-import { validPhone } from "../../utils/validate";
+import { validPhone, IdCardValidate } from "../../utils/validate";
+import { AddReport } from "@/api/report";
 import linkageRules from "../../components/linkageRules";
 export default {
   name: "report",
@@ -136,22 +144,27 @@ export default {
       showDate: false,
       showPicker: false,
       reportShow: false,
+      preparietaldate: "", // 预约来访日期
+      preparietaltime: "", // 预约来访时间
       fromData: {
-        title: this.$route.params.title || "", // 项目
-        username: this.$route.params.username || "", // 负责人
-        userphone: this.$route.params.userphone || "", // 负责人电话
-        customername: "", // 客户姓名
-        customerphone: "", // 客户电话
-        preparietaldate: "", // 预约来访日期
-        preparietaltime: "", // 预约来访时间
-        system: "", // 体系
-        reportname: "", // 报备人姓名
-        reportphone: "", // 报备人电话
-        store: "", // 所在门店
-        remark: "" //备注
+        ProjectId: this.$route.params.Id, // 项目Id
+        ProjectName: this.$route.params.ProjectName || "", // 项目名称
+        PrincipalerName: this.$route.params.PrincipalerName || "", // 项目负责人姓名
+        PrincipalerMobile: this.$route.params.PrincipalerMobile || "", // 负责人电话
+        CustomerName: "", // 客户姓名
+        CustomerMobile: "", // 客户电话
+        CustomerIdCard: "", // 客户身份证号
+        ArriveDateTime: this.preparietaldate + " " + this.preparietaltime, // 预约来访时间
+        companyId: "", // 体系Id
+        CompanyName: "", // 体系
+        ReporterName: "", // 报备人姓名
+        ReporterMobile: "", // 报备人电话
+        StoreName: "", // 所在门店
+        Remark: "" //备注
       },
       validator: {
-        phoneMessage: "请输入手机号码"
+        phoneMessage: "请输入手机号码",
+        cardMessage: "请输入身份证号"
       }
     };
   },
@@ -178,6 +191,18 @@ export default {
         return isTest;
       } else {
         this.validator.phoneMessage = `请输入手机号码`;
+        return false;
+      }
+    },
+    cardValidator(value, rule) {
+      if (value.length > 0) {
+        let isTest = IdCardValidate(value);
+        if (!isTest) {
+          this.validator.cardMessage = '请检查身份证号码';
+        }
+        return isTest;
+      } else {
+        this.validator.cardMessage = "请输入身份证号码";
         return false;
       }
     },

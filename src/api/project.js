@@ -48,7 +48,16 @@ export function ChangeSort(data) {
 // 关注项目(最多关注五个项目)
 export function FollowProject(data) {
   return request({
-    url: '​/api​/Project​/FollowProject',
+    url: '/api/Project/FollowProject',
+    method: 'get',
+    params: data
+  })
+}
+
+// 地区
+export function GetAreaList(data) {
+  return request({
+    url: '/api/Area/GetAreaList',
     method: 'get',
     params: data
   })

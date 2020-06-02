@@ -9,7 +9,8 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: "2"
+  roles: "2",
+  ruleData: ''
 }
 
 const mutations = {
@@ -30,7 +31,10 @@ const mutations = {
   },
   SET_ACCOUNT: (state, roles) => {
     state.account = roles
-  }
+  },
+  SET_RULEDATA: (state, roles) => {
+    state.ruleData = roles
+  },
 }
 
 const actions = {
@@ -42,7 +46,7 @@ const actions = {
       login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
         const { Result } = response
         commit('SET_TOKEN', Result.access_token)
-        commit("SET_ROLES",Result.profile.account_type)
+        commit("SET_ROLES", Result.profile.account_type)
         setToken(Result.access_token)
         resolve()
       }).catch(error => {
@@ -82,6 +86,9 @@ const actions = {
     })
   },
 
+  saveRules({ commit }, data) {
+    commit('SET_RULEDATA', data)
+  },
 }
 
 export default {
