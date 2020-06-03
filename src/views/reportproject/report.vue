@@ -30,7 +30,7 @@
         :rules="[{ required: true, message: '请填写客户姓名' }]"
       />
       <van-field
-        v-model="fromData.ustomerMobile"
+        v-model="fromData.CustomerMobile"
         name="客户电话"
         label="客户电话"
         placeholder="请输入客户电话"
@@ -130,7 +130,7 @@
 </template>
 
 <script type="text/javascript">
-import { Dialog } from "vant";
+import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "../../utils/validate";
 import { AddReport } from "@/api/report";
 import linkageRules from "../../components/linkageRules";
@@ -154,8 +154,7 @@ export default {
         CustomerName: "", // 客户姓名
         CustomerMobile: "", // 客户电话
         CustomerIdCard: "", // 客户身份证号
-        ArriveDateTime: this.preparietaldate + " " + this.preparietaltime, // 预约来访时间
-        companyId: "", // 体系Id
+        ArriveDateTime: "", // 预约来访时间
         CompanyName: "", // 体系
         ReporterName: "", // 报备人姓名
         ReporterMobile: "", // 报备人电话
@@ -168,8 +167,16 @@ export default {
       }
     };
   },
-  mounted() {
-    console.log(this.$route.params);
+  mounted() {},
+  watch: {
+    preparietaldate() {
+      this.fromData.ArriveDateTime =
+        this.preparietaldate + " " + this.preparietaltime;
+    },
+    preparietaltime() {
+      this.fromData.ArriveDateTime =
+        this.preparietaldate + " " + this.preparietaltime;
+    }
   },
   methods: {
     openphone(phone) {
@@ -198,7 +205,7 @@ export default {
       if (value.length > 0) {
         let isTest = IdCardValidate(value);
         if (!isTest) {
-          this.validator.cardMessage = '请检查身份证号码';
+          this.validator.cardMessage = "请检查身份证号码";
         }
         return isTest;
       } else {
@@ -207,11 +214,11 @@ export default {
       }
     },
     onConfirm(date) {
-      this.fromData.preparietaldate = this.formatter(date);
+      this.preparietaldate = this.formatter(date);
       this.showDate = false;
     },
     confirmDate(date) {
-      this.fromData.preparietaltime = date;
+      this.preparietaltime = date;
       this.showPicker = false;
     },
     formatter(date) {
@@ -228,7 +235,10 @@ export default {
       return timeValue;
     },
     postForm() {
-      console.log(123);
+      AddReport(this.fromData).then(res => {
+        Toast("报备成功");
+        this.onClickLeft();
+      });
     },
     openReport(item) {
       this.reportShow = true;

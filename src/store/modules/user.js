@@ -10,6 +10,7 @@ const state = {
   avatar: '',
   introduction: '',
   roles: "2",
+  other: {},
   ruleData: ''
 }
 
@@ -29,6 +30,9 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
+  SET_OTHER: (state, roles) => {
+    state.other = roles
+  },
   SET_ACCOUNT: (state, roles) => {
     state.account = roles
   },
@@ -44,10 +48,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       console.log({ Account: account.trim(), PassWord: md5(password) })
       login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
-        const { Result } = response
-        commit('SET_TOKEN', Result.access_token)
-        commit("SET_ROLES", Result.profile.account_type)
-        setToken(Result.access_token)
+        const { access_token, profile } = response.Result
+        commit('SET_TOKEN', access_token)
+        commit("SET_ROLES", profile.account_type)
+        commit("SET_OTHER", profile)
+        setToken(access_token)
         resolve()
       }).catch(error => {
         reject(error)

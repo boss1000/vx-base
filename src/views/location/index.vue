@@ -8,27 +8,27 @@
           v-model="satelabel"
           :columns="hanlersateList"
         />
-        <van-field v-model="searchForm.cruxValue" label="搜索关键词" placeholder="多个关键字之间用空格隔开" />
+        <van-field v-model="searchForm.Q" label="搜索关键词" placeholder="多个关键字之间用空格隔开" />
         <van-row>
           <van-col span="14">
             <van-field
-              :value="searchForm.timeStart"
+              :value="searchForm.DateBegin"
               label="报备日期"
               placeholder="开始"
               @click="timeStart = true"
             />
-            <van-calendar v-model="timeStart" title="开始" @confirm="onConfirm" />
+            <van-calendar v-model="timeStart" title="开始" @confirm="onConfirmStart" />
           </van-col>
           <van-col span="2" class="spiltRow">-</van-col>
           <van-col span="8">
-            <van-field :value="searchForm.timeEnd" placeholder="截至" @click="timeEnd = true" />
-            <van-calendar v-model="timeEnd" title="截至" @confirm="onConfirm" />
+            <van-field :value="searchForm.DateEnd" placeholder="截至" @click="timeEnd = true" />
+            <van-calendar v-model="timeEnd" title="截至" @confirm="onConfirmEnd" />
           </van-col>
         </van-row>
       </van-cell-group>
 
       <van-row class="controlBox">
-        <van-button class="buttonRight" type="info" size="small" @click="postSearch">查询</van-button>
+        <van-button class="buttonRight" type="info" size="small" @click="getReport">查询</van-button>
       </van-row>
     </div>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
@@ -38,6 +38,8 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
+import { Toast } from "vant";
+import { GetReportList, GetReportListByUserId } from "@/api/report";
 import VanFieldSelectPicker from "../../components/VanFieldSelectPicker";
 import locationView from "./components/locationView";
 export default {
@@ -54,46 +56,46 @@ export default {
       finished: false,
       loading: false,
       searchForm: {
-        stateValue: "",
-        cruxValue: "",
-        timeStart: "",
-        timeEnd: ""
+        Status: 0,
+        Q: "",
+        DateBegin: "",
+        DateEnd: ""
       },
       sateList: [
         {
-          value: "",
+          value: 0,
           label: "请选择"
         },
         {
-          value: "1",
+          value: 1,
           label: "界定中"
         },
         {
-          value: "2",
+          value: 2,
           label: "有效推荐"
         },
         {
-          value: "3",
+          value: 3,
           label: "无效推荐"
         },
         {
-          value: "4",
+          value: 4,
           label: "有效带看"
         },
         {
-          value: "5",
+          value: 5,
           label: "有效到访"
         },
         {
-          value: "6",
+          value: 6,
           label: "认筹"
         },
         {
-          value: "7",
+          value: 7,
           label: "认购"
         },
         {
-          value: "8",
+          value: 8,
           label: "成交"
         }
       ],
@@ -110,7 +112,7 @@ export default {
           reportname: "林海静", // 报备人姓名
           reportphone: "13698761234", // 报备人电话
           store: "测试", // 所在门店
-          state: '1', // 报备状态
+          state: "1", // 报备状态
           remark:
             "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
           //备注
@@ -130,20 +132,23 @@ export default {
   },
   watch: {
     satelabel() {
-      this.searchForm.stateValue = this.sateList.find(
+      this.searchForm.Status = this.sateList.find(
         item => item.label == this.satelabel
       ).value;
     }
   },
   mounted() {
-    console.log(this.roles);
+    // console.log(this.roles);
   },
   methods: {
-    onConfirm(value) {
-      console.log(value);
+    onConfirmStart(value) {
+      this.searchForm.DateBegin = value;
       this.timeStart = false;
     },
-    postSearch() {},
+    onConfirmEnd(value) {
+      this.searchForm.DateEnd = value;
+      this.timeEnd = false;
+    },
     onLoad() {
       // this.buildList = this.buildList.concat([
       //   {
@@ -161,6 +166,15 @@ export default {
       // if (this.buildList.length == 4) {
       //   this.finished = true;
       // }
+    },
+    getReport() {
+      if (this.searchForm.Status !== 0) {
+        GetReportList(this.searchForm).then(res => {
+          console.log(res);
+        });
+      } else {
+        Toast("请选择报备数据");
+      }
     }
   }
 };
