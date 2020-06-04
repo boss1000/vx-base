@@ -4,35 +4,35 @@
     <van-form class="auth-form columnSpace" @submit="postForm">
       <div>
         <van-field
-          v-model="fromData.useraccount"
+          v-model="fromData.Mobile"
           name="账号"
           label="账号"
           :placeholder="validator.phoneMessage"
           :rules="[{validator: phoneValidator, message: validator.phoneMessage }]"
         />
         <van-field
-          v-model="fromData.username"
+          v-model="fromData.UserName"
           name="姓名"
           label="姓名"
           :placeholder="validator.phoneMessage"
           :rules="[{ required: true, message: '请填写账号' }]"
         />
         <van-field
-          v-model="fromData.useridcard"
+          v-model="fromData.IdCard"
           name="身份证号码"
           label="身份证号码"
           :placeholder="validator.cardMessage"
           :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
         />
         <van-field
-          v-model="fromData.userstore"
+          v-model="fromData.StoreName"
           name="门店"
           label="门店"
           placeholder="请输入门店"
           :rules="[{ required: true, message: '请输入门店' }]"
         />
         <van-field
-          v-model="fromData.usersystem"
+          v-model="fromData.Company"
           name="体系"
           label="体系"
           placeholder="请输入所属体系"
@@ -47,6 +47,7 @@
 <script type="text/javascript">
 import { Dialog } from "vant";
 import { validPhone, IdCardValidate } from "@/utils/validate";
+import { AddAccount } from "@/api/account";
 export default {
   name: "report",
   data() {
@@ -55,11 +56,12 @@ export default {
       showPicker: false,
       reportShow: false,
       fromData: {
-        useraccount: "", // 账号
-        username: "", // 姓名
-        useridcard: "", // 身份证号码
-        userstore: "", // 门店
-        usersystem: "" // 体系
+        Mobile: "", // 账号
+        UserName: "", // 姓名
+        IdCard: "", // 身份证号码
+        StoreName: "", // 门店
+        Company: "", // 体系
+        typeEnum: 3 // 账号类型
       },
       validator: {
         phoneMessage: "请输入手机号码",
@@ -102,7 +104,10 @@ export default {
       }
     },
     postForm() {
-      console.log(123);
+      AddAccount(this.fromData).then(res => {
+        console.log(res);
+        // onClickLeft()
+      });
     },
     onClickLeft() {
       this.$router.go(-1); //返回上一层
