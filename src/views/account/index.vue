@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-search v-model="searchData.searchlabel" show-action placeholder="请输入搜索关键词">
+    <van-search v-model="searchData.Q" show-action placeholder="请输入搜索关键词">
       <template #action>
         <!-- <span @click="onSearch">搜索</span> -->
         <van-button class="searchBoxbutton" size="small" hairline type="info">搜索</van-button>
@@ -10,7 +10,7 @@
     </van-search>
     <van-dropdown-menu>
       <van-dropdown-item
-        v-model="searchData.accountsate"
+        v-model="searchData.Status"
         :options="option1"
         title="账号状态"
         @change="changeDropdown"
@@ -23,19 +23,21 @@
 </template>
 <script>
 import accountView from "./components/accountView";
+import { GetAccountList } from "@/api/account";
 export default {
   components: { accountView },
   data() {
     return {
       searchData: {
-        searchlabel: "",
-        accountsate: ""
+        Q: "",
+        Status: 0
       },
       loading: false,
       finished: false,
       option1: [
+        { text: "全部", value: 0 },
         { text: "启用", value: 1 },
-        { text: "停用", value: 0 }
+        { text: "停用", value: 2 }
       ],
       accountList: [
         {
@@ -48,8 +50,15 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.onSearch();
+  },
   methods: {
-    onSearch() {},
+    onSearch() {
+      GetAccountList(this.searchData).then(res => {
+        console.log(res);
+      });
+    },
     onLoad() {
       // this.buildList = this.buildList.concat([
       //   {

@@ -9,7 +9,7 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: "2",
+  roles: "1",
   other: {},
   ruleData: ''
 }

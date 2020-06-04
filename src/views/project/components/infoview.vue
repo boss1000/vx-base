@@ -9,6 +9,9 @@
         <van-image class="imageSize" fit="contain" lazy-load :src="item.ImgUrl" />
       </div>
       <div class="buildContent">
+        <div class="collectionBtn" @click="followStart(item)">
+          <svg-icon :icon-class="item.IsFollow == true ? 'collection' : 'nocollection'" />
+        </div>
         <div class="contentBox">
           <van-row>
             <van-col class="title" span="12">{{item.ProjectName}}</van-col>
@@ -49,20 +52,7 @@
           </van-row>
           <van-row>
             <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
-            <van-button
-              class="buttonRight"
-              v-if="item.IsFollow == true"
-              type="info"
-              size="mini"
-              @click="followStart(item)"
-            >取消关注</van-button>
-            <van-button
-              class="buttonRight"
-              v-else
-              type="info"
-              size="mini"
-              @click="followStart(item)"
-            >关注</van-button>
+            <van-button class="buttonRight" type="info" size="mini" @click="openData(item)">数据</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
               type="info"
@@ -213,6 +203,7 @@ export default {
       height: 90px;
     }
     .buildContent {
+      position: relative;
       flex-grow: 1;
       .contentBox {
         display: flex;
@@ -240,6 +231,16 @@ export default {
         }
         .buttonRight {
           margin-right: 2px;
+        }
+      }
+      .collectionBtn {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        right: 0;
+        /deep/ .svg-icon {
+          height: 100%;
+          width: 100%;
         }
       }
     }

@@ -46,7 +46,7 @@
 
 <script type="text/javascript">
 import { Dialog } from "vant";
-import { validPhone, IdCardValidate } from "../../../utils/validate";
+import { validPhone, IdCardValidate } from "@/utils/validate";
 export default {
   name: "report",
   data() {
