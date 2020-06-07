@@ -52,7 +52,13 @@
           </van-row>
           <van-row>
             <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
-            <van-button class="buttonRight" type="info" size="mini" @click="openData(item)">数据</van-button>
+            <van-button
+              v-if="roles == '2'"
+              class="buttonRight"
+              type="info"
+              size="mini"
+              @click="openData(item)"
+            >数据</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
               type="info"
@@ -76,10 +82,9 @@
   </div>
 </template>
 <script>
-import { Dialog } from "vant";
+import { Dialog, Toast } from "vant";
 import { mapState, mapGetters, mapActions } from "vuex";
-import { Toast } from "vant";
-import linkageRules from "../../../components/linkageRules";
+import linkageRules from "@/components/linkageRules";
 import { isPhone } from "@/utils/common.js";
 import { FollowProject, EditProject } from "@/api/project";
 export default {

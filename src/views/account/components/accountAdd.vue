@@ -36,8 +36,11 @@
           name="体系"
           label="体系"
           placeholder="请输入所属体系"
+          disabled
           :rules="[{ required: true, message: '请输入所属体系' }]"
         />
+
+        <reportLink @saveProject="saveProject"></reportLink>
       </div>
       <van-button type="info" block native-type="submit">确认新增</van-button>
     </van-form>
@@ -45,11 +48,14 @@
 </template>
 
 <script type="text/javascript">
-import { Dialog } from "vant";
+import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "@/utils/validate";
+import { mapState, mapGetters, mapActions } from "vuex";
 import { AddAccount } from "@/api/account";
+import reportLink from "@/components/reportLink";
 export default {
   name: "report",
+  components: { reportLink },
   data() {
     return {
       showDate: false,
@@ -61,7 +67,8 @@ export default {
         IdCard: "", // 身份证号码
         StoreName: "", // 门店
         Company: "", // 体系
-        typeEnum: 3 // 账号类型
+        typeEnum: 3, // 账号类型
+        projectIds: []
       },
       validator: {
         phoneMessage: "请输入手机号码",
@@ -69,7 +76,12 @@ export default {
       }
     };
   },
-  mounted() {},
+  computed: {
+    ...mapGetters(["typeName"])
+  },
+  mounted() {
+    this.fromData.Company = this.typeName;
+  },
   methods: {
     openphone(phone) {
       Dialog.confirm({
@@ -105,12 +117,19 @@ export default {
     },
     postForm() {
       AddAccount(this.fromData).then(res => {
-        console.log(res);
+        Toast("新增成功");
+        setTimeout(() => {
+          this.$router.back();
+        }, 1500);
+
         // onClickLeft()
       });
     },
     onClickLeft() {
       this.$router.go(-1); //返回上一层
+    },
+    saveProject(data) {
+      this.fromData.projectIds = data.ResponsibleProjects;
     }
   }
 };

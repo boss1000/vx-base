@@ -128,6 +128,12 @@ const router = new Router({
       path: "/changePsd",
       name: "changePsd",
       component: () => import("../views/mine/components/changePsd.vue")
+    },
+    {
+      // 关注列表
+      path: "/followProject",
+      name: "followProject",
+      component: () => import("../views/mine/components/getFollowProjects.vue")
     }
   ],
 });

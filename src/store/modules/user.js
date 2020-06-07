@@ -10,7 +10,12 @@ const state = {
   avatar: '',
   introduction: '',
   roles: "1",
-  other: {},
+  otherData: {
+    company_Id: 0,
+    name: "wuyu",
+    sid: 0,
+    store_name: "123"
+  },
   ruleData: ''
 }
 
@@ -31,7 +36,8 @@ const mutations = {
     state.roles = roles
   },
   SET_OTHER: (state, roles) => {
-    state.other = roles
+    let { account_type, ...otherData } = roles
+    state.otherData = otherData
   },
   SET_ACCOUNT: (state, roles) => {
     state.account = roles

@@ -62,3 +62,12 @@ export function GetAreaList(data) {
     params: data
   })
 }
+
+// 获取关注项目列表
+export function getFollowProjects(data) {
+  return request({
+    url: '/api/Project/GetFollowProjects',
+    method: 'get',
+    params: data
+  })
+}

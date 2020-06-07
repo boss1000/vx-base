@@ -31,6 +31,9 @@
         <van-button class="buttonRight" type="info" size="small" @click="getReport">查询</van-button>
       </van-row>
     </div>
+
+    <showLoading :showLoading="showLoading"></showLoading>
+
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <locationView :locationList="locationList" :sateList="sateList"></locationView>
     </van-list>
@@ -40,30 +43,33 @@
 import { mapState, mapGetters, mapActions } from "vuex";
 import { Toast } from "vant";
 import { GetReportList, GetReportListByUserId } from "@/api/report";
-import VanFieldSelectPicker from "../../components/VanFieldSelectPicker";
+import showLoading from "@/components/showLoading";
+import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
 import locationView from "./components/locationView";
 export default {
   name: "location",
   components: {
     VanFieldSelectPicker,
+    showLoading,
     locationView
   },
   data() {
     return {
+      showLoading: false,
       satelabel: "请选择",
       timeStart: false,
       timeEnd: false,
       finished: false,
       loading: false,
       searchForm: {
-        Status: 0,
+        Status: null,
         Q: "",
         DateBegin: "",
         DateEnd: ""
       },
       sateList: [
         {
-          value: 0,
+          value: null,
           label: "请选择"
         },
         {
@@ -99,25 +105,7 @@ export default {
           label: "成交"
         }
       ],
-      locationList: [
-        {
-          title: "万科新都会", // 项目
-          username: "林海静", // 负责人
-          userphone: "13698761234", // 负责人电话
-          customername: "陆大佬", // 客户姓名
-          customerphone: "13698761234", // 客户电话
-          preparietaldate: "2020-05-02", // 预约来访日期
-          preparietaltime: "10：00", // 预约来访时间
-          system: "传说", // 体系
-          reportname: "林海静", // 报备人姓名
-          reportphone: "13698761234", // 报备人电话
-          store: "测试", // 所在门店
-          state: "1", // 报备状态
-          remark:
-            "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
-          //备注
-        }
-      ]
+      locationList: []
     };
   },
   computed: {
@@ -168,9 +156,11 @@ export default {
       // }
     },
     getReport() {
-      if (this.searchForm.Status !== 0) {
+      if (this.searchForm.Status !== null) {
+        this.showLoading = true;
         GetReportList(this.searchForm).then(res => {
-          console.log(res);
+          this.locationList = res.Result;
+          this.showLoading = false;
         });
       } else {
         Toast("请选择报备数据");

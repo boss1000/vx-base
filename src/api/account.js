@@ -30,7 +30,7 @@ export function ModifyAccount(data) {
 // 重置密码（需判断该用户是否挂在本账号下）
 export function ResetPassword(data) {
   return request({
-    url: '​/api​/Account​/ResetPassword',
+    url: '/api/Account/ResetPassword',
     method: 'get',
     params: data
   })

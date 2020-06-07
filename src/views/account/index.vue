@@ -2,12 +2,20 @@
   <div>
     <van-search v-model="searchData.Q" show-action placeholder="请输入搜索关键词">
       <template #action>
-        <!-- <span @click="onSearch">搜索</span> -->
-        <van-button class="searchBoxbutton" size="small" hairline type="info">搜索</van-button>
-        <!-- <span @click="onSearch">添加</span> -->
-        <van-button class="searchBoxbutton" size="small" hairline type="info" @click="accountAdd">新增</van-button>
+        <van-button class="searchBoxbutton" size="small" hairline type="info" @click="onSearch">搜索</van-button>
+        <van-button
+          v-if="roles == '1'"
+          class="searchBoxbutton"
+          size="small"
+          hairline
+          type="info"
+          @click="accountAdd"
+        >新增</van-button>
       </template>
     </van-search>
+
+    <showLoading :showLoading="showLoading"></showLoading>
+
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.Status"
@@ -17,17 +25,20 @@
       />
     </van-dropdown-menu>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <accountView class="mainContent" :accountList="accountList"></accountView>
+      <accountView class="mainContent" :accountList="accountList" @onSearch="onSearch"></accountView>
     </van-list>
   </div>
 </template>
 <script>
+import { mapState, mapGetters, mapActions } from "vuex";
 import accountView from "./components/accountView";
+import showLoading from "@/components/showLoading";
 import { GetAccountList } from "@/api/account";
 export default {
-  components: { accountView },
+  components: { accountView, showLoading },
   data() {
     return {
+      showLoading: false,
       searchData: {
         Q: "",
         Status: 0
@@ -39,24 +50,21 @@ export default {
         { text: "启用", value: 1 },
         { text: "停用", value: 2 }
       ],
-      accountList: [
-        {
-          account: "13798761234",
-          name: "来建平",
-          system: "传成",
-          state: "1",
-          project: ["大都会", "富力城"]
-        }
-      ]
+      accountList: []
     };
+  },
+  computed: {
+    ...mapGetters(["roles"])
   },
   mounted() {
     this.onSearch();
   },
   methods: {
     onSearch() {
+      this.showLoading = true;
       GetAccountList(this.searchData).then(res => {
-        console.log(res);
+        this.showLoading = false;
+        this.accountList = res.Result;
       });
     },
     onLoad() {

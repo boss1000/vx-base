@@ -9,58 +9,61 @@
         <div class="contentBox">
           <van-row class="halfBorder">
             <van-col class="name" span="8">报备项目</van-col>
-            <van-col class="content" span="16">{{item.title}}</van-col>
+            <van-col class="content" span="16">{{item.ProjectName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">负责人</van-col>
             <van-col class="content" span="16">
-              {{item.username}} -
-              <span class="phone" @click="openphone(item.userphone)"></span>
+              {{item.PrincipalerName}} -
+              <span
+                class="phone"
+                @click="openphone(item.PrincipalerMobile)"
+              >{{item.PrincipalerMobile}}</span>
             </van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">客户姓名</van-col>
-            <van-col class="content" span="16">{{item.customername}}</van-col>
+            <van-col class="content" span="16">{{item.CustomerName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">客户电话</van-col>
             <van-col
               class="content phone"
               span="16"
-              @click="openphone(item.customerphone)"
-            >{{item.customerphone}}</van-col>
+              @click="openphone(item.CustomerMobile)"
+            >{{item.CustomerMobile}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">预约来访日期</van-col>
-            <van-col class="content" span="16">{{item.preparietaldate}} {{item.preparietaltime}}</van-col>
+            <van-col class="content" span="16">{{item.ArriveDateTime}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">体系</van-col>
-            <van-col class="content" span="16">{{ item.system }}</van-col>
+            <van-col class="content" span="16">{{ item.CompanyName }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">报备人</van-col>
-            <van-col class="content" span="16">{{item.reportname}}</van-col>
+            <van-col class="content" span="16">{{item.ReporterName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">报备电话</van-col>
             <van-col
               class="content phone"
               span="16"
-              @click="openphone(item.reportphone)"
-            >{{ item.reportphone }}</van-col>
+              @click="openphone(item.ReporterMobile)"
+            >{{ item.ReporterMobile }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">所在门店</van-col>
-            <van-col class="content" span="16">{{item.store}}</van-col>
+            <van-col class="content" span="16">{{item.StoreName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">报备状态</van-col>
-            <van-col class="content" span="16">{{ conversionSate(item.state) }}</van-col>
+            <van-col class="content" span="16">{{ item.StatusName }}</van-col>
           </van-row>
           <van-row :class="['halfBorder',{'hideBorder':roles !== '2'}]">
             <van-col class="name" span="8">备注</van-col>
-            <van-col class="content notice" span="16">{{item.remark}}</van-col>
+            <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <van-row v-if="roles == '2'" class="controlBox" type="flex" justify="end">
             <van-button
@@ -164,13 +167,14 @@ export default {
       this.showModify = !this.showModify;
     },
     conversionSate(value) {
-      this.satelabel = this.sateList.find((item, index) => {
-        if (item.value == value) {
-          this.defaultIndex = index;
-          return item;
-        }
-      }).label;
-      return this.satelabel;
+      console.log(value)
+      // this.satelabel = this.sateList.find((item, index) => {
+      //   if (item.value == value) {
+      //     this.defaultIndex = index;
+      //     return item;
+      //   }
+      // }).label;
+      // return this.satelabel;
     },
     destoryPoup() {
       this.destoryPoupState = false;

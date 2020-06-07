@@ -9,28 +9,30 @@
         <div class="contentBox">
           <van-row class="halfBorder">
             <van-col class="name" span="5">账号</van-col>
-            <van-col
-              class="content phone"
-              span="7"
-              @click="openphone(item.account)"
-            >{{item.account}}</van-col>
+            <van-col class="content phone" span="7" @click="openphone(item.Mobile)">{{item.Mobile}}</van-col>
             <van-col class="name" span="5">姓名</van-col>
-            <van-col class="content" span="7">{{item.name}}</van-col>
+            <van-col class="content" span="7">{{item.UserName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="5">体系</van-col>
-            <van-col class="content" span="7">{{item.system}}</van-col>
+            <van-col class="content" span="7">{{item.Company}}</van-col>
             <van-col class="name" span="5">状态</van-col>
-            <van-col class="content" span="7">{{ item.state == '1' ? '启用' : '停用'}}</van-col>
+            <van-col
+              class="content"
+              span="7"
+            >{{ item.Status == '0' ? '停用' : item.Status == '1' ? '启用': '异常' }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="5">负责项目</van-col>
             <van-col class="content" span="19">
-              <div v-for="(allproject,index) in item.project" :key="index">{{allproject}}</div>
+              <div
+                v-for="(allproject,index) in item.ResponsibleProjectsName"
+                :key="index"
+              >{{allproject}}</div>
             </van-col>
           </van-row>
           <van-row class="controlBox" type="flex" justify="end">
-            <van-button class="buttonRight" type="danger" size="small" @click="resetPass">重置密码</van-button>
+            <van-button class="buttonRight" type="danger" size="small" @click="resetPass(item)">重置密码</van-button>
             <van-button class="buttonRight" type="info" size="small" @click="modifyData(item)">修改</van-button>
             <van-button type="info" size="small" @click="opendetail(item)">数据</van-button>
           </van-row>
@@ -45,15 +47,17 @@
       @confirm="postModify"
     >
       <van-form ref="postModify" class="auth-form">
-        <van-field
+        <!-- <van-field
           v-model="modify.name"
           name="姓名"
           label="姓名"
           placeholder="请输入姓名"
           :rules="[{ required: true, message: '请输入姓名' }]"
-        />
+        />-->
+        <reportLink v-if="showModify" labelWidth="120px" @saveProject="saveProject"></reportLink>
         <van-field
-          v-model="modify.system"
+          label-width="120px"
+          v-model="modify.StoreName"
           name="门店"
           label="门店"
           placeholder="请输入门店"
@@ -65,6 +69,8 @@
 </template>
 <script>
 import { Dialog, Toast } from "vant";
+import { ResetPassword, ModifyAccount } from "@/api/account";
+import reportLink from "@/components/reportLink";
 export default {
   name: "accountList",
   props: {
@@ -78,11 +84,11 @@ export default {
       showModify: false,
       currReport: {},
       modify: {
-        name: "",
-        system: ""
+        StoreName: ""
       }
     };
   },
+
   watch: {
     showModify() {
       if (!this.showModify) {
@@ -91,10 +97,12 @@ export default {
           this.$data.modify,
           this.$options.data().modify
         );
+
         this.$refs["postModify"].resetValidation();
       }
     }
   },
+  components: { reportLink },
   mounted() {},
   methods: {
     openphone(phone) {
@@ -113,16 +121,23 @@ export default {
       this.$router.push({
         name: "accountReport",
         params: {
-          id: item.id,
-          name: item.name
+          id: item.Id,
+          name: item.UserName
         }
       });
     },
-    resetPass() {
-      Toast("密码重置成功");
+    resetPass(item) {
+      ResetPassword({ Id: item.Id })
+        .then(res => {
+          Toast("密码重置成功");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     modifyData(item) {
       this.showModify = true;
+      this.currReport = JSON.parse(JSON.stringify(item));
     },
     onBeforeClose(action, done) {
       if (action === "confirm") {
@@ -135,13 +150,15 @@ export default {
       }
     },
     postModify() {
-      this.$refs["postModify"]
-        .validate()
-        .then(() => {
-          this.showModify = false;
-          console.log(this.modify);
-        })
-        .catch(() => {});
+      this.currReport = Object.assign({}, this.currReport, this.modify);
+      ModifyAccount(this.currReport).then(data => {
+        this.showModify = false;
+        this.$emit("onSearch");
+      });
+    },
+    saveProject(data) {
+      this.currReport.ResponsibleProjects = data.ResponsibleProjects;
+      this.currReport.ResponsibleProjectsName = data.ResponsibleProjectsName;
     }
   }
 };
@@ -172,7 +189,7 @@ export default {
           &.halfBorder {
             border-bottom: 1px solid rgba(0, 0, 0, 0.2);
             .van-col {
-              padding: 5px 0;
+              // padding: 5px 0;
               border-left: 1px solid rgba(0, 0, 0, 0.2);
             }
             .van-col:first-child {
@@ -192,6 +209,7 @@ export default {
         .content {
           font-size: 14px;
           line-height: 20px;
+          min-height: 20px;
           text-indent: 5px;
           // margin-top: 10px;
         }
