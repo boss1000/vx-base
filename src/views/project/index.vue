@@ -1,24 +1,25 @@
 <template>
   <div>
-    <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @search="changeDropdown"></van-search>
+    <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @search="getDataList"></van-search>
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.Area"
         :options="option1"
         title="地区"
-        @change="changeDropdown"
+        @change="getDataList"
       />
       <van-dropdown-item
         v-model="searchData.orderType"
         :options="option2"
         title="类型"
-        @change="changeDropdown"
+        @change="getDataList"
       />
     </van-dropdown-menu>
     <van-list
       class="mainContent"
       v-model="loading"
       :finished="finished"
+      :immediate-check="false"
       finished-text="没有更多了"
       @load="onLoad"
     >
@@ -36,7 +37,9 @@ export default {
       searchData: {
         ProjectName: "",
         Area: "",
-        orderType: 1
+        orderType: 1,
+        PageIndex: 1,
+        PageSize: 2
       },
       loading: false,
       finished: false,
@@ -59,32 +62,32 @@ export default {
     };
   },
   mounted() {
-    this.changeDropdown();
+    this.getDataList();
     this.getAreaList();
   },
   methods: {
     onLoad() {
-      // this.infoList = this.infoList.concat([
-
-      // ]);
-      // // 加载状态结束
-      this.loading = false;
-
-      // // 数据全部加载完成
-      // if (this.infoList.length == 4) {
-      //   this.finished = true;
-      // }
+      if (!this.finished) {
+        this.loading = true;
+        this.searchData.PageIndex += 1;
+        this.$nextTick(() => {
+          this.getDataList();
+        });
+      }
     },
     getAreaList() {
       GetAreaList().then(data => {
         this.option1 = data.Result;
       });
     },
-    changeDropdown() {
+    getDataList() {
       getProjectList(this.searchData)
         .then(data => {
-          this.infoList = data.Result;
-          console.log(data);
+          this.infoList = this.infoList.concat(data.Result);
+          this.loading = false;
+          if (data.Result.length < this.searchData.PageSize) {
+            this.finished = true;
+          }
         })
         .catch(error => {
           console.log(error);

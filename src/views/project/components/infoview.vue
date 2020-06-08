@@ -133,10 +133,7 @@ export default {
       this.$router.push({
         name: "projectdetail",
         params: {
-          id: this.currReport.id,
-          title: this.currReport.title,
-          username: this.currReport.username,
-          userphone: this.currReport.userphone
+          id: item.Id
         }
       });
     },

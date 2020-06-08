@@ -91,7 +91,7 @@
 import { ImagePreview, Popup } from "vant";
 import linkageRules from "../../components/linkageRules";
 import Map from "../../components/Maps/Map";
-import { AddProject } from "@/api/project";
+import { AddProject, GetDetail } from "@/api/project";
 export default {
   data() {
     return {
@@ -118,7 +118,17 @@ export default {
     linkageRules,
     Map
   },
+  mounted() {
+    this.getdetail();
+  },
   methods: {
+    getdetail() {
+      GetDetail({
+        projectID: this.$route.params.id
+      }).then(res => {
+        console.log(res)
+      });
+    },
     onClickLeft() {
       this.$router.go(-1); //返回上一层
     },

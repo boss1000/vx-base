@@ -34,8 +34,14 @@
 
     <showLoading :showLoading="showLoading"></showLoading>
 
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <locationView :locationList="locationList" :sateList="sateList"></locationView>
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      :immediate-check="false"
+      @load="onLoad"
+    >
+      <locationView class="van-clearfix" :locationList="locationList" :sateList="sateList"></locationView>
     </van-list>
   </div>
 </template>
@@ -65,7 +71,9 @@ export default {
         Status: null,
         Q: "",
         DateBegin: "",
-        DateEnd: ""
+        DateEnd: "",
+        PageIndex: 1,
+        PageSize: 2
       },
       sateList: [
         {
@@ -138,29 +146,24 @@ export default {
       this.timeEnd = false;
     },
     onLoad() {
-      // this.buildList = this.buildList.concat([
-      //   {
-      //     name: "新鹿城2121",
-      //     size: "102-140",
-      //     address: "路程区牛山北路（百里亭公交站）",
-      //     price: "240",
-      //     image: "https://img.yzcdn.cn/vant/apple-1.jpg"
-      //   }
-      // ]);
-      // 加载状态结束
-      this.loading = false;
-      this.finished = true;
-      // 数据全部加载完成
-      // if (this.buildList.length == 4) {
-      //   this.finished = true;
-      // }
+      if (!this.finished && this.locationList.length > 0) {
+        this.loading = true;
+        this.searchForm.PageIndex += 1;
+        this.$nextTick(() => {
+          this.getReport();
+        });
+      }
     },
     getReport() {
       if (this.searchForm.Status !== null) {
         this.showLoading = true;
         GetReportList(this.searchForm).then(res => {
-          this.locationList = res.Result;
+          this.locationList = this.locationList.concat(res.Result);
           this.showLoading = false;
+          this.loading = false;
+          if (res.Result.length < this.searchForm.PageSize) {
+            this.finished = true;
+          }
         });
       } else {
         Toast("请选择报备数据");

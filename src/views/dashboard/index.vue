@@ -44,10 +44,10 @@ export default {
           active: "build-active"
         },
         {
-          name: "location",
+          name: "reportData",
           title: "数据",
-          normal: "location",
-          active: "location-active"
+          normal: "reportData",
+          active: "reportData-active"
         },
         {
           name: "mine",

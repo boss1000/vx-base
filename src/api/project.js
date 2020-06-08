@@ -71,3 +71,12 @@ export function getFollowProjects(data) {
     params: data
   })
 }
+
+// 获取项目详情
+export function GetDetail(data) {
+  return request({
+    url: '/api/Project/GetDetail',
+    method: 'get',
+    params: data
+  })
+}

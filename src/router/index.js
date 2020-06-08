@@ -71,9 +71,9 @@ const router = new Router({
         },
         {
           // 数据
-          path: "location",
-          name: "location",
-          component: () => import("../views/location"),
+          path: "reportData",
+          name: "reportData",
+          component: () => import("../views/reportData"),
           // 是否数据缓存
           meta: {
             keepAlive: true,

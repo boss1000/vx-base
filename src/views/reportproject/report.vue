@@ -147,6 +147,7 @@ export default {
       preparietaldate: "", // 预约来访日期
       preparietaltime: "", // 预约来访时间
       fromData: {
+        Id: this.$route.params.Id,
         ProjectId: this.$route.params.Id, // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
         PrincipalerName: this.$route.params.PrincipalerName || "", // 项目负责人姓名
