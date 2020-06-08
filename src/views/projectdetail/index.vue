@@ -7,15 +7,15 @@
       :title="detailForm.title"
     />
     <div class="auth-form">
-      <van-image
+      <!-- <van-image
         class="imageSize"
         fit="contain"
         lazy-load
         :src="detailForm.image"
         @click="openImagePreview"
-      />
+      /> -->
       <div class="detailContent">
-        <van-row>
+        <!-- <van-row>
           <van-col class="title" span="12">{{detailForm.title}}</van-col>
         </van-row>
         <van-row>
@@ -47,21 +47,21 @@
         <van-row>
           <van-col class="name" span="6">佣金</van-col>
           <van-col class="content" span="18">{{detailForm.commission}}</van-col>
-        </van-row>
+        </van-row> -->
         <van-row>
           <van-col class="name" span="6">特别说明</van-col>
-          <van-col class="content" span="18">{{detailForm.notice}}</van-col>
+          <van-col class="content" span="18">{{detailForm.Detail}}</van-col>
         </van-row>
         <van-row>
           <van-button class="buttonRight" type="info" size="small" block @click="openReport">报备</van-button>
         </van-row>
         <van-row>
           <van-col class="name" offset="4" span="4">访问人数</van-col>
-          <van-col class="number" span="2">2332</van-col>
+          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
           <van-col class="name" offset="1" span="4">访问次数</van-col>
-          <van-col class="number" span="2">232</van-col>
+          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
           <van-col class="name" offset="1" span="4">转发次数</van-col>
-          <van-col class="number" span="2">223</van-col>
+          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
         </van-row>
 
         <van-row>
@@ -97,21 +97,7 @@ export default {
     return {
       reportShow: false,
       showbigMap: false,
-      detailForm: {
-        id: this.$route.params.id,
-        title: this.$route.params.title || "万科新都会", // 项目
-        image: "https://img.yzcdn.cn/vant/apple-1.jpg",
-        reportnum: "5123",
-        username: "林海静",
-        userphone: "13698761234",
-        discount:
-          "首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折,首付90w96折,全款94折",
-        developers: "万科",
-        openquotation: "最新2020年8月20",
-        commission: "120m²以上30000,120m²以下0.9%",
-        notice:
-          "万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮.万科新都会，3室2厅2卫，好楼层，阳光无遮挡.高品质小区，环境优美，物业管理好。楼层也好，采光无遮."
-      }
+      detailForm: {}
     };
   },
   components: {
@@ -126,7 +112,7 @@ export default {
       GetDetail({
         projectID: this.$route.params.id
       }).then(res => {
-        console.log(res)
+        this.detailForm = res.Result;
       });
     },
     onClickLeft() {
@@ -142,13 +128,19 @@ export default {
       this.reportShow = true;
     },
     agreeReportShow() {
+      let {
+        Id,
+        ProjectName,
+        PrincipalerName,
+        PrincipalerMobile
+      } = this.currReport;
       this.$router.push({
         name: "report",
         params: {
-          id: this.detailForm.id,
-          title: this.detailForm.title,
-          username: this.detailForm.username,
-          userphone: this.detailForm.userphone
+          Id,
+          ProjectName,
+          PrincipalerName,
+          PrincipalerMobile
         }
       });
     },

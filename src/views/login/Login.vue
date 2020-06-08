@@ -232,7 +232,6 @@ export default {
       this.$refs.registerPage
         .validate()
         .then(() => {
-          md5;
           register(this.register)
             .then(data => {
               Toast.success("注册成功，请等待验证");

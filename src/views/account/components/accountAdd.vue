@@ -52,7 +52,7 @@ import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "@/utils/validate";
 import { mapState, mapGetters, mapActions } from "vuex";
 import { AddAccount } from "@/api/account";
-import reportLink from "@/components/reportLink";
+import reportLink from "@/components/reportLink/project";
 export default {
   name: "report",
   components: { reportLink },

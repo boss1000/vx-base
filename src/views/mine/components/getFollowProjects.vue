@@ -186,6 +186,14 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    opendetail(item) {
+      this.$router.push({
+        name: "projectdetail",
+        params: {
+          id: item.Id
+        }
+      });
     }
   }
 };

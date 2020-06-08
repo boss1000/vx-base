@@ -20,7 +20,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       // xhr.setRequestHeader("Authorization", "Bearer " + $.cookie("xzb_token"));
-      config.headers['Authorization'] = "Bearer "+ getToken()
+      config.headers['Authorization'] = "Bearer " + getToken()
     }
     return config
   },
@@ -53,8 +53,12 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log(error.response.data) // for debug
-    Toast(error.response.data);
+    if (error.response.data instanceof Array) {
+      Toast(error.response.data[0]);
+    } else {
+
+      Toast(error.response.data);
+    }
     return Promise.reject(error)
   }
 )

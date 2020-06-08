@@ -21,7 +21,7 @@
         name="确认新密码"
         label="确认新密码"
         placeholder="请再次输入新密码"
-        :rules="[{ required: true, validator: phoneValidator, message: validator.newpassword }]"
+        :rules="[{ validator: phoneValidator, message: validator.newpassword }]"
       />
       <van-button type="info" block native-type="submit">确认修改</van-button>
     </van-form>
@@ -29,7 +29,10 @@
 </template>
 
 <script type="text/javascript">
-import { Dialog } from "vant";
+import { Dialog, Toast } from "vant";
+import { ModifyOwnPassword } from "@/api/account";
+import { removeToken } from "@/utils/auth";
+import md5 from "js-md5";
 export default {
   name: "changePsd",
   data() {
@@ -50,12 +53,32 @@ export default {
       this.$router.go(-1); //返回上一层
     },
     phoneValidator(value, rule) {
-      if (value.length > 0) {
-        this.validator.newpassword = "两次密码不一致"
-        return false;
+      if (this.fromData.testpassword == this.fromData.newpassword) {
+        return true;
+      } else {
+        if (value.length > 0) {
+          this.validator.newpassword = "两次密码不一致";
+          return false;
+        } else {
+          this.validator.newpassword = "请再次输入新密码";
+          return false;
+        }
       }
     },
-    postForm() {}
+    postForm() {
+      ModifyOwnPassword({
+        OldPassword: md5(this.fromData.oldpassword),
+        Password: md5(this.fromData.newpassword)
+      }).then(res => {
+        Toast("密码修改成功，请重新登陆！");
+        setTimeout(() => {
+          removeToken();
+          this.$router.push({
+            name: "login"
+          });
+        }, 1000);
+      });
+    }
   }
 };
 </script>

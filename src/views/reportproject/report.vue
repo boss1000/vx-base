@@ -8,10 +8,17 @@
           <span class="redcol" @click="openReport">《联动规则》</span>
         </van-col>
       </van-row>
-      <van-row>
+
+      <reportLink
+        labelTitle="报备项目"
+        :defaultIndex="fromData.ProjectIds"
+        :defaultName="fromData.ProjectName"
+        @saveProject="saveProject"
+      ></reportLink>
+      <!-- <van-row>
         <van-col span="6">报备项目</van-col>
         <van-col span="18">{{ fromData.ProjectName }}</van-col>
-      </van-row>
+      </van-row>-->
       <van-row>
         <van-col span="6">负责人</van-col>
         <van-col span="16">
@@ -134,10 +141,12 @@ import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "../../utils/validate";
 import { AddReport } from "@/api/report";
 import linkageRules from "../../components/linkageRules";
+import reportLink from "@/components/reportLink/project";
 export default {
   name: "report",
   components: {
-    linkageRules
+    linkageRules,
+    reportLink
   },
   data() {
     return {
@@ -147,8 +156,7 @@ export default {
       preparietaldate: "", // 预约来访日期
       preparietaltime: "", // 预约来访时间
       fromData: {
-        Id: this.$route.params.Id,
-        ProjectId: this.$route.params.Id, // 项目Id
+        ProjectIds: [this.$route.params.Id], // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
         PrincipalerName: this.$route.params.PrincipalerName || "", // 项目负责人姓名
         PrincipalerMobile: this.$route.params.PrincipalerMobile || "", // 负责人电话
@@ -246,6 +254,12 @@ export default {
     },
     onClickLeft() {
       this.$router.go(-1); //返回上一层
+    },
+    saveProject(data) {
+      this.fromData.ProjectIds = [this.$route.params.Id];
+      this.fromData.ProjectIds = [
+        ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
+      ].filter(true);
     }
   }
 };

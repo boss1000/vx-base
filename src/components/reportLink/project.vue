@@ -1,6 +1,12 @@
 <template>
   <div class="reportLink">
-    <van-field center clearable label="负责项目" :label-width="labelWidth" @click="showPopup = true">
+    <van-field
+      center
+      clearable
+      :label="labelTitle"
+      :label-width="labelWidth"
+      @click="showPopup = true"
+    >
       <template #input>
         <div class="inputClass">
           <div class="inputFlex">
@@ -21,8 +27,6 @@
     >
       <van-row class="checkBox" type="flex" justify="left">
         <van-button class="buttonRight" type="info" size="mini" @click="sureReport()">确定</van-button>
-        <!-- <van-button class="buttonRight" type="info" size="mini" @click="checkAll(true)">全选</van-button>
-        <van-button class="buttonRight" type="info" size="mini" @click="checkAll(false)">全不选</van-button>-->
       </van-row>
       <van-list
         class="checkListClass"
@@ -38,10 +42,16 @@
               clickable
               :key="item.Id"
               :title="`${item.ProjectName}`"
+              :disabled="item.Id == defaultIndex[0]"
               @click="toggle(index)"
             >
               <template #right-icon>
-                <van-checkbox shape="square" :name="item.Id" ref="checkboxes" />
+                <van-checkbox
+                  :disabled="item.Id == defaultIndex[0]"
+                  shape="square"
+                  :name="item.Id"
+                  ref="checkboxes"
+                />
               </template>
             </van-cell>
           </van-cell-group>
@@ -53,11 +63,23 @@
 <script>
 import { getProjectList } from "@/api/project";
 export default {
-  name: "reportLink",
+  name: "projectLink",
   props: {
     labelWidth: {
       type: String,
       default: "180px"
+    },
+    labelTitle: {
+      type: String,
+      default: "负责项目"
+    },
+    defaultIndex: {
+      type: Array,
+      default: () => []
+    },
+    defaultName: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -74,16 +96,14 @@ export default {
   mounted() {
     this.changeDropdown();
   },
-  watch: {
-    infoList() {
-      // console.log(this.infoList);
-    }
-  },
+  watch: {},
   methods: {
     openDetail(item) {},
     onLoad() {},
     toggle(index) {
-      this.$refs.checkboxes[index].toggle();
+      if (!this.$refs.checkboxes[index].disabled) {
+        this.$refs.checkboxes[index].toggle();
+      }
     },
     changeDropdown() {
       getProjectList({
@@ -95,13 +115,18 @@ export default {
           this.infoList = data.Result;
           this.loading = true;
           this.finished = true;
+          if (this.defaultIndex.length > 0 && this.defaultName.length > 0) {
+            this.ResponsibleProjects = this.defaultIndex;
+            this.ResponsibleProjectsName = [this.defaultName];
+          }
         })
         .catch(error => {
           console.log(error);
         });
     },
     sureReport() {
-      this.ResponsibleProjectsName = [];
+      this.ResponsibleProjectsName =
+        this.defaultName.length > 0 ? [].concat([this.defaultName]) : [];
       // 获取名称
       this.infoList.map(item => {
         this.ResponsibleProjects.find(value => {

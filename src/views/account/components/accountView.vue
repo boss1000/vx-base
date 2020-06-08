@@ -70,7 +70,7 @@
 <script>
 import { Dialog, Toast } from "vant";
 import { ResetPassword, ModifyAccount } from "@/api/account";
-import reportLink from "@/components/reportLink";
+import reportLink from "@/components/reportLink/project";
 export default {
   name: "accountList",
   props: {

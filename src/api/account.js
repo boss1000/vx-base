@@ -57,7 +57,7 @@ export function DeleteAccount(data) {
 // 修改自己密码
 export function ModifyOwnPassword(data) {
   return request({
-    url: '​​/api/Account/ModifyOwnPassword',
+    url: '/api/Account/ModifyOwnPassword',
     method: 'get',
     params: data
   })
