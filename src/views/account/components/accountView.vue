@@ -54,9 +54,9 @@
           placeholder="请输入姓名"
           :rules="[{ required: true, message: '请输入姓名' }]"
         />-->
-        <reportLink v-if="showModify" labelWidth="120px" @saveProject="saveProject"></reportLink>
+        <reportLink v-if="showModify" @saveProject="saveProject"></reportLink>
         <van-field
-          label-width="120px"
+          label-width="2.4rem"
           v-model="modify.StoreName"
           name="门店"
           label="门店"

@@ -1,22 +1,33 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{pcSet:!isPhone}">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// 禁止手机端扩大和缩小手势
-window.onload = function () {
-  document.addEventListener('touchstart', function (event) {
-    if (event.touches.length > 1) {
-      event.preventDefault()
-    }
-  })
-  document.addEventListener('gesturestart', function (event) {
-    event.preventDefault()
-  })
-}
-
+import { mapGetters } from "vuex";
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["isPhone"])
+  },
+  mounted() {
+    this.$store.dispatch("app/setPhone");
+    // 禁止手机端扩大和缩小手势
+    window.onload = function() {
+      document.addEventListener("touchstart", function(event) {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      });
+      document.addEventListener("gesturestart", function(event) {
+        event.preventDefault();
+      });
+    };
+  }
+};
 </script>
 <style lang="less">
 #app {

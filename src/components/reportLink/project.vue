@@ -4,7 +4,7 @@
       center
       clearable
       :label="labelTitle"
-      :label-width="labelWidth"
+      :label-width="setlabelWidth"
       @click="showPopup = true"
     >
       <template #input>
@@ -20,7 +20,7 @@
     <van-popup
       v-model="showPopup"
       position="right"
-      :style="{ width: '60%',height:'100%' }"
+      :style="popupClass"
       closeable
       close-icon-position="top-left"
       get-container="body"
@@ -62,12 +62,13 @@
 </template>
 <script>
 import { getProjectList } from "@/api/project";
+import { isPhone } from "@/utils/common.js";
 export default {
   name: "projectLink",
   props: {
     labelWidth: {
       type: String,
-      default: "180px"
+      default: "90px"
     },
     labelTitle: {
       type: String,
@@ -92,6 +93,26 @@ export default {
       ResponsibleProjectsName: [],
       showTag: false
     };
+  },
+  computed: {
+    setlabelWidth() {
+      let labelWidth = Number(this.labelWidth.replace(/[a-zA-Z]+/g, ""));
+      let conversion = (labelWidth / 37.5).toFixed(1) + "rem";
+      return conversion;
+    },
+    popupClass() {
+      if (isPhone()) {
+        return {
+          width: "60%",
+          height: "100%"
+        };
+      } else {
+        return {
+          width: "30%",
+          height: "100%"
+        };
+      }
+    }
   },
   mounted() {
     this.changeDropdown();

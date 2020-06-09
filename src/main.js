@@ -8,16 +8,16 @@ import FastClick from 'fastclick'
 import waterfall from 'vue-waterfall2'
 // 全局引入UI库 vant
 import '@/plugins/vant'
-// 全局引入rem
-import '@/config/rem'
-// 移动端适配
-import 'lib-flexible/flexible.js'
 //  全局引入 过滤器
 import '@/config/filter'
 // import './assets/iconfont/iconfont.css'
 import './icons' // icon
 import './assets/scss/base.scss'
-
+import './assets/scss/pcBase.scss'
+// 全局引入rem
+import '@/config/rem'
+// 移动端适配
+import 'lib-flexible/flexible.js'
 Vue.config.productionTip = false
 
 // 解决移动端点击延迟200ms的问题

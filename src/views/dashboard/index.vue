@@ -72,7 +72,7 @@ export default {
     ...mapGetters(["roles"])
   },
   created() {
-    this.setRoles()
+    this.setRoles();
     //通过路由跳转绑定Tabbar的选中
     this.tabbarSelected(this.$route.name);
   },
@@ -88,9 +88,10 @@ export default {
           this.tabbars.splice(1, 1);
           break;
         case "3":
+          // 中介
           this.tabbars.splice(1, 1);
-        // 中介
         default:
+          // 超级管理员
           break;
       }
     },

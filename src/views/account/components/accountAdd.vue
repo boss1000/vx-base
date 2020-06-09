@@ -40,7 +40,7 @@
           :rules="[{ required: true, message: '请输入所属体系' }]"
         />
 
-        <reportLink @saveProject="saveProject"></reportLink>
+        <reportLink  @saveProject="saveProject"></reportLink>
       </div>
       <van-button type="info" block native-type="submit">确认新增</van-button>
     </van-form>

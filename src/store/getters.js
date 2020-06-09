@@ -9,6 +9,7 @@ const getters = {
   ruleData: state => state.user.ruleData,
   typeName: state => state.user.otherData.name,
   name: state => state.user.name,
+  isPhone: state => state.app.isPhone,
   introduction: state => state.user.introduction,
   permission_routes: state => state.permission.routes,
   errorLogs: state => state.errorLog.logs,

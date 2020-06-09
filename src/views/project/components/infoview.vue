@@ -85,7 +85,6 @@
 import { Dialog, Toast } from "vant";
 import { mapState, mapGetters, mapActions } from "vuex";
 import linkageRules from "@/components/linkageRules";
-import { isPhone } from "@/utils/common.js";
 import { FollowProject, EditProject } from "@/api/project";
 export default {
   name: "infoview",
@@ -101,12 +100,11 @@ export default {
   data() {
     return {
       reportShow: false,
-      isPhone: isPhone(),
       currReport: {}
     };
   },
   computed: {
-    ...mapGetters(["roles", "ruleData"])
+    ...mapGetters(["roles", "ruleData",'isPhone'])
   },
   mounted() {},
   methods: {
@@ -155,7 +153,7 @@ export default {
       });
     },
     changeData() {
-      if (isPhone) {
+      if (this.isPhone) {
         Toast({
           message: "请使用电脑端操作该功能"
         });

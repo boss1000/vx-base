@@ -23,7 +23,15 @@
                   :rules="[{ required: true, message: '请输入密码' }]"
                 />
               </van-cell-group>
-              <van-button type="info" size="large" style="margin-top:1rem" native-type="submit" :loading="loginloading" loading-text="登录中..." loading-type="spinner">登录</van-button>
+              <van-button
+                type="info"
+                size="large"
+                style="margin-top:1rem"
+                native-type="submit"
+                :loading="loginloading"
+                loading-text="登录中..."
+                loading-type="spinner"
+              >登录</van-button>
             </van-form>
           </van-tab>
           <!-- 注册 -->
@@ -210,17 +218,17 @@ export default {
     },
     // 5.登录
     async loginForm() {
-      this.loginloading = true
+      this.loginloading = true;
       this.$store
         .dispatch("user/login", this.loginData)
         .then(data => {
           Toast.success("登录成功");
-          this.loginloading = false
+          this.loginloading = false;
           this.$router.push({ path: "/" });
         })
         .catch(error => {
           console.log(error);
-          this.loginloading = false
+          this.loginloading = false;
           // Toast({
           //   message: "账号或密码错误"
           // });
@@ -357,6 +365,16 @@ export default {
   font-size: 0.867rem;
   .agreement-box {
     color: blue;
+  }
+}
+.pcSet {
+  #login {
+    .loginBox {
+      .auth-form {
+        width: 400px;
+        max-width: 400px;
+      }
+    }
   }
 }
 </style>
