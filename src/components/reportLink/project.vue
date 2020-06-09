@@ -130,7 +130,9 @@ export default {
       getProjectList({
         ProjectName: "",
         Area: "",
-        orderType: 1
+        orderType: 1,
+        PageIndex: 1,
+        PageSize: 100
       })
         .then(data => {
           this.infoList = data.Result;

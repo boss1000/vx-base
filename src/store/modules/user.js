@@ -52,7 +52,6 @@ const actions = {
   login({ commit }, userInfo) {
     const { account, password } = userInfo
     return new Promise((resolve, reject) => {
-      console.log({ Account: account.trim(), PassWord: md5(password) })
       login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
         const { access_token, profile } = response.Result
         commit('SET_TOKEN', access_token)
