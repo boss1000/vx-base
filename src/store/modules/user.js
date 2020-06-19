@@ -50,9 +50,9 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { account, password } = userInfo
+    const { account, password, wxCode } = userInfo
     return new Promise((resolve, reject) => {
-      login({ Account: account.trim(), PassWord: md5(password) }).then(response => {
+      login({ Account: account.trim(), PassWord: md5(password), wxCode: wxCode }).then(response => {
         const { access_token, profile } = response.Result
         commit('SET_TOKEN', access_token)
         commit("SET_ROLES", profile.account_type)

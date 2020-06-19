@@ -139,6 +139,7 @@ export default {
         cardMessage: "请输入身份证号码"
       },
       loginData: {
+        wxCode: "",
         account: "", // 用户名
         password: "" // 用户密码
       },
@@ -219,6 +220,7 @@ export default {
     // 5.登录
     async loginForm() {
       this.loginloading = true;
+      this.loginData.wxCode = this.getQueryString('code')
       this.$store
         .dispatch("user/login", this.loginData)
         .then(data => {
@@ -281,6 +283,12 @@ export default {
     },
     onFailed(errorInfo) {
       console.log("failed", errorInfo);
+    },
+    getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return null;
     }
   }
 };
