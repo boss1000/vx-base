@@ -92,6 +92,8 @@ export default {
           this.tabbars.splice(1, 1);
         default:
           // 超级管理员
+          // window.location.href = 'http://ccreportmanage.chuanchengfc.com/'
+          // window.location.href = 'http://192.168.3.47:9527/'
           break;
       }
     },

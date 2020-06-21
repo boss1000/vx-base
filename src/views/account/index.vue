@@ -41,14 +41,15 @@ export default {
       showLoading: false,
       searchData: {
         Q: "",
-        Status: 0
+        Status: null
       },
       loading: false,
       finished: false,
       option1: [
-        { text: "全部", value: 0 },
-        { text: "启用", value: 1 },
-        { text: "停用", value: 2 }
+        { label: "全部", value: null },
+        { label: "启用", value: 1 },
+        { label: "停用", value: 2 },
+        { label: "异常", value: 3 }
       ],
       accountList: []
     };

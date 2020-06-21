@@ -1,18 +1,18 @@
 <template>
   <div>
-    <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @search="getDataList"></van-search>
+    <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @search="getDataList()"></van-search>
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.Area"
         :options="option1"
         title="地区"
-        @change="getDataList"
+        @change="getDataList()"
       />
       <van-dropdown-item
         v-model="searchData.orderType"
         :options="option2"
-        title="类型"
-        @change="getDataList"
+        title="排序"
+        @change="getDataList()"
       />
     </van-dropdown-menu>
     <van-list
@@ -71,7 +71,7 @@ export default {
         this.loading = true;
         this.searchData.PageIndex += 1;
         this.$nextTick(() => {
-          this.getDataList();
+          this.getDataList(false);
         });
       }
     },
@@ -80,18 +80,27 @@ export default {
         this.option1 = data.Result;
       });
     },
-    getDataList() {
-      getProjectList(this.searchData)
-        .then(data => {
-          this.infoList = this.infoList.concat(data.Result);
-          this.loading = false;
-          if (data.Result.length < this.searchData.PageSize) {
-            this.finished = true;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    getDataList(isPage) {
+      if (!isPage) {
+        // 判断是否为翻页
+        this.infoList = [];
+        this.searchData.PageIndex = 1;
+      }
+      this.$nextTick(() => {
+        getProjectList(this.searchData)
+          .then(data => {
+            if (!this.finished) {
+            }
+            this.infoList = this.infoList.concat(data.Result);
+            this.loading = false;
+            if (data.Result.length < this.searchData.PageSize) {
+              this.finished = true;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
     }
   }
 };

@@ -142,7 +142,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     if (state.getters.token) {
-      next();
+      if (state.getters.roles == '308') {
+        // 超级管理员
+        window.location.href = 'http://ccreportmanage.chuanchengfc.com/'
+      } else {
+        next();
+      }
     } else {
       next({
         path: "/login",
