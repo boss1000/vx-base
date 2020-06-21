@@ -15,7 +15,7 @@ import './icons' // icon
 import './assets/scss/base.scss'
 import './assets/scss/pcBase.scss'
 // 全局引入rem
-import '@/config/rem'
+// import '@/config/rem'
 // 移动端适配
 import 'lib-flexible/flexible.js'
 Vue.config.productionTip = false
