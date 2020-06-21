@@ -21,10 +21,36 @@ export default {
     isSalce: {
       type: Boolean,
       default: true
+    },
+    detailForm: {
+      type: Object,
+      default: () => {}
+    },
+    showbigMap: {
+      type: Boolean,
+      default: false
+    }
+  },
+  watch: {
+    detailForm: {
+      handler() {
+        this.initMap();
+      },
+      deep: true
+    },
+    showbigMap: {
+      handler() {
+        if (this.showbigMap) {
+          this.$nextTick(() => {
+            this.initMap();
+          });
+        }
+      },
+      immediate: true
     }
   },
   mounted() {
-    this.initMap();
+    // this.initMap();
   },
   methods: {
     //这几个地方加this
@@ -73,10 +99,11 @@ export default {
     },
     //创建marker
     addMarker() {
+      let pointSet = this.detailForm.GPS.split(",");
       const markerArr = [
         {
-          title: "无锡云熵动力科技有限公司",
-          content: "地址：无锡市惠山经济开发区智慧路18号<br/>电话：15061509527",
+          title: "",
+          content: "",
           point: ["120.32801", "31.686872"],
           isOpen: 1
         }
@@ -93,14 +120,11 @@ export default {
         let opts = {
           width: 500, // 信息窗口宽度
           height: 250, // 信息窗口高度
-          title: '<h3 style="float: left">海底捞王府井店</h3>', // 信息窗口标题
-          message: "亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~",
+          title: "", // 信息窗口标题
+          message: "",
           enableCloseOnClick: false
         };
-        var infoWindow = new BMap.InfoWindow(
-          "地址：北京市东城区王府井大街88号乐天银泰百货八层",
-          opts
-        ); // 创建信息窗口对象
+        var infoWindow = new BMap.InfoWindow(this.detailForm.Address, opts); // 创建信息窗口对象
         marker.addEventListener("click", function() {
           this.map.openInfoWindow(infoWindow, point); //开启信息窗口
         });

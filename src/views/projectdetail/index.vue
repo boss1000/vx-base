@@ -13,7 +13,7 @@
         lazy-load
         :src="detailForm.image"
         @click="openImagePreview"
-      /> -->
+      />-->
       <div class="detailContent">
         <!-- <van-row>
           <van-col class="title" span="12">{{detailForm.title}}</van-col>
@@ -47,10 +47,10 @@
         <van-row>
           <van-col class="name" span="6">佣金</van-col>
           <van-col class="content" span="18">{{detailForm.commission}}</van-col>
-        </van-row> -->
+        </van-row>-->
         <van-row>
           <van-col class="name" span="6">特别说明</van-col>
-          <van-col class="content" span="18">{{detailForm.Detail}}</van-col>
+          <van-col class="content" span="18" v-html="detailForm.Detail">{{detailForm.Detail}}</van-col>
         </van-row>
         <van-row>
           <van-button class="buttonRight" type="info" size="small" block @click="openReport">报备</van-button>
@@ -65,13 +65,13 @@
         </van-row>
 
         <van-row>
-          <Map @openBigMap="openBigMap"></Map>
+          <Map @openBigMap="openBigMap" :detailForm="detailForm"></Map>
         </van-row>
       </div>
 
       <van-popup v-model="showbigMap" :style="{ height: '80%',width: '100%' }">
         <div class="bigMapbox">
-          <Map v-if="showbigMap" @openBigMap="openBigMap" :isSalce="false" />
+          <Map @openBigMap="openBigMap" :showbigMap="showbigMap" :detailForm="detailForm" :isSalce="false" />
         </div>
       </van-popup>
 
@@ -172,5 +172,21 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .content {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+  }
 }
 </style>
+<style lang="less">
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+</style>>

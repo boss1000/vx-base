@@ -23,7 +23,7 @@ export function getCode(data) {
   return request({
     url: '/api/Home/GetCode',
     method: 'get',
-    data
+    params: data
   })
 }
 

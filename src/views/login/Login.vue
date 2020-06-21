@@ -39,6 +39,7 @@
             <van-form ref="registerPage">
               <van-cell-group>
                 <van-field
+                  name="postPhone"
                   v-model="register.mobile"
                   maxlength="11"
                   label="手机号"
@@ -50,7 +51,7 @@
                     slot="button"
                     size="small"
                     type="primary"
-                    v-if="!countDown"
+                    v-if="countDown == 0"
                     native-type="button"
                     @click="sendVerifyCode"
                   >发送验证码</van-button>
@@ -196,31 +197,23 @@ export default {
     },
     // 4.获取手机验证码
     async sendVerifyCode() {
-      this.countDown = 60;
-      this.timeIntervalID = setInterval(() => {
-        this.countDown--;
-        // 4.1 如果减到0 则清除定时器
-        if (this.countDown == 0) {
-          clearInterval(this.timeIntervalID);
-        }
-      }, 1000);
-
-      // 4.2 获取短信验证码
-      let result = await getCode({ Mobile: this.register.mobile });
-      console.log(result);
-      // if (result.success_code == 200) {
-      //   this.smsCaptchaResult = result.data.code;
-      //   // 4.3  获取验证码成功
-      //   Dialog.alert({
-      //     title: this.loginPage.tipTile,
-      //     message: this.loginPage.message + result.data.code
-      //   }).then(() => {});
-      // }
+      if (this.$refs.registerPage.validate('postPhone')) {
+        this.countDown = 60;
+        this.timeIntervalID = setInterval(() => {
+          this.countDown--;
+          // 4.1 如果减到0 则清除定时器
+          if (this.countDown == 0) {
+            clearInterval(this.timeIntervalID);
+          }
+        }, 1000);
+        // 4.2 获取短信验证码
+        let result = await getCode({ Mobile: this.register.mobile });
+      }
     },
     // 5.登录
     async loginForm() {
       this.loginloading = true;
-      this.loginData.wxCode = this.getQueryString('code')
+      this.loginData.wxCode = this.getQueryString("code");
       this.$store
         .dispatch("user/login", this.loginData)
         .then(data => {
