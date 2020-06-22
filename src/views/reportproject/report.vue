@@ -47,24 +47,22 @@
         <van-col span="16">
           <van-field
             readonly
-            clickable
             name="datetimePicker"
             :value="preparietaldate"
             :rules="[{ required: true, message: '请选择预约来访日期' }]"
             label="预约来访日期"
             placeholder="请输入预约来访日期"
-            @click="showDate = true"
+            @click-input="showDate = true"
           />
           <van-calendar v-model="showDate" title="来访日期" @confirm="onConfirm" :round="false" />
         </van-col>
         <van-col span="8">
           <van-field
             readonly
-            clickable
             name="datetimePicker"
             :value="preparietaltime"
             placeholder="请输入时间"
-            @click="showPicker = true"
+            @click-input="showPicker = true"
             :rules="[{ required: true, message: '请选择时间' }]"
           />
         </van-col>

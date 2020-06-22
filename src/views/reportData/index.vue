@@ -15,14 +15,27 @@
               :value="searchForm.DateBegin"
               label="报备日期"
               placeholder="开始"
-              @click="timeStart = true"
+              readonly
+              @click-input="timeStart = true"
             />
-            <van-calendar v-model="timeStart" title="开始" @confirm="onConfirmStart" />
+            <van-calendar
+              v-model="timeStart"
+              title="开始"
+              :min-date="minDate"
+              :max-date="maxDate"
+              @confirm="onConfirmStart"
+            />
           </van-col>
           <van-col span="2" class="spiltRow">-</van-col>
           <van-col span="8">
-            <van-field :value="searchForm.DateEnd" placeholder="截至" @click="timeEnd = true" />
-            <van-calendar v-model="timeEnd" title="截至" @confirm="onConfirmEnd" />
+            <van-field :value="searchForm.DateEnd" placeholder="截至" readonly @click-input="timeEnd = true" />
+            <van-calendar
+              v-model="timeEnd"
+              title="截至"
+              :min-date="minDate"
+              :max-date="maxDate"
+              @confirm="onConfirmEnd"
+            />
           </van-col>
         </van-row>
       </van-cell-group>
@@ -48,6 +61,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import { Toast } from "vant";
+import { formatDate } from "@/utils/common.js";
 import { GetReportList, GetReportListByUserId } from "@/api/report";
 import showLoading from "@/components/showLoading";
 import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
@@ -67,6 +81,7 @@ export default {
       timeEnd: false,
       finished: false,
       loading: false,
+      minDate: new Date(2018, 0, 1),
       searchForm: {
         Status: null,
         Q: "",
@@ -118,6 +133,12 @@ export default {
   },
   computed: {
     ...mapGetters(["roles"]),
+    maxDate() {
+      let date = formatDate(Date.now(), "yyyy-MM-dd")
+        .split("-")
+        .map(item => Number(item));
+      return new Date(date[0], date[1] - 1, date[2]);
+    },
     hanlersateList() {
       let label = [];
       label = this.sateList.map(item => {
@@ -128,21 +149,22 @@ export default {
   },
   watch: {
     satelabel() {
+      // item.updateTime = this.$tool.formatTime(item.updateTime, "yyyy-MM-dd");
       this.searchForm.Status = this.sateList.find(
         item => item.label == this.satelabel
       ).value;
     }
   },
   mounted() {
-    // console.log(this.roles);
+    console.log(this.maxDate);
   },
   methods: {
     onConfirmStart(value) {
-      this.searchForm.DateBegin = value;
+      this.searchForm.DateBegin = formatDate(value, "yyyy-MM-dd");
       this.timeStart = false;
     },
     onConfirmEnd(value) {
-      this.searchForm.DateEnd = value;
+      this.searchForm.DateEnd = formatDate(value, "yyyy-MM-dd");
       this.timeEnd = false;
     },
     onLoad() {

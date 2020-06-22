@@ -1,7 +1,7 @@
 <template>
   <van-overlay :show="showLoading">
     <div class="loadingWrapper" @click.stop>
-      <van-loading type="spinner" size="64px">数据加载中...</van-loading>
+      <van-loading size="34px">数据加载中...</van-loading>
     </div>
   </van-overlay>
 </template>

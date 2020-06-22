@@ -1,8 +1,20 @@
 <template>
-  <div>
-    <van-search v-model="searchData.Q" show-action placeholder="请输入搜索关键词">
-      <template #action>
-        <van-button class="searchBoxbutton" size="small" hairline type="info" @click="onSearch">搜索</van-button>
+  <div class="mainContent">
+    <div class="searchForm">
+      <van-cell-group>
+        <van-field v-model="searchData.UserName" label="姓名" placeholder="请输入姓名" />
+        <van-field v-model="searchData.Mobile" label="手机号" placeholder="请输入手机号" />
+        <van-field v-model="searchData.Store" label="门店" placeholder="请输入门店" />
+        <van-field-select-picker
+          label="账号类型"
+          placeholder="请选择"
+          v-model="AccountTypelabel"
+          :columns="handeraccountList"
+        />
+      </van-cell-group>
+
+      <van-row class="controlBox">
+        <van-button class="searchBoxbutton" size="small" hairline type="info" @click="onSearch">查询</van-button>
         <van-button
           v-if="roles == '1'"
           class="searchBoxbutton"
@@ -11,19 +23,10 @@
           type="info"
           @click="accountAdd"
         >新增</van-button>
-      </template>
-    </van-search>
+      </van-row>
+    </div>
 
     <showLoading :showLoading="showLoading"></showLoading>
-
-    <van-dropdown-menu>
-      <van-dropdown-item
-        v-model="searchData.Status"
-        :options="option1"
-        title="账号状态"
-        @change="changeDropdown"
-      />
-    </van-dropdown-menu>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <accountView class="mainContent" :accountList="accountList" @onSearch="onSearch"></accountView>
     </van-list>
@@ -34,28 +37,54 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import accountView from "./components/accountView";
 import showLoading from "@/components/showLoading";
 import { GetAccountList } from "@/api/account";
+import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
 export default {
-  components: { accountView, showLoading },
+  components: { accountView, showLoading, VanFieldSelectPicker },
   data() {
     return {
       showLoading: false,
       searchData: {
-        Q: "",
+        UserName: "",
+        Mobile: "",
+        Store: "",
         Status: null
       },
       loading: false,
       finished: false,
-      option1: [
-        { label: "全部", value: null },
-        { label: "启用", value: 1 },
-        { label: "停用", value: 2 },
-        { label: "异常", value: 3 }
+      AccountTypelabel: "请选择",
+      AccountTypeList: [
+        {
+          label: "公司账户",
+          value: 1
+        },
+        {
+          label: "项目驻场",
+          value: 2
+        },
+        {
+          label: "中介",
+          value: 3
+        }
       ],
       accountList: []
     };
   },
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles"]),
+    handeraccountList() {
+      let label = [];
+      label = this.AccountTypeList.map(item => {
+        return item.label;
+      });
+      return label;
+    }
+  },
+  watch: {
+    AccountTypelabel() {
+      this.searchData.Status = this.AccountTypeList.find(
+        item => item.label == this.AccountTypelabel
+      ).value;
+    }
   },
   mounted() {
     this.onSearch();
@@ -103,5 +132,12 @@ export default {
 }
 .searchBoxbutton:last-child {
   margin-right: 0px;
+}
+.searchForm {
+  padding: 18px 0;
+  .spiltRow {
+    text-align: center;
+    line-height: 28px;
+  }
 }
 </style>
