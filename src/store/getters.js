@@ -8,6 +8,7 @@ const getters = {
   roles: state => state.user.roles,
   ruleData: state => state.user.ruleData,
   otherData: state => state.user.otherData,
+  detailCurr: state => state.user.detailCurr,
   name: state => state.user.name,
   isPhone: state => state.app.isPhone,
   introduction: state => state.user.introduction,

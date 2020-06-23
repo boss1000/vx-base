@@ -26,6 +26,7 @@ export default {
         event.preventDefault();
       });
     };
+    this.$store.dispatch("user/saveUserRoles");
   }
 };
 </script>

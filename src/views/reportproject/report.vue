@@ -169,8 +169,7 @@ export default {
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {
       this.fromData.ReporterName = this.otherData.name;
-      this.fromData.ReporterMobile = this.otherData.phone;
-      this.fromData.ReporterName = this.otherData.name;
+      this.fromData.ReporterMobile = this.otherData.Mobile;
       this.fromData.StoreName = this.otherData.store_name;
     }
   },

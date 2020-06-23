@@ -181,6 +181,11 @@ export default {
     },
     ...mapGetters(["roles"])
   },
+  watch: {
+    active() {
+      this.$refs.registerPage.resetValidation();
+    }
+  },
   methods: {
     switchLogin() {
       this.isShowSMSLogin = !this.isShowSMSLogin;
@@ -197,7 +202,7 @@ export default {
     },
     // 4.获取手机验证码
     async sendVerifyCode() {
-      if (this.$refs.registerPage.validate('postPhone')) {
+      this.$refs.registerPage.validate("postPhone").then(() => {
         this.countDown = 60;
         this.timeIntervalID = setInterval(() => {
           this.countDown--;
@@ -207,8 +212,8 @@ export default {
           }
         }, 1000);
         // 4.2 获取短信验证码
-        let result = await getCode({ Mobile: this.register.mobile });
-      }
+        let result = getCode({ Mobile: this.register.mobile });
+      });
     },
     // 5.登录
     async loginForm() {
@@ -238,6 +243,12 @@ export default {
           register(this.register)
             .then(data => {
               Toast.success("注册成功，请等待验证");
+              this.register = Object.assign(
+                {},
+                this.$data.register,
+                this.$options.data().register
+              );
+              this.active = 1;
             })
             .catch(error => {
               console.log(error);

@@ -12,14 +12,14 @@ const state = {
   roles: "1",
   otherData: {
     company_Id: 0,
-    company_Name: '假体系',
-    name: "wuyu",
-    phone: 13563251456,
+    company_Name: '',
+    name: "",
+    Mobile: '',
     sid: 0,
-    store_name: "wuyu",
-
+    store_name: ""
   },
-  ruleData: ''
+  ruleData: '',
+  detailCurr: {}
 }
 
 const mutations = {
@@ -48,6 +48,9 @@ const mutations = {
   SET_RULEDATA: (state, roles) => {
     state.ruleData = roles
   },
+  SET_DETAILCURR: (state, roles) => {
+    state.detailCurr = roles;
+  }
 }
 
 const actions = {
@@ -61,6 +64,7 @@ const actions = {
         commit("SET_ROLES", profile.account_type)
         commit("SET_OTHER", profile)
         setToken(access_token)
+        localStorage.setItem("userRoles", JSON.stringify(profile));
         resolve()
       }).catch(error => {
         reject(error)
@@ -75,12 +79,8 @@ const actions = {
         commit('SET_ACCOUNT', '')
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
+        localStorage.removeItem("userRoles");
         removeToken()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        dispatch('tagsView/delAllViews', null, { root: true })
-
         resolve()
       }).catch(error => {
         reject(error)
@@ -102,6 +102,16 @@ const actions = {
   saveRules({ commit }, data) {
     commit('SET_RULEDATA', data)
   },
+  saveUserRoles({ commit }) {
+    if (localStorage.getItem('userRoles')) {
+      let userRoles = JSON.parse(localStorage.getItem('userRoles'));
+      commit("SET_ROLES", userRoles.account_type)
+      commit("SET_OTHER", userRoles)
+    }
+  },
+  detailCurr({ commit }, data) {
+    commit('SET_DETAILCURR', data)
+  }
 }
 
 export default {

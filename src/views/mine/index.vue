@@ -32,6 +32,7 @@ export default {
       })
         .then(() => {
           removeToken();
+          sessionStorage.removeItem("userRoles");
           this.$nextTick(() => {
             this.$router.push({
               name: "login"

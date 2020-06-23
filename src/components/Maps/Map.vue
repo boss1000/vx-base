@@ -104,7 +104,7 @@ export default {
         {
           title: "",
           content: "",
-          point: ["120.32801", "31.686872"],
+          point: [pointSet[0], pointSet[1]],
           isOpen: 1
         }
       ];

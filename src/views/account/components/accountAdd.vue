@@ -7,6 +7,7 @@
           v-model="fromData.Mobile"
           name="账号"
           label="账号"
+          :border="false"
           :placeholder="validator.phoneMessage"
           :rules="[{validator: phoneValidator, message: validator.phoneMessage }]"
         />
@@ -14,6 +15,7 @@
           v-model="fromData.UserName"
           name="姓名"
           label="姓名"
+          :border="false"
           :placeholder="validator.phoneMessage"
           :rules="[{ required: true, message: '请填写账号' }]"
         />
@@ -21,6 +23,7 @@
           v-model="fromData.IdCard"
           name="身份证号码"
           label="身份证号码"
+          :border="false"
           :placeholder="validator.cardMessage"
           :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
         />
@@ -29,18 +32,12 @@
           name="门店"
           label="门店"
           placeholder="请输入门店"
+          :border="false"
           :rules="[{ required: true, message: '请输入门店' }]"
         />
-        <van-field
-          v-model="fromData.Company"
-          name="体系"
-          label="体系"
-          placeholder="请输入所属体系"
-          disabled
-          :rules="[{ required: true, message: '请输入所属体系' }]"
-        />
+        <van-field v-model="fromData.Company" name="体系" label="体系" placeholder="请输入所属体系" disabled />
 
-        <reportLink  @saveProject="saveProject"></reportLink>
+        <reportLink @saveProject="saveProject"></reportLink>
       </div>
       <van-button type="info" block native-type="submit">确认新增</van-button>
     </van-form>
@@ -80,7 +77,7 @@ export default {
     ...mapGetters(["otherData"])
   },
   mounted() {
-    this.fromData.Company = this.otherData;
+    this.fromData.Company = this.otherData.name;
   },
   methods: {
     openphone(phone) {

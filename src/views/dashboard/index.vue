@@ -79,7 +79,7 @@ export default {
   mounted() {},
   methods: {
     setRoles() {
-      switch (this.roles) {
+      switch (String(this.roles)) {
         case "1":
           // 公司账户
           break;
@@ -90,6 +90,7 @@ export default {
         case "3":
           // 中介
           this.tabbars.splice(1, 1);
+          break;
         default:
           // 超级管理员
           // window.location.href = 'http://ccreportmanage.chuanchengfc.com/'

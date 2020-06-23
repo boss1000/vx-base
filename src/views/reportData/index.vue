@@ -13,6 +13,7 @@
           <van-col span="14">
             <van-field
               :value="searchForm.DateBegin"
+              :border="false"
               label="报备日期"
               placeholder="开始"
               readonly
@@ -23,6 +24,7 @@
               title="开始"
               :min-date="minDate"
               :max-date="maxDate"
+              :border="false"
               @confirm="onConfirmStart"
             />
           </van-col>
@@ -30,12 +32,14 @@
           <van-col span="8">
             <van-field
               :value="searchForm.DateEnd"
+              :border="false"
               placeholder="截至"
               readonly
               @click-input="timeEnd = true"
             />
             <van-calendar
               v-model="timeEnd"
+              :border="false"
               title="截至"
               :min-date="minDate"
               :max-date="maxDate"

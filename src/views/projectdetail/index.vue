@@ -1,17 +1,17 @@
 <template>
   <div class="commonBase">
-    <van-nav-bar
-      left-arrow
-      class="commonTitle"
-      @click-left="onClickLeft"
-      :title="detailForm.title"
-    />
+    <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div class="auth-form">
       <div class="detailContent">
         <van-list>
           <div class="van-clearfix">
             <van-row>
-              <van-col class="content" span="24" v-html="detailForm.Detail">{{detailForm.Detail}}</van-col>
+              <van-col
+                class="content"
+                span="24"
+                @click="getImg($event)"
+                v-html="detailForm.Detail"
+              >{{detailForm.Detail}}</van-col>
             </van-row>
             <van-row>
               <van-button class="buttonRight" type="info" size="small" block @click="openReport">报备</van-button>
@@ -60,37 +60,49 @@ import { ImagePreview, Popup } from "vant";
 import linkageRules from "../../components/linkageRules";
 import Map from "../../components/Maps/Map";
 import { AddProject, GetDetail } from "@/api/project";
+import { mapGetters } from "vuex";
 export default {
+  name: "projectdetail",
   data() {
     return {
       reportShow: false,
       showbigMap: false,
+      title: "",
       detailForm: {}
     };
+  },
+  computed: {
+    ...mapGetters(["detailCurr"])
   },
   components: {
     linkageRules,
     Map
   },
   mounted() {
-    this.getdetail();
+    if (
+      Object.keys(this.detailCurr).length == 0 &&
+      Object.keys(this.$route.params).length == 0
+    ) {
+      this.$router.go(-1);
+    } else {
+      this.getdetail();
+    }
   },
   methods: {
     getdetail() {
       GetDetail({
-        projectID: this.$route.params.id
+        projectID: this.$route.params.id || this.detailCurr.projectID
       }).then(res => {
         this.detailForm = res.Result;
+        this.title = this.$route.params.ProjectName || this.detailCurr.title;
+        this.$store.dispatch("user/detailCurr", {
+          projectID: this.$route.params.id,
+          title: this.$route.params.ProjectName
+        });
       });
     },
     onClickLeft() {
       this.$router.go(-1); //返回上一层
-    },
-    openImagePreview() {
-      ImagePreview({
-        images: [this.detailForm.image],
-        showIndex: false
-      });
     },
     openReport() {
       this.reportShow = true;
@@ -114,6 +126,15 @@ export default {
     },
     openBigMap() {
       this.showbigMap = true;
+    },
+    getImg(event) {
+      let getSrc = event.target.getAttribute("src");
+      if (getSrc) {
+        ImagePreview({
+          images: [getSrc],
+          showIndex: false
+        });
+      }
     }
   }
 };

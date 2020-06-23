@@ -128,6 +128,7 @@ export default {
       });
     },
     opendetail(item) {
+      console.log(item)
       let { Id, ProjectName, PrincipalerName, PrincipalerMobile } = item;
       this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
@@ -221,6 +222,7 @@ export default {
         .title {
           font-size: 16px;
           font-weight: bold;
+          width: 80%;
         }
         .name {
           color: #908585;

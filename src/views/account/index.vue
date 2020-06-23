@@ -1,10 +1,10 @@
 <template>
   <div class="mainContent">
     <div class="searchForm">
-      <van-cell-group>
-        <van-field v-model="searchData.UserName" label="姓名" placeholder="请输入姓名" />
-        <van-field v-model="searchData.Mobile" label="手机号" placeholder="请输入手机号" />
-        <van-field v-model="searchData.Store" label="门店" placeholder="请输入门店" />
+      <van-cell-group :border="false">
+        <van-field v-model="searchData.UserName" :border="false" label="姓名" placeholder="请输入姓名" />
+        <van-field v-model="searchData.Mobile" :border="false" label="手机号" placeholder="请输入手机号" />
+        <van-field v-model="searchData.Store" :border="false" label="门店" placeholder="请输入门店" />
         <van-field-select-picker
           label="账号类型"
           placeholder="请选择"
