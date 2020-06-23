@@ -12,9 +12,12 @@ const state = {
   roles: "1",
   otherData: {
     company_Id: 0,
+    company_Name: '假体系',
     name: "wuyu",
+    phone: 13563251456,
     sid: 0,
-    store_name: "123"
+    store_name: "wuyu",
+
   },
   ruleData: ''
 }

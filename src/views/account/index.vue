@@ -47,20 +47,24 @@ export default {
         UserName: "",
         Mobile: "",
         Store: "",
-        Status: null
+        AccountType: null
       },
       loading: false,
       finished: false,
-      AccountTypelabel: "请选择",
+      AccountTypelabel: "全部",
       AccountTypeList: [
+        {
+          label: "全部",
+          value: null
+        },
         {
           label: "公司账户",
           value: 1
         },
-        {
-          label: "项目驻场",
-          value: 2
-        },
+        // {
+        //   label: "项目驻场",
+        //   value: 2
+        // },
         {
           label: "中介",
           value: 3
@@ -81,7 +85,7 @@ export default {
   },
   watch: {
     AccountTypelabel() {
-      this.searchData.Status = this.AccountTypeList.find(
+      this.searchData.AccountType = this.AccountTypeList.find(
         item => item.label == this.AccountTypelabel
       ).value;
     }

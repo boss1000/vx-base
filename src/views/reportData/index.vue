@@ -28,7 +28,12 @@
           </van-col>
           <van-col span="2" class="spiltRow">-</van-col>
           <van-col span="8">
-            <van-field :value="searchForm.DateEnd" placeholder="截至" readonly @click-input="timeEnd = true" />
+            <van-field
+              :value="searchForm.DateEnd"
+              placeholder="截至"
+              readonly
+              @click-input="timeEnd = true"
+            />
             <van-calendar
               v-model="timeEnd"
               title="截至"
@@ -41,7 +46,7 @@
       </van-cell-group>
 
       <van-row class="controlBox">
-        <van-button class="buttonRight" type="info" size="small" @click="getReport">查询</van-button>
+        <van-button class="buttonRight" type="info" size="small" @click="getReport()">查询</van-button>
       </van-row>
     </div>
 
@@ -76,7 +81,7 @@ export default {
   data() {
     return {
       showLoading: false,
-      satelabel: "请选择",
+      satelabel: "全部",
       timeStart: false,
       timeEnd: false,
       finished: false,
@@ -88,12 +93,12 @@ export default {
         DateBegin: "",
         DateEnd: "",
         PageIndex: 1,
-        PageSize: 2
+        PageSize: 10
       },
       sateList: [
         {
           value: null,
-          label: "请选择"
+          label: "全部"
         },
         {
           value: 1,
@@ -156,7 +161,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.maxDate);
+    this.getReport();
   },
   methods: {
     onConfirmStart(value) {
@@ -172,12 +177,17 @@ export default {
         this.loading = true;
         this.searchForm.PageIndex += 1;
         this.$nextTick(() => {
-          this.getReport();
+          this.getReport(true);
         });
       }
     },
-    getReport() {
-      if (this.searchForm.Status !== null) {
+    getReport(isPage) {
+      if (!isPage) {
+        // 判断是否为翻页
+        this.locationList = [];
+        this.searchForm.PageIndex = 1;
+      }
+      this.$nextTick(() => {
         this.showLoading = true;
         GetReportList(this.searchForm).then(res => {
           this.locationList = this.locationList.concat(res.Result);
@@ -187,9 +197,7 @@ export default {
             this.finished = true;
           }
         });
-      } else {
-        Toast("请选择报备数据");
-      }
+      });
     }
   }
 };

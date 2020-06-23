@@ -7,71 +7,39 @@
       :title="detailForm.title"
     />
     <div class="auth-form">
-      <!-- <van-image
-        class="imageSize"
-        fit="contain"
-        lazy-load
-        :src="detailForm.image"
-        @click="openImagePreview"
-      />-->
       <div class="detailContent">
-        <!-- <van-row>
-          <van-col class="title" span="12">{{detailForm.title}}</van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">报备数</van-col>
-          <van-col class="content" span="18">{{detailForm.reportnum}}</van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">负责人</van-col>
-          <van-col class="content" span="18">
-            {{detailForm.username}} -
-            <span
-              class="phone"
-              @click="openphone(detailForm.userphone)"
-            >{{detailForm.userphone}}</span>
-          </van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">折扣</van-col>
-          <van-col class="content" span="18">{{detailForm.discount}}</van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">开发商</van-col>
-          <van-col class="content" span="18">{{detailForm.developers}}</van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">开盘时间</van-col>
-          <van-col class="content" span="18">{{detailForm.openquotation}}</van-col>
-        </van-row>
-        <van-row>
-          <van-col class="name" span="6">佣金</van-col>
-          <van-col class="content" span="18">{{detailForm.commission}}</van-col>
-        </van-row>-->
-        <van-row>
-          <van-col class="name" span="6">特别说明</van-col>
-          <van-col class="content" span="18" v-html="detailForm.Detail">{{detailForm.Detail}}</van-col>
-        </van-row>
-        <van-row>
-          <van-button class="buttonRight" type="info" size="small" block @click="openReport">报备</van-button>
-        </van-row>
-        <van-row>
-          <van-col class="name" offset="4" span="4">访问人数</van-col>
-          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
-          <van-col class="name" offset="1" span="4">访问次数</van-col>
-          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
-          <van-col class="name" offset="1" span="4">转发次数</van-col>
-          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
-        </van-row>
+        <van-list>
+          <div class="van-clearfix">
+            <van-row>
+              <van-col class="content" span="24" v-html="detailForm.Detail">{{detailForm.Detail}}</van-col>
+            </van-row>
+            <van-row>
+              <van-button class="buttonRight" type="info" size="small" block @click="openReport">报备</van-button>
+            </van-row>
+            <van-row>
+              <van-col class="name" offset="4" span="4">访问人数</van-col>
+              <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
+              <van-col class="name" offset="1" span="4">访问次数</van-col>
+              <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
+              <van-col class="name" offset="1" span="4">转发次数</van-col>
+              <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
+            </van-row>
 
-        <van-row>
-          <Map @openBigMap="openBigMap" :detailForm="detailForm"></Map>
-        </van-row>
+            <van-row>
+              <Map @openBigMap="openBigMap" :detailForm="detailForm"></Map>
+            </van-row>
+          </div>
+        </van-list>
       </div>
 
       <van-popup v-model="showbigMap" :style="{ height: '80%',width: '100%' }">
         <div class="bigMapbox">
-          <Map @openBigMap="openBigMap" :showbigMap="showbigMap" :detailForm="detailForm" :isSalce="false" />
+          <Map
+            @openBigMap="openBigMap"
+            :showbigMap="showbigMap"
+            :detailForm="detailForm"
+            :isSalce="false"
+          />
         </div>
       </van-popup>
 
@@ -133,7 +101,7 @@ export default {
         ProjectName,
         PrincipalerName,
         PrincipalerMobile
-      } = this.currReport;
+      } = this.$route.params;
       this.$router.push({
         name: "report",
         params: {
@@ -178,6 +146,10 @@ export default {
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-wrap: break-word;
+  }
+  .auth-form {
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 }
 </style>

@@ -8,27 +8,21 @@
           <span class="redcol" @click="openReport">《联动规则》</span>
         </van-col>
       </van-row>
-
       <reportLink
         labelTitle="报备项目"
         :defaultIndex="fromData.ProjectIds"
         :defaultName="fromData.ProjectName"
         @saveProject="saveProject"
       ></reportLink>
-      <!-- <van-row>
-        <van-col span="6">报备项目</van-col>
-        <van-col span="18">{{ fromData.ProjectName }}</van-col>
-      </van-row>-->
-      <van-row>
-        <van-col span="6">负责人</van-col>
-        <van-col span="16">
+      <van-field class="noboder" v-model="fromData.CustomerName" name="负责人" label="负责人">
+        <template #input>
           {{fromData.PrincipalerName}} -
           <span
             class="redcol"
             @click="openphone(fromData.PrincipalerMobile)"
           >{{fromData.PrincipalerMobile}}</span>
-        </van-col>
-      </van-row>
+        </template>
+      </van-field>
       <van-field
         v-model="fromData.CustomerName"
         name="客户姓名"
@@ -42,6 +36,13 @@
         label="客户电话"
         placeholder="请输入客户电话"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
+      />
+      <van-field
+        v-model="fromData.CustomerIdCard"
+        name="身份证号码"
+        label="身份证号码"
+        placeholder="请输入身份证号码"
+        :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
       />
       <van-row class="datetime">
         <van-col span="16">
@@ -67,13 +68,7 @@
           />
         </van-col>
       </van-row>
-      <van-field
-        v-model="fromData.CompanyName"
-        name="体系"
-        label="体系"
-        placeholder="请输入体系"
-        :rules="[{ required: true, message: '请输入体系' }]"
-      />
+      <van-field v-model="fromData.CompanyName" disabled name="体系" label="体系" placeholder="请输入体系" />
       <van-field
         v-model="fromData.ReporterName"
         name="报备人"
@@ -87,13 +82,6 @@
         label="报备人电话"
         placeholder="报备人电话"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
-      />
-      <van-field
-        v-model="fromData.CustomerIdCard"
-        name="身份证号码"
-        label="身份证号码"
-        placeholder="请输入身份证号码"
-        :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
       />
       <van-field
         v-model="fromData.StoreName"
@@ -123,7 +111,6 @@
         type="time"
         :min-hour="8"
         :max-hour="20"
-        item-height="80"
         @confirm="confirmDate"
         @cancel="showPicker = false"
       />
@@ -137,6 +124,7 @@
 <script type="text/javascript">
 import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "../../utils/validate";
+import { mapState, mapGetters, mapActions } from "vuex";
 import { AddReport } from "@/api/report";
 import linkageRules from "../../components/linkageRules";
 import reportLink from "@/components/reportLink/project";
@@ -174,7 +162,18 @@ export default {
       }
     };
   },
-  mounted() {},
+  computed: {
+    ...mapGetters(["otherData", "roles"])
+  },
+  mounted() {
+    this.fromData.CompanyName = this.otherData.company_Name;
+    if (this.roles == 3) {
+      this.fromData.ReporterName = this.otherData.name;
+      this.fromData.ReporterMobile = this.otherData.phone;
+      this.fromData.ReporterName = this.otherData.name;
+      this.fromData.StoreName = this.otherData.store_name;
+    }
+  },
   watch: {
     preparietaldate() {
       this.fromData.ArriveDateTime =
@@ -278,7 +277,11 @@ export default {
       border-right: none;
     }
   }
-
+  .noboder {
+    /deep/ .van-field__control {
+      border: none;
+    }
+  }
   .redcol {
     color: #ff0000;
   }

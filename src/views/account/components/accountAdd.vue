@@ -77,10 +77,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["typeName"])
+    ...mapGetters(["otherData"])
   },
   mounted() {
-    this.fromData.Company = this.typeName;
+    this.fromData.Company = this.otherData;
   },
   methods: {
     openphone(phone) {

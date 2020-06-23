@@ -104,7 +104,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles", "ruleData",'isPhone'])
+    ...mapGetters(["roles", "ruleData", "isPhone"])
   },
   mounted() {},
   methods: {
@@ -128,10 +128,15 @@ export default {
       });
     },
     opendetail(item) {
+      let { Id, ProjectName, PrincipalerName, PrincipalerMobile } = item;
+      this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
         name: "projectdetail",
         params: {
-          id: item.Id
+          id: Id,
+          ProjectName,
+          PrincipalerName,
+          PrincipalerMobile
         }
       });
     },
