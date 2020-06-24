@@ -150,6 +150,7 @@ export default {
         CustomerMobile: "", // 客户电话
         CustomerIdCard: "", // 客户身份证号
         ArriveDateTime: "", // 预约来访时间
+        CompanyId: '', // 体系ID
         CompanyName: "", // 体系
         ReporterName: "", // 报备人姓名
         ReporterMobile: "", // 报备人电话
@@ -166,6 +167,7 @@ export default {
     ...mapGetters(["otherData", "roles"])
   },
   mounted() {
+    this.fromData.CompanyId = this.otherData.company_Id;
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {
       this.fromData.ReporterName = this.otherData.name;

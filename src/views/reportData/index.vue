@@ -63,7 +63,7 @@
       :immediate-check="false"
       @load="onLoad"
     >
-      <locationView class="van-clearfix" :locationList="locationList" :sateList="sateList"></locationView>
+      <locationView class="van-clearfix" :locationList="locationList" :sateList="sateList" @ChangeStatus="ChangeStatus"></locationView>
     </van-list>
   </div>
 </template>
@@ -201,6 +201,14 @@ export default {
             this.finished = true;
           }
         });
+      });
+    },
+    ChangeStatus(data) {
+      let { ReportId, Status} = data
+      this.locationList.map(item => {
+        if ((item.Id == ReportId)) {
+          item.StatusName = Status;
+        }
       });
     }
   }

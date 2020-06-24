@@ -66,12 +66,7 @@
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <van-row v-if="roles == '2'" class="controlBox" type="flex" justify="end">
-            <van-button
-              class="buttonRight"
-              type="info"
-              size="small"
-              @click="changeSate(conversionSate(item.state))"
-            >修改状态</van-button>
+            <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
           </van-row>
         </div>
       </div>
@@ -91,6 +86,7 @@
 <script>
 import { Dialog, Toast } from "vant";
 import { mapState, mapGetters, mapActions } from "vuex";
+import { ChangeStatus } from "@/api/report";
 import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
 export default {
   name: "locationView",
@@ -109,6 +105,7 @@ export default {
       showModify: false,
       destoryPoupState: true,
       defaultIndex: "0",
+      currIndex: 0,
       satelabel: "请选择",
       currReport: {},
       modify: {
@@ -147,15 +144,23 @@ export default {
     },
     opendetail(item) {
       this.$router.push({
-        name: "accountReport",
+        name: "reportList",
         params: {
           id: item.id,
           name: item.name
         }
       });
     },
-    changeSate() {
+    changeSate(data) {
+      let satevIndex = 0;
       this.destoryPoupState = true;
+      this.currIndex = data.Id;
+      this.sateList.find((item, index) => {
+        if (item.label == data.StatusName) {
+          satevIndex = index;
+        }
+      });
+      this.defaultIndex = satevIndex;
       this.$nextTick(() => {
         this.showModify = true;
       });
@@ -163,18 +168,22 @@ export default {
     onBeforeClose(action, done) {},
     postModify() {},
     onConfirm(value) {
-      // this.result = value;
-      this.showModify = !this.showModify;
-    },
-    conversionSate(value) {
-      console.log(value)
-      // this.satelabel = this.sateList.find((item, index) => {
-      //   if (item.value == value) {
-      //     this.defaultIndex = index;
-      //     return item;
-      //   }
-      // }).label;
-      // return this.satelabel;
+      let satevalue = this.sateList.find((item, index) => {
+        if (item.label == value) {
+          return item;
+        }
+      });
+      ChangeStatus({
+        ReportId: this.currIndex,
+        Status: satevalue.value
+      }).then(() => {
+        this.showModify = !this.showModify;
+        this.$emit("ChangeStatus", {
+          ReportId: this.currIndex,
+          Status: satevalue.label
+        });
+        Toast.success("状态修改成功");
+      });
     },
     destoryPoup() {
       this.destoryPoupState = false;
@@ -244,7 +253,10 @@ export default {
         margin-right: 10px;
       }
       .hideBorder {
-        border: none !important;
+        // border: none !important;
+        .notice {
+          word-break: break-all;
+        }
       }
     }
   }

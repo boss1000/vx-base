@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 // 添加报备
 export function AddReport(data) {
   return request({
@@ -23,6 +22,15 @@ export function GetReportList(data) {
 export function GetReportListByUserId(data) {
   return request({
     url: '/api/Report/GetReportListByUserId',
+    method: 'get',
+    params: data
+  })
+}
+
+// 根据项目Id获取报备列表
+export function GetReportListByProjectId(data) {
+  return request({
+    url: '/api/Report/GetReportListByProjectId',
     method: 'get',
     params: data
   })

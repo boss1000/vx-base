@@ -101,9 +101,9 @@ const router = new Router({
     },
     {
       // 账号 - 数据
-      path: "/accountReport",
-      name: "accountReport",
-      component: () => import("../views/account/components/accountReport.vue"),
+      path: "/reportList",
+      name: "reportList",
+      component: () => import("../views/reportList/reportList.vue"),
     },
     {
       // 账号 - 新增

@@ -18,20 +18,28 @@ import "./assets/scss/pcBase.scss";
 // import '@/config/rem'
 // 移动端适配
 import "lib-flexible/flexible.js";
+
+import Element from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import BaiduMap from "vue-baidu-map";
+
+Vue.use(Element, {
+  size: "small", // set element-ui default size
+});
 Vue.config.productionTip = false;
 
 // 解决移动端点击延迟200ms的问题
 if ("addEventListener" in document) {
   document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function () {
       FastClick.attach(document.body);
     },
     false
   );
 }
 
-FastClick.prototype.focus = function(targetElement) {
+FastClick.prototype.focus = function (targetElement) {
   var length;
   if (
     targetElement.setSelectionRange &&
@@ -46,6 +54,11 @@ FastClick.prototype.focus = function(targetElement) {
     targetElement.focus();
   }
 };
+
+Vue.use(BaiduMap, {
+  ak: "rG6P27qMvS3eeo7KpOpE48nAdvbznIBX"
+});
+
 Vue.use(waterfall);
 
 new Vue({

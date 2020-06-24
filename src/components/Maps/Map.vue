@@ -104,7 +104,7 @@ export default {
         {
           title: "",
           content: "",
-          point: [pointSet[0], pointSet[1]],
+          point: [parseFloat(pointSet[0]), parseFloat(pointSet[1])],
           isOpen: 1
         }
       ];

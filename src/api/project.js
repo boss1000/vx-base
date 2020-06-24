@@ -12,16 +12,7 @@ export function getProjectList(data) {
 // 新增项目
 export function AddProject(data) {
   return request({
-    url: '/api​/Project​/AddProject',
-    method: 'post',
-    data
-  })
-}
-
-// 修改项目
-export function EditProject(data) {
-  return request({
-    url: '/api​/Project​/EditProject',
+    url: '/api/Project/AddProject',
     method: 'post',
     data
   })
@@ -30,7 +21,7 @@ export function EditProject(data) {
 // 删除项目
 export function DelProject(data) {
   return request({
-    url: '/api​/Project​/DelProject',
+    url: '/api/Project/DelProject',
     method: 'post',
     data
   })
@@ -78,5 +69,37 @@ export function GetDetail(data) {
     url: '/api/Project/GetDetail',
     method: 'get',
     params: data
+  })
+}
+
+// 上传图片
+export function UploadPhysical(data) {
+  return request({
+    url: '/api/File/UploadPhysical',
+    method: 'post',
+    data,
+    config: {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  })
+}
+
+// 获取项目详情
+export function getEditProject(data) {
+  return request({
+    url: '/api/Project/EditProject',
+    method: 'get',
+    params: data
+  })
+}
+
+// 修改项目详情
+export function updateEditProject(data) {
+  return request({
+    url: '/api/Project/EditProject',
+    method: 'post',
+    data
   })
 }

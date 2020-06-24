@@ -57,7 +57,7 @@
               class="buttonRight"
               type="info"
               size="mini"
-              @click="openData(item)"
+              @click="openReportList(item)"
             >数据</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
@@ -70,6 +70,7 @@
         </div>
       </div>
     </div>
+
     <van-dialog
       v-model="reportShow"
       title="联动规则"
@@ -128,7 +129,6 @@ export default {
       });
     },
     opendetail(item) {
-      console.log(item)
       let { Id, ProjectName, PrincipalerName, PrincipalerMobile } = item;
       this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
@@ -158,19 +158,15 @@ export default {
         }
       });
     },
-    changeData() {
+    changeData(item) {
       if (this.isPhone) {
         Toast({
           message: "请使用电脑端操作该功能"
         });
       } else {
-        EditProject({ projectId: item.id })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        this.$emit('openChange',{
+          projectId:  item.Id
+        })
       }
     },
     followStart(item) {
@@ -192,6 +188,15 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    openReportList(item) {
+      this.$router.push({
+        name: "reportList",
+        params: {
+          ProjectId: item.Id,
+          name: item.UserName
+        }
+      });
     }
   }
 };

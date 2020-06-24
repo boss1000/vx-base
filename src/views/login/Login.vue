@@ -10,6 +10,7 @@
               <van-cell-group>
                 <van-field
                   v-model="loginData.account"
+                  :border="false"
                   label="账号"
                   maxlength="11"
                   placeholder="请输入账号"
@@ -17,6 +18,7 @@
                 />
                 <van-field
                   v-model="loginData.password"
+                  :border="false"
                   type="password"
                   label="密码"
                   placeholder="请输入密码"
@@ -41,6 +43,7 @@
                 <van-field
                   name="postPhone"
                   v-model="register.mobile"
+                  :border="false"
                   maxlength="11"
                   label="手机号"
                   type="number"
@@ -66,6 +69,7 @@
                 </van-field>
                 <van-field
                   v-model="register.code"
+                  :border="false"
                   type="text"
                   label="验证码"
                   placeholder="请输入验证码"
@@ -73,6 +77,7 @@
                 />
                 <van-field
                   v-model="register.userName"
+                  :border="false"
                   type="text"
                   label="姓名"
                   placeholder="请输入姓名"
@@ -80,6 +85,7 @@
                 />
                 <van-field
                   v-model="register.storeName"
+                  :border="false"
                   type="text"
                   label="门店"
                   placeholder="请输入门店"
@@ -87,6 +93,7 @@
                 />
                 <van-field
                   v-model="register.idCard"
+                  :border="false"
                   type="text"
                   label="身份证"
                   placeholder="请输入身份证号码"
@@ -94,6 +101,7 @@
                 />
                 <van-field
                   v-model="register.orginpassWord"
+                  :border="false"
                   type="text"
                   label="登录密码"
                   placeholder="请输入密码"
@@ -183,7 +191,9 @@ export default {
   },
   watch: {
     active() {
-      this.$refs.registerPage.resetValidation();
+      if (this.$refs.registerPage) {
+        this.$refs.registerPage.resetValidation();
+      }
     }
   },
   methods: {

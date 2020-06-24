@@ -142,6 +142,12 @@ export default {
 <style lang="less" scoped>
 .commonBase {
   .detailContent {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     margin-top: 20px;
     .name {
       color: #908585;

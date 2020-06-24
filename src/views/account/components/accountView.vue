@@ -20,7 +20,7 @@
             <van-col
               class="content"
               span="7"
-            >{{ item.Status == '0' ? '停用' : item.Status == '1' ? '启用': '异常' }}</van-col>
+            >{{ item.Status == '1' ? '启用' : item.Status == '2' ? '停用': '异常' }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="5">负责项目</van-col>
@@ -119,7 +119,7 @@ export default {
     },
     opendetail(item) {
       this.$router.push({
-        name: "accountReport",
+        name: "reportList",
         params: {
           id: item.Id,
           name: item.UserName

@@ -6,7 +6,7 @@
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.Area"
-        :options="option1"
+        :options="areaList"
         title="地区"
         @change="getDataList()"
       />
@@ -25,15 +25,17 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <infoview :infoList="infoList"></infoview>
+      <infoview :infoList="infoList" @openChange="openChange"></infoview>
     </van-list>
+    <cahangeData :projectId="projectId" :areaList="areaList" :dialogFormVisible.sync="dialogFormVisible" @getDataList="getDataList"></cahangeData>
   </div>
 </template>
 <script>
 import infoview from "./components/infoview";
+import cahangeData from "./components/cahangeData";
 import { getProjectList, GetAreaList } from "@/api/project";
 export default {
-  components: { infoview },
+  components: { infoview, cahangeData },
   data() {
     return {
       searchData: {
@@ -41,11 +43,11 @@ export default {
         Area: "",
         orderType: 1,
         PageIndex: 1,
-        PageSize: 2
+        PageSize: 10
       },
       loading: false,
       finished: false,
-      option1: [],
+      areaList: [],
       option2: [
         {
           text: "默认",
@@ -60,7 +62,9 @@ export default {
           value: 3
         }
       ],
-      infoList: []
+      infoList: [],
+      projectId: 0,
+      dialogFormVisible: false
     };
   },
   mounted() {
@@ -79,7 +83,7 @@ export default {
     },
     getAreaList() {
       GetAreaList().then(data => {
-        this.option1 = data.Result;
+        this.areaList = data.Result;
       });
     },
     getDataList(isPage) {
@@ -100,6 +104,12 @@ export default {
           .catch(error => {
             console.log(error);
           });
+      });
+    },
+    openChange(data) {
+      this.projectId = data.projectId;
+      this.$nextTick(() => {
+        this.dialogFormVisible = true;
       });
     }
   }
