@@ -94,8 +94,6 @@ export default {
   },
   data() {
     return {
-      baidumapSwitch: false,
-      jgNameDialog: false,
       show: false,
       center: {
         lng: 120.639855,
