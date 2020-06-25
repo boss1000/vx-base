@@ -13,21 +13,22 @@
       @click="getPoint"
     >
       <!--信息窗口，show属性是控制显示隐藏，infoWindowClose和infoWindowOpen是控制信息窗口关闭隐藏的方法-->
-      <bm-marker
-        :position="pointMap"
-        animation="BMAP_ANIMATION_BOUNCE"
-        :icon="{url: iconUrl, size: {width: 30, height: 30}}"
-      >
-        <bm-info-window
-          class="infowindow"
-          :show="showPoint"
-          @close="infoWindowClose"
-          @open="infoWindowOpen"
-          :offset="{ height: -10}"
+      <bm-overlay pane="floatPane">
+        <bm-marker
+          :position="pointMap"
+          :icon="{url: iconUrl, size: {width: 30, height: 30},imageSize: {width: 30, height: 30}}"
         >
-          <p>{{ Address }}</p>
-        </bm-info-window>
-      </bm-marker>
+          <bm-info-window
+            class="infowindow"
+            :show="showPoint"
+            @close="infoWindowClose"
+            @open="infoWindowOpen"
+            :offset="{ height: -10}"
+          >
+            <p>{{ Address }}</p>
+          </bm-info-window>
+        </bm-marker>
+      </bm-overlay>
     </baidu-map>
   </div>
 </template>

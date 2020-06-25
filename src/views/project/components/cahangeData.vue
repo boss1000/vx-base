@@ -198,7 +198,7 @@
 <script>
 import { validPhone } from "@/utils/validate";
 import EditorBar from "@/components/wangEditor/index.vue";
-import MapDialog from "@/components/MapDialog/Map";
+import MapDialog from "@/components/bMap/MapDialog";
 import {
   UploadPhysical,
   AddProject,
