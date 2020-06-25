@@ -13,12 +13,17 @@
       @click="getPoint"
     >
       <!--信息窗口，show属性是控制显示隐藏，infoWindowClose和infoWindowOpen是控制信息窗口关闭隐藏的方法-->
-      <bm-marker :position="postionMap">
+      <bm-marker
+        :position="pointMap"
+        animation="BMAP_ANIMATION_BOUNCE"
+        :icon="{url: iconUrl, size: {width: 30, height: 30}}"
+      >
         <bm-info-window
-          style="font-size: 14px"
+          class="infowindow"
           :show="showPoint"
           @close="infoWindowClose"
           @open="infoWindowOpen"
+          :offset="{ height: -10}"
         >
           <p>{{ Address }}</p>
         </bm-info-window>
@@ -38,7 +43,13 @@ export default {
         lng: null,
         lat: null
       },
-      Address: "测试"
+      pointMap: {
+        // 标单坐标
+        lng: null,
+        lat: null
+      },
+      Address: "测试",
+      iconUrl: require("@/assets/images/mk_icon.png")
     };
   },
   computed: {
@@ -76,9 +87,6 @@ export default {
         }
       },
       immediate: true
-    },
-    showPoint() {
-      console.log(12)
     }
   },
   mounted() {
@@ -92,6 +100,9 @@ export default {
         lng: parseFloat(pointSet[0]),
         lat: parseFloat(pointSet[1])
       };
+      this.$nextTick(() => {
+        this.pointMap = Object.assign({}, this.pointMap, this.postionMap);
+      });
     },
     getPoint(e) {
       setTimeout(() => {
@@ -106,10 +117,13 @@ export default {
       this.$emit("openBigMap");
     },
     infoWindowClose() {
-      this.showPoint = true;
+      this.showPoint = false;
     },
     infoWindowOpen() {
       this.showPoint = true;
+    },
+    addPoint() {
+      this.pointMap = Object.assign({}, this.pointMap, this.postionMap);
     }
   }
 };
@@ -146,5 +160,15 @@ export default {
 }
 .BMap_bubble_content {
   margin-top: 20px;
+}
+.infowindow {
+  // z-index: 101;
+}
+.BMap_Marker {
+  img {
+    height: 100%;
+    width: 100%;
+    z-index: 801;
+  }
 }
 </style>

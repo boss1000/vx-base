@@ -47,21 +47,15 @@
       @confirm="postModify"
     >
       <van-form ref="postModify" class="auth-form">
-        <!-- <van-field
-          v-model="modify.name"
-          name="姓名"
-          label="姓名"
-          placeholder="请输入姓名"
-          :rules="[{ required: true, message: '请输入姓名' }]"
-        />-->
         <reportLink v-if="showModify" @saveProject="saveProject"></reportLink>
+
         <van-field
-          label-width="2.4rem"
+          :label-width="setlabelWidth"
           v-model="modify.StoreName"
-          name="门店"
-          label="门店"
-          placeholder="请输入门店"
-          :rules="[{ required: true, message: '请输入门店' }]"
+          name="门店名称"
+          label="门店名称"
+          placeholder="请输入门店名称"
+          :rules="[{ required: true, message: '请输入门店名称' }]"
         />
       </van-form>
     </van-dialog>
@@ -83,12 +77,19 @@ export default {
     return {
       showModify: false,
       currReport: {},
+      labelWidth: "90px",
       modify: {
         StoreName: ""
       }
     };
   },
-
+  computed: {
+    setlabelWidth() {
+      let labelWidth = Number(this.labelWidth.replace(/[a-zA-Z]+/g, ""));
+      let conversion = (labelWidth / 37.5).toFixed(1) + "rem";
+      return conversion;
+    }
+  },
   watch: {
     showModify() {
       if (!this.showModify) {
@@ -228,12 +229,22 @@ export default {
   }
 }
 .auth-form {
+  border-radius: 0;
+  margin: 18px;
   padding-bottom: 0;
   .van-cell:last-child {
     padding: 0;
   }
   /deep/ .van-field__label {
     width: 50px;
+  }
+  /deep/ .van-cell {
+    padding: 0;
+    padding-bottom: 18px;
+    .van-field__value .van-field__control {
+      border: solid 1px #ccc;
+      padding-left: 5px;
+    }
   }
 }
 </style>

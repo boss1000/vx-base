@@ -1,8 +1,9 @@
 <template>
   <div class="commonBase">
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
-    <div class="auth-form">
-      <div class="detailContent">
+    <div ref="authform" class="auth-form">
+      <div ref="contentform" class="detailContent">
+        <showLoading :showLoading="showLoading"></showLoading>
         <van-list>
           <div class="van-clearfix">
             <van-row>
@@ -26,7 +27,11 @@
             </van-row>
 
             <van-row>
-              <Map @openBigMap="openBigMap" :detailForm="detailForm"></Map>
+              <Map
+                ref="listMap"
+                :detailForm="detailForm"
+                @openBigMap="openBigMap"
+              ></Map>
             </van-row>
           </div>
         </van-list>
@@ -57,16 +62,19 @@
 </template>
 <script>
 import { ImagePreview, Popup } from "vant";
-import linkageRules from "../../components/linkageRules";
-import Map from "../../components/Maps/Map";
+import linkageRules from "@/components/linkageRules";
+import showLoading from "@/components/showLoading";
+import Map from "@/components/Maps/Map";
 import { AddProject, GetDetail } from "@/api/project";
 import { mapGetters } from "vuex";
 export default {
   name: "projectdetail",
   data() {
     return {
+      finished: false,
       reportShow: false,
       showbigMap: false,
+      showLoading: false,
       title: "",
       detailForm: {}
     };
@@ -76,7 +84,8 @@ export default {
   },
   components: {
     linkageRules,
-    Map
+    Map,
+    showLoading
   },
   mounted() {
     if (
@@ -90,15 +99,21 @@ export default {
   },
   methods: {
     getdetail() {
+      this.showLoading = true;
       GetDetail({
         projectID: this.$route.params.id || this.detailCurr.projectID
       }).then(res => {
         this.detailForm = res.Result;
         this.title = this.$route.params.ProjectName || this.detailCurr.title;
+        this.showLoading = false;
         this.$store.dispatch("user/detailCurr", {
           projectID: this.$route.params.id,
           title: this.$route.params.ProjectName
         });
+        // this.$nextTick(() => {
+        //   console.log(this.$refs.authform.scrollHeight);
+        //   console.log(this.$refs.contentform.clientHeight);
+        // });
       });
     },
     onClickLeft() {
