@@ -26,10 +26,3 @@ export function getCode(data) {
     params: data
   })
 }
-
-export function logout() {
-  return request({
-    url: '/spxtapi/user/logout',
-    method: 'get'
-  })
-}

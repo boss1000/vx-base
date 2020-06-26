@@ -64,7 +64,7 @@
 import { ImagePreview, Popup } from "vant";
 import linkageRules from "@/components/linkageRules";
 import showLoading from "@/components/showLoading";
-import Map from "@/components/bMap/MapShow";
+import Map from "@/components/gMap/MapShow";
 import { AddProject, GetDetail } from "@/api/project";
 import { mapGetters } from "vuex";
 export default {

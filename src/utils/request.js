@@ -59,6 +59,9 @@ service.interceptors.response.use(
     } else {
       if (error.toString().indexOf("404") > 0) {
         Toast("页面丢失");
+      } else if (error.toString().indexOf("401") > 0) {
+        Toast("登录过期，请重新登录");
+        store.dispatch('user/logout')
       } else if (error.toString().indexOf("500") > 0) {
         Toast("出错了");
       } else {

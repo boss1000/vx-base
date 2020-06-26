@@ -22,7 +22,6 @@ import "lib-flexible/flexible.js";
 import Element from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import BaiduMap from "vue-baidu-map";
-
 Vue.use(Element, {
   size: "small", // set element-ui default size
 });
@@ -32,14 +31,14 @@ Vue.config.productionTip = false;
 if ("addEventListener" in document) {
   document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    function() {
       FastClick.attach(document.body);
     },
     false
   );
 }
 
-FastClick.prototype.focus = function (targetElement) {
+FastClick.prototype.focus = function(targetElement) {
   var length;
   if (
     targetElement.setSelectionRange &&
@@ -56,7 +55,7 @@ FastClick.prototype.focus = function (targetElement) {
 };
 
 Vue.use(BaiduMap, {
-  ak: "rG6P27qMvS3eeo7KpOpE48nAdvbznIBX"
+  ak: "1ba5c792d7a80dcda3b617dceb7012f7",
 });
 
 Vue.use(waterfall);
