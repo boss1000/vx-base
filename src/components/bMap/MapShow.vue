@@ -13,22 +13,18 @@
       @click="getPoint"
     >
       <!--信息窗口，show属性是控制显示隐藏，infoWindowClose和infoWindowOpen是控制信息窗口关闭隐藏的方法-->
-      <bm-overlay pane="floatPane">
-        <bm-marker
-          :position="pointMap"
-          :icon="{url: iconUrl, size: {width: 30, height: 30},imageSize: {width: 30, height: 30}}"
+
+      <bm-marker :position="pointMap" :icon="{url: iconUrl, size: {width: 30, height: 30}}">
+        <bm-info-window
+          class="infowindow"
+          :show="showPoint"
+          @close="infoWindowClose"
+          @open="infoWindowOpen"
+          :offset="{ height: -10}"
         >
-          <bm-info-window
-            class="infowindow"
-            :show="showPoint"
-            @close="infoWindowClose"
-            @open="infoWindowOpen"
-            :offset="{ height: -10}"
-          >
-            <p>{{ Address }}</p>
-          </bm-info-window>
-        </bm-marker>
-      </bm-overlay>
+          <p>{{ Address }}</p>
+        </bm-info-window>
+      </bm-marker>
     </baidu-map>
   </div>
 </template>
@@ -67,6 +63,10 @@ export default {
       type: Object,
       default: () => {}
     },
+    showMap: {
+      type: Boolean,
+      default: false
+    },
     showbigMap: {
       type: Boolean,
       default: false
@@ -79,12 +79,18 @@ export default {
       },
       deep: true
     },
+    showMap: {
+      handler() {
+        if (this.showMap) {
+          this.initMap();
+        }
+      },
+      immediate: true
+    },
     showbigMap: {
       handler() {
         if (this.showbigMap) {
-          this.$nextTick(() => {
-            this.initMap();
-          });
+          this.initMap();
         }
       },
       immediate: true
@@ -101,9 +107,8 @@ export default {
         lng: parseFloat(pointSet[0]),
         lat: parseFloat(pointSet[1])
       };
-      this.$nextTick(() => {
-        this.pointMap = Object.assign({}, this.pointMap, this.postionMap);
-      });
+
+      this.pointMap = Object.assign({}, this.pointMap, this.postionMap);
     },
     getPoint(e) {
       setTimeout(() => {
@@ -132,8 +137,7 @@ export default {
 <style lang="less" scoped>
 .dituContent {
   width: 100%;
-  height: 300px;
-  overflow: hidden;
+  padding-bottom: 50px;
   margin: 0px auto;
   font-family: "微软雅黑";
   position: relative;
@@ -146,13 +150,19 @@ export default {
     opacity: 0;
     z-index: 100;
   }
+  .map {
+    width: 100%;
+    height: 400px;
+  }
   &.bigMap {
     height: 100%;
+    padding-bottom: 0px;
+    .map {
+      width: 100%;
+      height: 100%;
+      padding: 50px 0;
+    }
   }
-}
-.map {
-  width: 100%;
-  height: 100%;
 }
 </style>
 <style lang="scss">
