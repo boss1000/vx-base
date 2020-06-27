@@ -14,7 +14,12 @@
         :defaultName="fromData.ProjectName"
         @saveProject="saveProject"
       ></reportLink>
-      <van-field class="noboder" v-model="fromData.CustomerName" name="负责人" label="负责人">
+      <van-field
+        v-model="fromData.CustomerName"
+        name="负责人"
+        label="负责人"
+        :border="false"
+      >
         <template #input>
           {{fromData.PrincipalerName}} -
           <span
@@ -28,6 +33,7 @@
         name="客户姓名"
         label="客户姓名"
         placeholder="请输入客户姓名"
+        :border="false"
         :rules="[{ required: true, message: '请填写客户姓名' }]"
       />
       <van-field
@@ -35,6 +41,7 @@
         name="客户电话"
         label="客户电话"
         placeholder="请输入客户电话"
+        :border="false"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
@@ -42,6 +49,7 @@
         name="身份证号码"
         label="身份证号码"
         placeholder="请输入身份证号码"
+        :border="false"
         :rules="[{ validator: cardValidator, message: validator.cardMessage }]"
       />
       <van-row class="datetime">
@@ -53,6 +61,7 @@
             :rules="[{ required: true, message: '请选择预约来访日期' }]"
             label="预约来访日期"
             placeholder="请输入预约来访日期"
+            :border="false"
             @click-input="showDate = true"
           />
           <van-calendar v-model="showDate" title="来访日期" @confirm="onConfirm" :round="false" />
@@ -63,6 +72,7 @@
             name="datetimePicker"
             :value="preparietaltime"
             placeholder="请输入时间"
+            :border="false"
             @click-input="showPicker = true"
             :rules="[{ required: true, message: '请选择时间' }]"
           />
@@ -74,6 +84,7 @@
         name="报备人"
         label="报备人"
         placeholder="请输入报备人"
+        :border="false"
         :rules="[{ required: true, message: '请输入报备人' }]"
       />
       <van-field
@@ -81,6 +92,7 @@
         name="报备人电话"
         label="报备人电话"
         placeholder="报备人电话"
+        :border="false"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
@@ -88,6 +100,7 @@
         name="所在门店"
         label="所在门店"
         placeholder="请输入所在门店"
+        :border="false"
         :rules="[{ required: true, message: '请输入所在门店' }]"
       />
       <van-field
@@ -95,6 +108,7 @@
         name="备注"
         label="备注"
         placeholder="请输入备注"
+        :border="false"
         :rules="[{ required: true, message: '请输入备注' }]"
       />
       <van-button type="info" block native-type="submit">提交报备</van-button>
@@ -150,7 +164,7 @@ export default {
         CustomerMobile: "", // 客户电话
         CustomerIdCard: "", // 客户身份证号
         ArriveDateTime: "", // 预约来访时间
-        CompanyId: '', // 体系ID
+        CompanyId: "", // 体系ID
         CompanyName: "", // 体系
         ReporterName: "", // 报备人姓名
         ReporterMobile: "", // 报备人电话

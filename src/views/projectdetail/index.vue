@@ -28,8 +28,10 @@
       </div>
       <van-popup
         v-model="showbigMap"
-        :style="{ height: '70%',width: '100%' }"
+        :get-container="getContainer"
+        :style="{ height: '90%',width: '100%' }"
         class="popup"
+        closeable
         @touchmove.prevent
       >
         <Map
@@ -142,6 +144,9 @@ export default {
           showIndex: false
         });
       }
+    },
+    getContainer() {
+      return document.querySelector(".commonBase");
     }
   }
 };

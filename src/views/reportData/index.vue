@@ -1,14 +1,15 @@
 <template>
   <div class="mainContent">
     <div class="searchForm" v-if="roles !== '3'">
-      <van-cell-group>
+      <van-cell-group :border="false">
         <van-field-select-picker
           label="状态"
           placeholder="请选择"
+          :border="false"
           v-model="satelabel"
           :columns="hanlersateList"
         />
-        <van-field v-model="searchForm.Q" label="搜索关键词" placeholder="多个关键字之间用空格隔开" />
+        <van-field v-model="searchForm.Q" :border="false" label="搜索关键词" placeholder="多个关键字之间用空格隔开" />
         <van-row>
           <van-col span="14">
             <van-field
@@ -49,7 +50,7 @@
         </van-row>
       </van-cell-group>
 
-      <van-row class="controlBox">
+      <van-row class="controlBox" :border="false">
         <van-button class="buttonRight" type="info" size="small" @click="getReport()">查询</van-button>
       </van-row>
     </div>
@@ -63,7 +64,12 @@
       :immediate-check="false"
       @load="onLoad"
     >
-      <locationView class="van-clearfix" :locationList="locationList" :sateList="sateList" @ChangeStatus="ChangeStatus"></locationView>
+      <locationView
+        class="van-clearfix"
+        :locationList="locationList"
+        :sateList="sateList"
+        @ChangeStatus="ChangeStatus"
+      ></locationView>
     </van-list>
   </div>
 </template>
@@ -204,9 +210,9 @@ export default {
       });
     },
     ChangeStatus(data) {
-      let { ReportId, Status} = data
+      let { ReportId, Status } = data;
       this.locationList.map(item => {
-        if ((item.Id == ReportId)) {
+        if (item.Id == ReportId) {
           item.StatusName = Status;
         }
       });
