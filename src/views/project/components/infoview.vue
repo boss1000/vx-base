@@ -65,7 +65,7 @@
               size="mini"
               @click="opendetail(item)"
             >详情</van-button>
-            <van-button v-if="roles == '2'" type="info" size="mini" @click="changeData(item)">修改</van-button>
+            <van-button v-if="roles == '2' && item.IsOwnProjec" type="info" size="mini" @click="changeData(item)">修改</van-button>
           </van-row>
         </div>
       </div>

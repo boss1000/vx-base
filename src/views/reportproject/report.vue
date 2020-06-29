@@ -109,7 +109,6 @@
         label="备注"
         placeholder="请输入备注"
         :border="false"
-        :rules="[{ required: true, message: '请输入备注' }]"
       />
       <van-button type="info" block native-type="submit">提交报备</van-button>
 
