@@ -28,10 +28,16 @@
           <van-row class="halfBorder">
             <van-col class="name" span="8">客户电话</van-col>
             <van-col
+              v-if="item.ReportMobileType == 1"
               class="content phone"
               span="16"
               @click="openphone(item.CustomerMobile)"
             >{{item.CustomerMobile}}</van-col>
+            <van-col
+              v-else
+              class="content"
+              span="16"
+            >{{ item.ReporterMobile.substr(0, 3) + '****' + item.ReporterMobile.substr(7) }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">预约来访日期</van-col>

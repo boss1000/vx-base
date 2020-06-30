@@ -65,7 +65,12 @@
               size="mini"
               @click="opendetail(item)"
             >详情</van-button>
-            <van-button v-if="roles == '2' && item.IsOwnProjec" type="info" size="mini" @click="changeData(item)">修改</van-button>
+            <van-button
+              v-if="roles == '2' && item.IsOwnProjec"
+              type="info"
+              size="mini"
+              @click="changeData(item)"
+            >修改</van-button>
           </van-row>
         </div>
       </div>
@@ -146,7 +151,8 @@ export default {
         Id,
         ProjectName,
         PrincipalerName,
-        PrincipalerMobile
+        PrincipalerMobile,
+        IsEnableIdCard
       } = this.currReport;
       this.$router.push({
         name: "report",
@@ -154,7 +160,8 @@ export default {
           Id,
           ProjectName,
           PrincipalerName,
-          PrincipalerMobile
+          PrincipalerMobile,
+          IsEnableIdCard
         }
       });
     },
@@ -164,9 +171,9 @@ export default {
           message: "请使用电脑端操作该功能"
         });
       } else {
-        this.$emit('openChange',{
-          projectId:  item.Id
-        })
+        this.$emit("openChange", {
+          projectId: item.Id
+        });
       }
     },
     followStart(item) {

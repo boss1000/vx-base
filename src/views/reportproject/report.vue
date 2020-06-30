@@ -14,12 +14,7 @@
         :defaultName="fromData.ProjectName"
         @saveProject="saveProject"
       ></reportLink>
-      <van-field
-        v-model="fromData.CustomerName"
-        name="负责人"
-        label="负责人"
-        :border="false"
-      >
+      <van-field v-model="fromData.CustomerName" name="负责人" label="负责人" :border="false">
         <template #input>
           {{fromData.PrincipalerName}} -
           <span
@@ -45,6 +40,7 @@
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
+        v-if="fromData.IsEnableIdCard"
         v-model="fromData.CustomerIdCard"
         name="身份证号码"
         label="身份证号码"
@@ -159,6 +155,7 @@ export default {
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
         PrincipalerName: this.$route.params.PrincipalerName || "", // 项目负责人姓名
         PrincipalerMobile: this.$route.params.PrincipalerMobile || "", // 负责人电话
+        IsEnableIdCard: this.$route.params.IsEnableIdCard,
         CustomerName: "", // 客户姓名
         CustomerMobile: "", // 客户电话
         CustomerIdCard: "", // 客户身份证号
@@ -270,7 +267,7 @@ export default {
       this.fromData.ProjectIds = [this.$route.params.Id];
       this.fromData.ProjectIds = [
         ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
-      ].filter(true);
+      ].filter(item => item);
     }
   }
 };
