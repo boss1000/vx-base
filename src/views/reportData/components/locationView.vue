@@ -37,7 +37,7 @@
               v-else
               class="content"
               span="16"
-            >{{ item.ReporterMobile.substr(0, 3) + '****' + item.ReporterMobile.substr(7) }}</van-col>
+            >{{ item.CustomerMobile.substr(0, 3) + '****' + item.CustomerMobile.substr(7) }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">预约来访日期</van-col>
