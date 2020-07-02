@@ -99,6 +99,13 @@
         :border="false"
         :rules="[{ required: true, message: '请输入所在门店' }]"
       />
+      <van-field-select-picker
+        class="setBorder"
+        label="推荐人"
+        placeholder="请选择"
+        v-model="AccountTypelabel"
+        :columns="handeraccountList"
+      />
       <van-field
         v-model="fromData.Remark"
         name="备注"
@@ -135,13 +142,16 @@ import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "../../utils/validate";
 import { mapState, mapGetters, mapActions } from "vuex";
 import { AddReport } from "@/api/report";
+import { GetAccountList } from "@/api/account";
 import linkageRules from "../../components/linkageRules";
 import reportLink from "@/components/reportLink/project";
+import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
 export default {
   name: "report",
   components: {
     linkageRules,
-    reportLink
+    reportLink,
+    VanFieldSelectPicker
   },
   data() {
     return {
@@ -150,6 +160,8 @@ export default {
       reportShow: false,
       preparietaldate: "", // 预约来访日期
       preparietaltime: "", // 预约来访时间
+      AccountTypelabel: "",
+      AccountTypeList: [], // 推荐人列表
       fromData: {
         ProjectIds: [this.$route.params.Id], // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
@@ -165,7 +177,8 @@ export default {
         ReporterName: "", // 报备人姓名
         ReporterMobile: "", // 报备人电话
         StoreName: "", // 所在门店
-        Remark: "" //备注
+        Remark: "", //备注
+        ReferrerId: "" // 推荐人id
       },
       validator: {
         phoneMessage: "请输入手机号码",
@@ -174,9 +187,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["otherData", "roles"])
+    ...mapGetters(["otherData", "roles"]),
+    handeraccountList() {
+      let label = [];
+      label = this.AccountTypeList.map(item => {
+        return item.UserName;
+      });
+      return label;
+    }
   },
   mounted() {
+    this.getAccountTypeList();
     this.fromData.CompanyId = this.otherData.company_Id;
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {
@@ -193,6 +214,11 @@ export default {
     preparietaltime() {
       this.fromData.ArriveDateTime =
         this.preparietaldate + " " + this.preparietaltime;
+    },
+    AccountTypelabel() {
+      this.fromData.ReferrerId = this.AccountTypeList.find(
+        item => item.UserName == this.AccountTypelabel
+      ).Id;
     }
   },
   methods: {
@@ -268,6 +294,18 @@ export default {
       this.fromData.ProjectIds = [
         ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
       ].filter(item => item);
+    },
+    getAccountTypeList() {
+      GetAccountList({
+        UserName: "",
+        Mobile: "",
+        Store: "",
+        Status: "",
+        AccountType: "",
+        IsReferrer: true
+      }).then(res => {
+        this.AccountTypeList = res.Result;
+      });
     }
   }
 };
@@ -286,6 +324,18 @@ export default {
     }
     /deep/ .van-col:first-child .van-field__control {
       border-right: none;
+    }
+  }
+  .setBorder {
+    /deep/.van-field__value {
+      border: solid 1px #ccc;
+      padding-left: 5px;
+      .van-field__control {
+        border: none;
+      }
+      .van-field__right-icon {
+        margin-right: 5px;
+      }
     }
   }
   .noboder {
