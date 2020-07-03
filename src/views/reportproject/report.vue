@@ -40,7 +40,7 @@
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
       <van-field
-        v-if="fromData.IsEnableIdCard"
+        v-if="fromData.IsEnableIdCard || IsEnableIdCard"
         v-model="fromData.CustomerIdCard"
         name="身份证号码"
         label="身份证号码"
@@ -142,7 +142,7 @@ import { Dialog, Toast } from "vant";
 import { validPhone, IdCardValidate } from "../../utils/validate";
 import { mapState, mapGetters, mapActions } from "vuex";
 import { AddReport } from "@/api/report";
-import { GetAccountList } from "@/api/account";
+import { GetSpecialAccountList } from "@/api/account";
 import linkageRules from "../../components/linkageRules";
 import reportLink from "@/components/reportLink/project";
 import VanFieldSelectPicker from "@/components/VanFieldSelectPicker";
@@ -162,6 +162,7 @@ export default {
       preparietaltime: "", // 预约来访时间
       AccountTypelabel: "",
       AccountTypeList: [], // 推荐人列表
+      IsEnableIdCard: false, // 判断是否显示身份证
       fromData: {
         ProjectIds: [this.$route.params.Id], // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
@@ -178,7 +179,7 @@ export default {
         ReporterMobile: "", // 报备人电话
         StoreName: "", // 所在门店
         Remark: "", //备注
-        ReferrerId: "" // 推荐人id
+        ReferrerId: 0 // 推荐人id
       },
       validator: {
         phoneMessage: "请输入手机号码",
@@ -294,9 +295,10 @@ export default {
       this.fromData.ProjectIds = [
         ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
       ].filter(item => item);
+      this.IsEnableIdCard = data.IsEnableIdCard
     },
     getAccountTypeList() {
-      GetAccountList({
+      GetSpecialAccountList({
         UserName: "",
         Mobile: "",
         Store: "",

@@ -9,6 +9,15 @@ export function GetAccountList(data) {
   })
 }
 
+// 获取推荐人列表
+export function GetSpecialAccountList(data) {
+  return request({
+    url: '/api/Account/GetSpecialAccountList',
+    method: 'get',
+    params: data
+  })
+}
+
 // 新增账号
 export function AddAccount(data) {
   return request({

@@ -91,6 +91,7 @@ export default {
       infoList: [],
       ResponsibleProjects: [],
       ResponsibleProjectsName: [],
+      IsEnableIdCard: [], // 判断是否需要身份证
       showTag: false
     };
   },
@@ -150,10 +151,12 @@ export default {
     sureReport() {
       this.ResponsibleProjectsName =
         this.defaultName.length > 0 ? [].concat([this.defaultName]) : [];
+      this.IsEnableIdCard = [];
       // 获取名称
       this.infoList.map(item => {
         this.ResponsibleProjects.find(value => {
           if (value == item.Id) {
+            this.IsEnableIdCard.push(item.IsEnableIdCard);
             this.ResponsibleProjectsName.push(item.ProjectName);
           }
         });
@@ -165,7 +168,10 @@ export default {
       }
       this.$emit("saveProject", {
         ResponsibleProjects: this.ResponsibleProjects,
-        ResponsibleProjectsName: this.ResponsibleProjectsName
+        ResponsibleProjectsName: Array.from(
+          new Set(this.ResponsibleProjectsName)
+        ),
+        IsEnableIdCard: this.IsEnableIdCard.indexOf(true) == 1 ? true : false
       });
       // 关闭弹窗
       this.showPopup = false;
