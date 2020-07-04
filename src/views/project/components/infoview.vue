@@ -139,7 +139,7 @@ export default {
       this.$router.push({
         name: "projectdetail",
         params: {
-          id: Id,
+          Id: Id,
           ProjectName,
           PrincipalerName,
           PrincipalerMobile

@@ -164,7 +164,7 @@ export default {
       AccountTypeList: [], // 推荐人列表
       IsEnableIdCard: false, // 判断是否显示身份证
       fromData: {
-        ProjectIds: [this.$route.params.Id], // 项目Id
+        ProjectIds: this.$route.params.Id ? [this.$route.params.Id] : [], // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
         PrincipalerName: this.$route.params.PrincipalerName || "", // 项目负责人姓名
         PrincipalerMobile: this.$route.params.PrincipalerMobile || "", // 负责人电话
@@ -199,6 +199,7 @@ export default {
   },
   mounted() {
     this.getAccountTypeList();
+    console.log(this.otherData)
     this.fromData.CompanyId = this.otherData.company_Id;
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {
@@ -295,7 +296,7 @@ export default {
       this.fromData.ProjectIds = [
         ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
       ].filter(item => item);
-      this.IsEnableIdCard = data.IsEnableIdCard
+      this.IsEnableIdCard = data.IsEnableIdCard;
     },
     getAccountTypeList() {
       GetSpecialAccountList({

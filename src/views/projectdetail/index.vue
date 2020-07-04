@@ -96,13 +96,13 @@ export default {
     getdetail() {
       this.showLoading = true;
       GetDetail({
-        projectID: this.$route.params.id || this.detailCurr.projectID
+        projectID: this.$route.params.Id || this.detailCurr.projectID
       }).then(res => {
         this.detailForm = res.Result;
         this.title = this.$route.params.ProjectName || this.detailCurr.title;
         this.showLoading = false;
         this.$store.dispatch("user/detailCurr", {
-          projectID: this.$route.params.id,
+          projectID: this.$route.params.Id,
           title: this.$route.params.ProjectName
         });
         this.$nextTick(() => {
@@ -123,6 +123,7 @@ export default {
         PrincipalerName,
         PrincipalerMobile
       } = this.$route.params;
+
       this.$router.push({
         name: "report",
         params: {
