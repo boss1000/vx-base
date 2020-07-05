@@ -6,7 +6,7 @@
     <van-dropdown-menu>
       <van-dropdown-item
         v-model="searchData.Area"
-        :options="areaList"
+        :options="areagroupList"
         title="地区"
         @change="getDataList()"
       />
@@ -27,7 +27,12 @@
     >
       <infoview :infoList="infoList" @openChange="openChange"></infoview>
     </van-list>
-    <cahangeData :projectId="projectId" :areaList="areaList" :dialogFormVisible.sync="dialogFormVisible" @getDataList="getDataList"></cahangeData>
+    <cahangeData
+      :projectId="projectId"
+      :areaList="areaList"
+      :dialogFormVisible.sync="dialogFormVisible"
+      @getDataList="getDataList"
+    ></cahangeData>
   </div>
 </template>
 <script>
@@ -48,6 +53,7 @@ export default {
       loading: false,
       finished: false,
       areaList: [],
+      areagroupList: [],
       option2: [
         {
           text: "默认",
@@ -84,6 +90,12 @@ export default {
     getAreaList() {
       GetAreaList().then(data => {
         this.areaList = data.Result;
+        this.areagroupList = [
+          {
+            value: null,
+            text: "全部"
+          }
+        ].concat(data.Result);
       });
     },
     getDataList(isPage) {

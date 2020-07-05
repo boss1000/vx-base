@@ -77,17 +77,17 @@
       <van-field v-model="fromData.CompanyName" disabled name="体系" label="体系" placeholder="请输入体系" />
       <van-field
         v-model="fromData.ReporterName"
-        name="报备人"
-        label="报备人"
-        placeholder="请输入报备人"
+        name="中介"
+        label="中介"
+        placeholder="请输入中介"
         :border="false"
-        :rules="[{ required: true, message: '请输入报备人' }]"
+        :rules="[{ required: true, message: '请输入中介' }]"
       />
       <van-field
         v-model="fromData.ReporterMobile"
-        name="报备人电话"
-        label="报备人电话"
-        placeholder="报备人电话"
+        name="中介电话"
+        label="中介电话"
+        placeholder="中介电话"
         :border="false"
         :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
       />
@@ -175,8 +175,8 @@ export default {
         ArriveDateTime: "", // 预约来访时间
         CompanyId: "", // 体系ID
         CompanyName: "", // 体系
-        ReporterName: "", // 报备人姓名
-        ReporterMobile: "", // 报备人电话
+        ReporterName: "", // 中介姓名
+        ReporterMobile: "", // 中介电话
         StoreName: "", // 所在门店
         Remark: "", //备注
         ReferrerId: 0 // 推荐人id
