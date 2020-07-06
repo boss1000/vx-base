@@ -20,9 +20,9 @@
           <van-col class="name" offset="4" span="4">访问人数</van-col>
           <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
           <van-col class="name" offset="1" span="4">访问次数</van-col>
-          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
+          <van-col class="number" span="2">{{detailForm.AccessCounts}}</van-col>
           <van-col class="name" offset="1" span="4">转发次数</van-col>
-          <van-col class="number" span="2">{{detailForm.ReportCount}}</van-col>
+          <van-col class="number" span="2">{{detailForm.ShareCounts}}</van-col>
         </van-row>
 
         <Map ref="listMap" :showMap="showMap" :detailForm="detailForm" @openBigMap="openBigMap"></Map>

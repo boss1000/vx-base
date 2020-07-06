@@ -55,6 +55,7 @@ export default {
       loading: false,
       finished: false,
       areaList: [],
+      areagroupList: [],
       option2: [
         {
           text: "默认",
@@ -100,6 +101,12 @@ export default {
     getAreaList() {
       GetAreaList().then(data => {
         this.areaList = data.Result;
+        this.areagroupList = [
+          {
+            value: null,
+            text: "全部"
+          }
+        ].concat(data.Result);
       });
     },
     getDataList(isPage) {
