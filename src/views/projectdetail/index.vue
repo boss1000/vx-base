@@ -3,6 +3,7 @@
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
       <showLoading :showLoading="showLoading"></showLoading>
+      <share></share>
       <div ref="contentform" class="detailContent">
         <van-row>
           <van-col
@@ -60,6 +61,7 @@ import linkageRules from "@/components/linkageRules";
 import showLoading from "@/components/showLoading";
 import Map from "@/components/bMap/MapShow";
 import { AddProject, GetDetail } from "@/api/project";
+import share from "@/components/share";
 import { mapGetters } from "vuex";
 export default {
   name: "projectdetail",
@@ -80,7 +82,8 @@ export default {
   components: {
     linkageRules,
     Map,
-    showLoading
+    showLoading,
+    share
   },
   mounted() {
     if (

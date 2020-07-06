@@ -1,33 +1,40 @@
 <template>
   <div>
-    <form action="javascript:return true">
-      <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @blur="getDataList()"></van-search>
-    </form>
-    <van-dropdown-menu>
-      <van-dropdown-item
-        v-model="searchData.Area"
-        :options="areaList"
-        title="地区"
-        @change="getDataList()"
-      />
-      <van-dropdown-item
-        v-model="searchData.orderType"
-        :options="option2"
-        title="排序"
-        @change="getDataList()"
-      />
-    </van-dropdown-menu>
     <van-list
-      class="mainContent"
+      v-if="showList"
+      :style="{height:getListheight}"
       v-model="loading"
       :finished="finished"
       :immediate-check="false"
+      offset="0"
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <infoview :infoList="infoList" @openChange="openChange"></infoview>
+      <form ref="search" action="javascript:return true">
+        <van-search v-model="searchData.ProjectName" placeholder="请输入搜索关键词" @blur="getDataList()"></van-search>
+      </form>
+      <van-dropdown-menu>
+        <van-dropdown-item
+          v-model="searchData.Area"
+          :options="areaList"
+          title="地区"
+          @change="getDataList()"
+        />
+        <van-dropdown-item
+          v-model="searchData.orderType"
+          :options="option2"
+          title="排序"
+          @change="getDataList()"
+        />
+      </van-dropdown-menu>
+      <infoview class="dataList" :infoList="infoList" @openChange="openChange"></infoview>
     </van-list>
-    <cahangeData :projectId="projectId" :areaList="areaList" :dialogFormVisible.sync="dialogFormVisible" @getDataList="getDataList"></cahangeData>
+    <cahangeData
+      :projectId="projectId"
+      :areaList="areaList"
+      :dialogFormVisible.sync="dialogFormVisible"
+      @getDataList="getDataList"
+    ></cahangeData>
   </div>
 </template>
 <script>
@@ -62,14 +69,23 @@ export default {
           value: 3
         }
       ],
+      showList: false,
       infoList: [],
       projectId: 0,
       dialogFormVisible: false
     };
   },
+  computed: {
+    getListheight() {
+      let listheight = window.screen.height + 20;
+      let setheght = (listheight / 37.5).toFixed(1) + "rem";
+      return setheght;
+    }
+  },
   mounted() {
     this.getDataList();
     this.getAreaList();
+    this.showList = true;
   },
   methods: {
     onLoad() {
@@ -116,4 +132,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.dataList {
+  margin: 0px;
+  padding: 0 15px;
+}
 </style>

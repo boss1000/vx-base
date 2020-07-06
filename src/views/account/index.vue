@@ -28,7 +28,7 @@
 
     <showLoading :showLoading="showLoading"></showLoading>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <accountView class="mainContent" :accountList="accountList" @onSearch="onSearch"></accountView>
+      <accountView :accountList="accountList" @onSearch="onSearch"></accountView>
     </van-list>
   </div>
 </template>

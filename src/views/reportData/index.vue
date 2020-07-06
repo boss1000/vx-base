@@ -1,71 +1,78 @@
 <template>
-  <div class="mainContent">
-    <div class="searchForm" v-if="roles !== '3'">
-      <van-cell-group :border="false">
-        <van-field-select-picker
-          label="状态"
-          placeholder="请选择"
-          :border="false"
-          v-model="satelabel"
-          :columns="hanlersateList"
-        />
-        <van-field v-model="searchForm.Q" :border="false" label="搜索关键词" placeholder="多个关键字之间用空格隔开" />
-        <van-row>
-          <van-col span="14">
-            <van-field
-              :value="searchForm.DateBegin"
-              :border="false"
-              label="报备日期"
-              placeholder="开始"
-              readonly
-              @click-input="timeStart = true"
-            />
-            <van-calendar
-              v-model="timeStart"
-              title="开始"
-              :min-date="minDate"
-              :max-date="maxDate"
-              :border="false"
-              @confirm="onConfirmStart"
-            />
-          </van-col>
-          <van-col span="2" class="spiltRow">-</van-col>
-          <van-col span="8">
-            <van-field
-              :value="searchForm.DateEnd"
-              :border="false"
-              placeholder="截至"
-              readonly
-              @click-input="timeEnd = true"
-            />
-            <van-calendar
-              v-model="timeEnd"
-              :border="false"
-              title="截至"
-              :min-date="minDate"
-              :max-date="maxDate"
-              @confirm="onConfirmEnd"
-            />
-          </van-col>
-        </van-row>
-      </van-cell-group>
-
-      <van-row class="controlBox" :border="false">
-        <van-button class="buttonRight" type="info" size="small" @click="getReport()">查询</van-button>
-      </van-row>
-    </div>
-
-    <showLoading :showLoading="showLoading"></showLoading>
-
+  <div>
     <van-list
+      v-if="showList"
+      :style="{height:getListheight}"
       v-model="loading"
       :finished="finished"
       finished-text="没有更多了"
       :immediate-check="false"
+      offset="10"
       @load="onLoad"
     >
+      <div ref="search" class="searchForm" v-if="roles !== '3'">
+        <van-cell-group :border="false">
+          <van-field-select-picker
+            label="状态"
+            placeholder="请选择"
+            :border="false"
+            v-model="satelabel"
+            :columns="hanlersateList"
+          />
+          <van-field
+            v-model="searchForm.Q"
+            :border="false"
+            label="搜索关键词"
+            placeholder="多个关键字之间用空格隔开"
+          />
+          <van-row>
+            <van-col span="14">
+              <van-field
+                :value="searchForm.DateBegin"
+                :border="false"
+                label="报备日期"
+                placeholder="开始"
+                readonly
+                @click-input="timeStart = true"
+              />
+              <van-calendar
+                v-model="timeStart"
+                title="开始"
+                :min-date="minDate"
+                :max-date="maxDate"
+                :border="false"
+                @confirm="onConfirmStart"
+              />
+            </van-col>
+            <van-col span="2" class="spiltRow">-</van-col>
+            <van-col span="8">
+              <van-field
+                :value="searchForm.DateEnd"
+                :border="false"
+                placeholder="截至"
+                readonly
+                @click-input="timeEnd = true"
+              />
+              <van-calendar
+                v-model="timeEnd"
+                :border="false"
+                title="截至"
+                :min-date="minDate"
+                :max-date="maxDate"
+                @confirm="onConfirmEnd"
+              />
+            </van-col>
+          </van-row>
+        </van-cell-group>
+
+        <van-row class="controlBox" :border="false">
+          <van-button class="buttonRight" type="info" size="small" @click="getReport()">查询</van-button>
+        </van-row>
+      </div>
+
+      <showLoading :showLoading="showLoading"></showLoading>
       <locationView
-        class="van-clearfix"
+        class="van-clearfix dataList"
         :locationList="locationList"
         :sateList="sateList"
         @ChangeStatus="ChangeStatus"
@@ -97,6 +104,7 @@ export default {
       finished: false,
       loading: false,
       minDate: new Date(2018, 0, 1),
+      showList: false,
       searchForm: {
         Status: null,
         Q: "",
@@ -160,6 +168,11 @@ export default {
         return item.label;
       });
       return label;
+    },
+    getListheight() {
+      let listheight = window.screen.height - 50;
+      let setheght = (listheight / 37.5).toFixed(1) + "rem";
+      return setheght;
     }
   },
   watch: {
@@ -172,6 +185,7 @@ export default {
   },
   mounted() {
     this.getReport();
+    this.showList = true;
   },
   methods: {
     onConfirmStart(value) {
@@ -186,9 +200,7 @@ export default {
       if (!this.finished && this.locationList.length > 0) {
         this.loading = true;
         this.searchForm.PageIndex += 1;
-        this.$nextTick(() => {
-          this.getReport(true);
-        });
+        this.getReport(true);
       }
     },
     getReport(isPage) {
@@ -197,16 +209,14 @@ export default {
         this.locationList = [];
         this.searchForm.PageIndex = 1;
       }
-      this.$nextTick(() => {
-        this.showLoading = true;
-        GetReportList(this.searchForm).then(res => {
-          this.locationList = this.locationList.concat(res.Result);
-          this.showLoading = false;
-          this.loading = false;
-          if (res.Result.length < this.searchForm.PageSize) {
-            this.finished = true;
-          }
-        });
+      this.showLoading = true;
+      GetReportList(this.searchForm).then(res => {
+        this.locationList = this.locationList.concat(res.Result);
+        this.showLoading = false;
+        this.loading = false;
+        if (res.Result.length < this.searchForm.PageSize) {
+          this.finished = true;
+        }
       });
     },
     ChangeStatus(data) {
@@ -222,10 +232,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .searchForm {
-  padding: 18px 0;
+  padding: 18px 15px;
   .spiltRow {
     text-align: center;
     line-height: 28px;
   }
+}
+.dataList {
+  padding: 0 15px;
+  overflow: hidden;
 }
 </style>
