@@ -60,12 +60,16 @@
             >{{ item.ReporterMobile }}</van-col>
           </van-row>
           <van-row class="halfBorder">
-            <van-col class="name" span="8">所在门店</van-col>
-            <van-col class="content" span="16">{{item.StoreName}}</van-col>
+            <van-col class="name" span="8">报备时间</van-col>
+            <van-col class="content" span="16">{{ item.CreateTime }}</van-col>
           </van-row>
           <van-row class="halfBorder">
             <van-col class="name" span="8">报备状态</van-col>
             <van-col class="content" span="16">{{ item.StatusName }}</van-col>
+          </van-row>
+          <van-row class="halfBorder">
+            <van-col class="name" span="8">所在门店</van-col>
+            <van-col class="content" span="16">{{item.StoreName}}</van-col>
           </van-row>
           <van-row :class="['halfBorder',{'hideBorder':roles !== '2'}]">
             <van-col class="name" span="8">备注</van-col>

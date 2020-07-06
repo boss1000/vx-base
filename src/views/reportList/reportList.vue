@@ -43,6 +43,14 @@
             <van-col span="16">{{ item.ReporterMobile }}</van-col>
           </van-row>
           <van-row>
+            <van-col span="8">报备时间</van-col>
+            <van-col span="16">{{ item.CreateTime }}</van-col>
+          </van-row>
+                    <van-row>
+            <van-col span="8">报备状态</van-col>
+            <van-col span="16">{{ item.StatusName }}</van-col>
+          </van-row>
+          <van-row>
             <van-col span="8">所在门店</van-col>
             <van-col span="16">{{ item.StoreName }}</van-col>
           </van-row>

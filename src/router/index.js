@@ -93,6 +93,11 @@ const router = new Router({
         },
       ],
     },
+    // // 外部分享
+    // {
+    //   path: '/share/project/:userId/:ProjectName?',
+    //   redirect: '/projectdetail'
+    // },
     {
       // 项目报备
       path: "/report",

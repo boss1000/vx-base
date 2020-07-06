@@ -1,8 +1,6 @@
 <template>
   <div>
     <van-list
-      v-if="showList"
-      :style="{height:getListheight}"
       v-model="loading"
       :finished="finished"
       :immediate-check="false"
@@ -78,7 +76,7 @@ export default {
   },
   computed: {
     getListheight() {
-      let listheight = window.screen.height + 20;
+      let listheight = window.screen.height - 40;
       let setheght = (listheight / 37.5).toFixed(1) + "rem";
       return setheght;
     }
