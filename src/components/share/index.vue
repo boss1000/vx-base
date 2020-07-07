@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button type="info" icon="star-o" class="shareInfo" @click="showShare=true" />
+    <van-button type="info" :icon="icon"  class="shareInfo" @click="showShare=true" />
 
     <van-popup v-model="showShare" :get-container="getContainer" class="popup" @touchmove.prevent>
       <div class="popupBackground">
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       showShare: false,
+      icon: require("@/assets/images/shareButton.png"),
       Id: "",
       ProjectName: "",
       ImgUrl: "",
@@ -46,8 +47,7 @@ export default {
       return document.querySelector(".commonBase");
     },
     bindQRCode() {
-      let herfText = `${window.location.origin}/share/project/${this.Id}`;
-      console.log(herfText)
+      let herfText = `${window.location.origin}/#/share/project/${this.Id}`;
       new QRCode(this.$refs.qrCodeDiv, {
         text: herfText,
         width: 80,
