@@ -4,8 +4,8 @@
 
     <van-popup v-model="showShare" :get-container="getContainer" class="popup" @touchmove.prevent>
       <div class="popupBackground">
-        <div class="image"></div>
-        <div class="projectName">1223</div>
+        <img class="image" :src="ImgUrl" />
+        <div class="projectName">{{ProjectName}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
       </div>
     </van-popup>
@@ -19,13 +19,20 @@ export default {
   data() {
     return {
       showShare: false,
+      Id: "",
+      ProjectName: "",
+      ImgUrl: "",
       imgData: ""
     };
   },
   watch: {
     showShare() {
-      if (this.showShare) {
+      if (this.showShare && !this.imgData) {
         this.$nextTick(() => {
+          let { Id, ProjectName, ImgUrl } = this.$route.params;
+          this.Id = Id;
+          this.ProjectName = ProjectName;
+          this.ImgUrl = ImgUrl;
           this.bindQRCode();
         });
       }
@@ -39,9 +46,10 @@ export default {
       return document.querySelector(".commonBase");
     },
     bindQRCode() {
-      let t = this;
+      let herfText = `${window.location.origin}/share/project/${this.Id}`;
+      console.log(herfText)
       new QRCode(this.$refs.qrCodeDiv, {
-        text: "http://192.168.0.xx:8765/#/SignAgency",
+        text: herfText,
         width: 80,
         height: 80,
         colorDark: "#333333", // 二维码颜色
@@ -82,17 +90,16 @@ export default {
   .image {
     position: absolute;
     width: 242px;
-    height: 145px;
+    height: 180px;
     top: 150px;
-    left: 28.5px;
-    background: #ccc;
+    left: 29.5px;
   }
   .projectName {
     position: absolute;
     width: 241.5px;
-    height: 23.5px;
+    height: 25.5px;
     line-height: 23.5px;
-    top: 295px;
+    top: 330px;
     left: 29.5px;
     font-family: pingFang;
     color: #fff;

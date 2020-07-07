@@ -3,7 +3,7 @@
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
       <showLoading :showLoading="showLoading"></showLoading>
-      <!-- <share></share> -->
+      <share></share>
       <div ref="contentform" class="detailContent">
         <van-row>
           <van-col
@@ -86,21 +86,6 @@ export default {
     share
   },
   mounted() {
-    // // 是否为外部跳转
-    // // /share/project/31/瑞安中心
-    // if (this.$route.redirectedFrom) {
-    //   this.isRedirected = true;
-    //   let setUrl = this.$route.redirectedFrom
-    //     .replace("/share/project", "")
-    //     .split("/")
-    //     .filter(item => item);
-    //   this.$store.dispatch("user/detailCurr", {
-    //     projectID: setUrl[0],
-    //     title: setUrl[1]
-    //   });
-    //   this.$nextTick(() => {
-    //     this.getdetail();
-    //   });
     if (
       Object.keys(this.detailCurr).length == 0 &&
       Object.keys(this.$route.params).length == 0

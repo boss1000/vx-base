@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-
-import state from "../store/index";
+import store from "../store/index";
+import { setLocalStore } from "../config/global.js";
 Vue.use(Router);
 
 // 解决多次点击重复路由报错
@@ -93,11 +93,11 @@ const router = new Router({
         },
       ],
     },
-    // // 外部分享
-    // {
-    //   path: '/share/project/:userId/:ProjectName?',
-    //   redirect: '/projectdetail'
-    // },
+    // 外部分享
+    {
+      path: "/share/project/:userId",
+      redirect: "/dashboard/project",
+    },
     {
       // 项目报备
       path: "/report",
@@ -129,24 +129,32 @@ const router = new Router({
       component: () => import("../views/login/Login.vue"),
     },
     {
-      // 项目
+      // 修改密码
       path: "/changePsd",
       name: "changePsd",
-      component: () => import("../views/mine/components/changePsd.vue")
+      component: () => import("../views/mine/components/changePsd.vue"),
     },
     {
       // 关注列表
       path: "/followProject",
       name: "followProject",
-      component: () => import("../views/mine/components/getFollowProjects.vue")
-    }
+      component: () => import("../views/mine/components/getFollowProjects.vue"),
+    },
   ],
 });
 
 //路由守卫
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    if (state.getters.token) {
+    if (to.redirectedFrom && to.redirectedFrom.indexOf("/share/project") > -1) {
+      // 判断是否为外部跳转
+      let setUrl = to.redirectedFrom
+        .replace("/share/project", "")
+        .split("/")
+        .filter((item) => item);
+      setLocalStore("saveRedirected", setUrl[0]);
+    }
+    if (store.getters.token) {
       next();
     } else {
       next({

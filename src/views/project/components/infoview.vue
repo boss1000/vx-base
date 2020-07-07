@@ -134,7 +134,13 @@ export default {
       });
     },
     opendetail(item) {
-      let { Id, ProjectName, PrincipalerName, PrincipalerMobile } = item;
+      let {
+        Id,
+        ProjectName,
+        PrincipalerName,
+        PrincipalerMobile,
+        ImgUrl
+      } = item;
       this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
         name: "projectdetail",
@@ -142,7 +148,8 @@ export default {
           Id: Id,
           ProjectName,
           PrincipalerName,
-          PrincipalerMobile
+          PrincipalerMobile,
+          ImgUrl
         }
       });
     },

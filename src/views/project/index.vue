@@ -25,7 +25,7 @@
           @change="getDataList()"
         />
       </van-dropdown-menu>
-      <infoview class="dataList" :infoList="infoList" @openChange="openChange"></infoview>
+      <infoview ref="infoview" class="dataList" :infoList="infoList" @openChange="openChange"></infoview>
     </van-list>
     <cahangeData
       :projectId="projectId"
@@ -38,7 +38,8 @@
 <script>
 import infoview from "./components/infoview";
 import cahangeData from "./components/cahangeData";
-import { getProjectList, GetAreaList } from "@/api/project";
+import { getProjectList, GetAreaList, getEditProject } from "@/api/project";
+import { getLocalStore, removeLocalStore } from "@/config/global.js";
 export default {
   components: { infoview, cahangeData },
   data() {
@@ -76,9 +77,17 @@ export default {
   },
   computed: {
     getListheight() {
-      let listheight = window.screen.height - 40;
+      let listheight = window.screen.height + 20;
       let setheght = (listheight / 37.5).toFixed(1) + "rem";
       return setheght;
+    }
+  },
+  created() {
+    let redirectedId = getLocalStore("saveRedirected");
+    // 判断是否为外部地址跳转
+    // http://localhost:8080/#/share/project/31
+    if (redirectedId) {
+      this.redirected(redirectedId);
     }
   },
   mounted() {
@@ -132,6 +141,18 @@ export default {
       this.$nextTick(() => {
         this.dialogFormVisible = true;
       });
+    },
+    redirected(Id) {
+      this.isRedirected = true;
+      getEditProject({ Id: Number(Id) })
+        .then(data => {
+          let currData = data.Result;
+          this.$refs.infoview.opendetail(currData);
+          removeLocalStore("saveRedirected")
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
