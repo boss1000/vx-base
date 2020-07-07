@@ -1,14 +1,19 @@
 <template>
   <div>
-    <van-button type="info" :icon="icon" class="shareInfo" @click="showShare=true" />
+    <van-button type="info" :icon="icon" class="shareInfo" @click="openShare" />
 
-    <van-popup v-model="showShare" :get-container="getContainer" class="popup" @touchmove.prevent>
-      <div class="popupBackground">
+    <div v-show="showShare" class="popupSet opacityPopup">
+      <div class="popupBackground" id="imageWrapper" ref="imageWrapper">
         <img class="image" :src="ImgUrl" />
         <div class="projectName">{{ProjectName}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
       </div>
-    </van-popup>
+    </div>
+    <van-overlay :show="showShareImg" @click="showShareImg = false">
+      <div v-show="showShareImg" class="popupSet">
+        <img class="popupBackground" :src="imgData" />
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -23,19 +28,20 @@ export default {
       Id: "",
       ProjectName: "",
       ImgUrl: "",
-      imgData: ""
+      imgData: "",
+      showShareImg: false,
+      sys: ""
     };
   },
   watch: {
     showShare() {
       if (this.showShare && !this.imgData) {
-        this.$nextTick(() => {
-          let { Id, ProjectName, ImgUrl } = this.$route.params;
-          this.Id = Id;
-          this.ProjectName = ProjectName;
-          this.ImgUrl = ImgUrl;
-          this.bindQRCode();
-        });
+        let { Id, ProjectName, ImgUrl } = this.$route.params;
+        this.Id = Id;
+        this.ProjectName = ProjectName;
+        this.ImgUrl =
+          "http://ccreportfiles.chuanchengfc.com/images/UpLoad/2020-07-06/204apkya.xdp.jpg";
+        this.bindQRCode();
       }
     }
   },
@@ -48,7 +54,7 @@ export default {
     },
     bindQRCode() {
       let herfText = `${window.location.origin}/#/share/project/${this.Id}`;
-      new QRCode(this.$refs.qrCodeDiv, {
+      let canvas = new QRCode(this.$refs.qrCodeDiv, {
         text: herfText,
         width: 80,
         height: 80,
@@ -56,19 +62,57 @@ export default {
         colorLight: "#ffffff", // 二维码背景色
         correctLevel: QRCode.CorrectLevel.L // 容错率，L/M/H
       });
-      this.createPicture(); // 二维码生成后，执行生成图片
+      this.$nextTick(() => {
+        this.createPicture(); // 二维码生成后，执行生成图片
+      });
     },
     // 从 canvas 提取图片 image
-    createPicture(canvas) {
-      html2canvas(this.$refs.qrCodeDiv, {
-        text: "http://192.168.0.xx:8765/#/SignAgency",
-        backgroundColor: null,
-        width: 80,
-        height: 80
+    createPicture(canvas, herfText) {
+      // window.scroll(0, 0);
+      var canvas2 = document.createElement("canvas");
+      // DOM节点主体
+      let main = document.querySelector("#imageWrapper");
+      //防止保存的图片模糊
+      let w = parseInt(window.getComputedStyle(main).width);
+      let h = parseInt(window.getComputedStyle(main).height);
+      canvas2.width = w * 1.5;
+      canvas2.height = h * 1.5;
+      canvas2.style.width = w + "px";
+      canvas2.style.height = h + "px";
+      var context = canvas2.getContext("2d");
+      context.scale(0.5, 0.5);
+      //useCORS允许网络地址图片跨域
+      html2canvas(this.$refs.imageWrapper, {
+        canvas: canvas2,
+        useCORS: true
+        // width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
+        // height: h
       }).then(canvas => {
-        var imgData = canvas.toDataURL("image/jpeg");
-        this.imgData = imgData;
+        // this.imgData = canvas.toDataURL();
+        this.imgData = canvas
+          .toDataURL("image/png")
+          .replace("image/png", "image/octet-stream");
+        this.showShare = false;
+        this.showShareImg = true;
       });
+    },
+    phone() {
+      if (navigator.userAgent.match("Android")) {
+        this.sys = "Android";
+      } else if (navigator.userAgent.match("iPhone")) {
+        this.sys = "iPhone";
+      } else if (navigator.userAgent.match("iPad")) {
+        this.sys = "iPad";
+      } else {
+        alert(navigator.userAgent);
+      }
+    },
+    openShare() {
+      if (this.imgData) {
+        this.showShareImg = true;
+      } else {
+        this.showShare = true;
+      }
     }
   }
 };
@@ -93,6 +137,18 @@ export default {
     }
   }
 }
+.popupSet {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -150px;
+  &.opacityPopup {
+    opacity: 0;
+  }
+}
+
 .popupBackground {
   position: relative;
   width: 300px;
@@ -104,7 +160,7 @@ export default {
     width: 242px;
     height: 180px;
     top: 150px;
-    left: 29.5px;
+    left: 29px;
   }
   .projectName {
     position: absolute;
