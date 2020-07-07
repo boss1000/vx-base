@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button type="info" :icon="icon"  class="shareInfo" @click="showShare=true" />
+    <van-button type="info" :icon="icon" class="shareInfo" @click="showShare=true" />
 
     <van-popup v-model="showShare" :get-container="getContainer" class="popup" @touchmove.prevent>
       <div class="popupBackground">
@@ -80,6 +80,18 @@ export default {
   right: 10px;
   top: 80px;
   opacity: 0.8;
+  padding: 0;
+  height: 38px;
+  width: 38px;
+  /deep/ .van-button__icon {
+    width: 100%;
+    height: 100%;
+    .van-icon__image {
+      padding: 5px;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 .popupBackground {
   position: relative;
