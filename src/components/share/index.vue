@@ -1,29 +1,31 @@
 <template>
   <div>
     <van-button type="info" :icon="icon" class="shareInfo" @click="openShare" />
-
-    <div v-show="showShare" class="popupSet opacityPopup">
+    <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
+      <div v-show="showShareImg" class="popupSet">
+        <img class="shareImg" :src="imgData" />
+      </div>
+    </van-overlay>
+    <div v-show="showShare" class="popupSet opacityPopup" @touchmove.prevent>
       <div class="popupBackground" id="imageWrapper" ref="imageWrapper">
+        <img :src="backgroundImg" style="width: 100%;height: 100%;" />
         <img class="image" :src="ImgUrl" />
         <div class="projectName">{{ProjectName}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
       </div>
     </div>
-    <van-overlay :show="showShareImg" @click="showShareImg = false">
-      <div v-show="showShareImg" class="popupSet">
-        <img class="popupBackground" :src="imgData" />
-      </div>
-    </van-overlay>
   </div>
 </template>
 
 <script>
+import { UploadPhysical } from "@/api/project";
 import html2canvas from "html2canvas";
 import QRCode from "qrcodejs2";
 export default {
   data() {
     return {
-      showShare: false,
+      showShare: true,
+      backgroundImg: require("@/assets/images/share.jpg"),
       icon: require("@/assets/images/shareButton.png"),
       Id: "",
       ProjectName: "",
@@ -33,20 +35,12 @@ export default {
       sys: ""
     };
   },
-  watch: {
-    showShare() {
-      if (this.showShare && !this.imgData) {
-        let { Id, ProjectName, ImgUrl } = this.$route.params;
-        this.Id = Id;
-        this.ProjectName = ProjectName;
-        this.ImgUrl =
-          "http://ccreportfiles.chuanchengfc.com/images/UpLoad/2020-07-06/204apkya.xdp.jpg";
-        this.bindQRCode();
-      }
-    }
-  },
   mounted() {
-    // this.bindQRCode();
+    let { Id, ProjectName, ImgUrl } = this.$route.params;
+    this.Id = Id;
+    this.ProjectName = ProjectName;
+    this.ImgUrl = ImgUrl;
+    this.bindQRCode();
   },
   methods: {
     getContainer() {
@@ -84,16 +78,20 @@ export default {
       //useCORS允许网络地址图片跨域
       html2canvas(this.$refs.imageWrapper, {
         canvas: canvas2,
-        useCORS: true
-        // width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
-        // height: h
+        useCORS: true,
+        width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
+        height: h
       }).then(canvas => {
-        // this.imgData = canvas.toDataURL();
-        this.imgData = canvas
-          .toDataURL("image/png")
-          .replace("image/png", "image/octet-stream");
-        this.showShare = false;
-        this.showShareImg = true;
+        let base64ImgSrc = canvas.toDataURL("image/png");
+        let file = this.base64ToFile(base64ImgSrc, "QRCode");
+        UploadPhysical(file).then(res => {
+          console.log(res);
+          // console.log(
+          //   "http://ccreportfiles.chuanchengfc.com" + res.replace(/\\/g, "/")
+          // );
+        });
+        // this.showShare = false;
+        // this.showShareImg = false;
       });
     },
     phone() {
@@ -108,11 +106,33 @@ export default {
       }
     },
     openShare() {
-      if (this.imgData) {
-        this.showShareImg = true;
-      } else {
-        this.showShare = true;
+      this.showShareImg = true;
+    },
+    base64ToFile(dataUrl, fileName) {
+      let arr = dataUrl.split(",");
+      let mime = arr[0].match(/:(.*?);/)[1];
+      let suffix = mime.split("/")[1];
+      let bstr = atob(arr[1]);
+      let n = bstr.length;
+      let u8arr = new Uint8Array(n);
+      let filename = "temp_img";
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
       }
+      let file = new File([u8arr], `${fileName}.png`, { type: mime });
+      console.log(file);
+      let formdata = new FormData();
+      formdata.append("file", file, fileName);
+      return formdata;
+      // let arr = urlData.split(",");
+      // let mime = arr[0].match(/:(.*?);/)[1];
+      // let bytes = atob(arr[1]); // 解码base64
+      // let n = bytes.length;
+      // let ia = new Uint8Array(n);
+      // while (n--) {
+      //   ia[n] = bytes.charCodeAt(n);
+      // }
+      // return new File([ia], fileName, fileName);
     }
   }
 };
@@ -146,6 +166,7 @@ export default {
   margin-left: -150px;
   &.opacityPopup {
     opacity: 0;
+    // z-index: -1;
   }
 }
 
@@ -153,8 +174,8 @@ export default {
   position: relative;
   width: 300px;
   height: 500px;
-  background-image: url("../../assets/images/share.jpg");
-  background-size: 100% 100%;
+  // background-image: url("../../assets/images/share.jpg");
+  // background-size: 100% 100%;
   .image {
     position: absolute;
     width: 242px;
@@ -183,6 +204,11 @@ export default {
       background: #fff;
     }
   }
+}
+.shareImg {
+  width: 300px;
+  height: 500px;
+  z-index: 999;
 }
 </style>
 <style lang="scss">

@@ -3,7 +3,6 @@
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
       <showLoading :showLoading="showLoading"></showLoading>
-      <share></share>
       <div ref="contentform" class="detailContent">
         <van-row>
           <van-col
@@ -52,6 +51,7 @@
       >
         <linkageRules></linkageRules>
       </van-dialog>
+      <share></share>
     </div>
   </div>
 </template>

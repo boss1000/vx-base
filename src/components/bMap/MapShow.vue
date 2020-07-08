@@ -158,7 +158,7 @@ export default {
   .mapZindex {
     position: absolute;
     opacity: 0;
-    z-index: 100;
+    z-index: 1;
   }
   &.bigMap {
     height: 100%;
