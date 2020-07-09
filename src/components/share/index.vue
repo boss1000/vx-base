@@ -1,15 +1,10 @@
 <template>
   <div>
     <van-button type="info" :icon="icon" class="shareInfo" @click="openShare" />
-    <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
-      <div v-show="showShareImg" class="popupSet">
-        <img class="shareImg" :src="imgData" />
-      </div>
-    </van-overlay>
     <div v-show="showShare" class="popupSet opacityPopup" @touchmove.prevent>
       <div class="popupBackground" id="imageWrapper" ref="imageWrapper">
         <img :src="backgroundImg" style="width: 100%;height: 100%;" />
-        <img class="image" :src="ImgUrl" />
+        <img class="image" :src="ImgUrl" @load="imgload = true" />
         <div class="projectName">{{ProjectName}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
       </div>
@@ -25,15 +20,32 @@ export default {
   data() {
     return {
       showShare: true,
+      imgload: false,
       backgroundImg: require("@/assets/images/share.jpg"),
       icon: require("@/assets/images/shareButton.png"),
       Id: "",
       ProjectName: "",
       ImgUrl: "",
       imgData: "",
-      showShareImg: false,
       sys: ""
     };
+  },
+  props: {
+    imgshareUrl: {
+      type: String,
+      default: ""
+    },
+    showShareImg: {
+      type: Boolean,
+      default: false
+    }
+  },
+  watch: {
+    imgload() {
+      if (this.imgload) {
+        this.createPicture(); // 二维码生成后，执行生成图片
+      }
+    }
   },
   mounted() {
     let { Id, ProjectName, ImgUrl } = this.$route.params;
@@ -55,9 +67,6 @@ export default {
         colorDark: "#333333", // 二维码颜色
         colorLight: "#ffffff", // 二维码背景色
         correctLevel: QRCode.CorrectLevel.L // 容错率，L/M/H
-      });
-      this.$nextTick(() => {
-        this.createPicture(); // 二维码生成后，执行生成图片
       });
     },
     // 从 canvas 提取图片 image
@@ -98,7 +107,8 @@ export default {
       }
     },
     openShare() {
-      this.showShareImg = true;
+      this.$emit("update:showShareImg", true);
+      // this.showShareImg = true;
     },
     base64ToFile(dataUrl, fileName) {
       let arr = dataUrl.split(",");
@@ -115,11 +125,11 @@ export default {
       let formdata = new FormData();
       formdata.append("files", file);
       UploadPhysical(formdata).then(res => {
-        this.imgData =
+        let url =
           "http://ccreportfiles.chuanchengfc.com" +
           res.Result.fileNames[0].replace(/\\/g, "/");
+        this.$emit("update:imgshareUrl", url);
         this.showShare = false;
-        this.showShareImg = false;
       });
     }
   }
@@ -154,7 +164,7 @@ export default {
   margin-left: -150px;
   &.opacityPopup {
     opacity: 0;
-    // z-index: -1;
+    z-index: 1;
   }
 }
 
@@ -192,11 +202,6 @@ export default {
       background: #fff;
     }
   }
-}
-.shareImg {
-  width: 300px;
-  height: 500px;
-  z-index: 999;
 }
 </style>
 <style lang="scss">

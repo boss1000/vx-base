@@ -51,7 +51,15 @@
       >
         <linkageRules></linkageRules>
       </van-dialog>
-      <share></share>
+      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
+      <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
+        <div v-if="imgshareUrl" class="setBase">
+          <img class="shareImg" :src="imgshareUrl" />
+        </div>
+        <div v-else class="loadingBase">
+          <van-loading size="24px" color="#fff">分享图片加载中...</van-loading>
+        </div>
+      </van-overlay>
     </div>
   </div>
 </template>
@@ -72,7 +80,10 @@ export default {
       showMap: false,
       showbigMap: false,
       showLoading: false,
+      showImg: false,
       title: "",
+      showShareImg: false,
+      imgshareUrl: "",
       detailForm: {}
     };
   },
@@ -151,7 +162,8 @@ export default {
     },
     getContainer() {
       return document.querySelector(".commonBase");
-    }
+    },
+    openImg() {}
   }
 };
 </script>
@@ -164,7 +176,9 @@ export default {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    -webkit-overflow-scrolling: unset;
     margin-top: 20px;
+    z-index: 2;
     .name {
       color: #908585;
     }
@@ -191,8 +205,35 @@ export default {
     word-wrap: break-word;
   }
   .auth-form {
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    // overflow-y: scroll;
+    // -webkit-overflow-scrolling: touch;
+  }
+}
+.setBase {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -150px;
+  .shareImg {
+    width: 300px;
+    height: 500px;
+    z-index: 999;
+  }
+}
+.loadingBase {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -150px;
+  /deep/ .van-loading__text {
+    color: #fff;
   }
 }
 </style>
