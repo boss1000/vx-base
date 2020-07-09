@@ -84,8 +84,6 @@ export default {
       }).then(canvas => {
         let base64ImgSrc = canvas.toDataURL("image/png");
         let file = this.base64ToFile(base64ImgSrc, "QRCode");
-        // this.showShare = false;
-        // this.showShareImg = false;
       });
     },
     phone() {
@@ -114,25 +112,15 @@ export default {
         u8arr[n] = bstr.charCodeAt(n);
       }
       let file = new File([u8arr], `${filename}.${suffix}`, { type: mime });
-      console.log(file);
       let formdata = new FormData();
-      formdata.append("file", file, fileName);
+      formdata.append("files", file);
       UploadPhysical(formdata).then(res => {
-        console.log(res);
-        // console.log(
-        //   "http://ccreportfiles.chuanchengfc.com" + res.replace(/\\/g, "/")
-        // );
+        this.imgData =
+          "http://ccreportfiles.chuanchengfc.com" +
+          res.Result.fileNames[0].replace(/\\/g, "/");
+        this.showShare = false;
+        this.showShareImg = false;
       });
-
-      // let arr = urlData.split(",");
-      // let mime = arr[0].match(/:(.*?);/)[1];
-      // let bytes = atob(arr[1]); // 解码base64
-      // let n = bytes.length;
-      // let ia = new Uint8Array(n);
-      // while (n--) {
-      //   ia[n] = bytes.charCodeAt(n);
-      // }
-      // return new File([ia], fileName, fileName);
     }
   }
 };
