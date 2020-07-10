@@ -3,7 +3,7 @@
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
       <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
-      <showLoading :showLoading="showLoading"></showLoading>
+      <showLoading :showLoading="showloading"></showLoading>
       <div ref="contentform" class="detailContent">
         <van-row>
           <van-col
@@ -79,7 +79,7 @@ export default {
       reportShow: false,
       showMap: false,
       showbigMap: false,
-      showLoading: false,
+      showloading: false,
       showImg: false,
       title: "",
       showShareImg: false,
@@ -96,6 +96,18 @@ export default {
     showLoading,
     share
   },
+  watch: {
+    imgshareUrl: {
+      handler() {
+        if (this.imgshareUrl) {
+          this.showloading = false;
+        } else {
+          this.showloading = true;
+        }
+      },
+      immediate: true
+    }
+  },
   mounted() {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     if (
@@ -109,13 +121,13 @@ export default {
   },
   methods: {
     getdetail() {
-      this.showLoading = true;
+      // this.showloading = true;
       GetDetail({
         projectID: this.$route.params.Id || this.detailCurr.projectID
       }).then(res => {
         this.detailForm = res.Result;
         this.title = this.$route.params.ProjectName || this.detailCurr.title;
-        this.showLoading = false;
+        // this.showloading = false;
         this.$store.dispatch("user/detailCurr", {
           projectID: this.$route.params.Id,
           title: this.$route.params.ProjectName
