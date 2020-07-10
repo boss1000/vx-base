@@ -1,9 +1,9 @@
 <template>
   <div>
     <van-button type="info" :icon="icon" class="shareInfo" @click="openShare" />
-    <div v-show="showShare" class="popupSet opacityPopup" @touchmove.prevent>
+    <div v-show="showShare" class="popupSet" @touchmove.prevent>
       <div class="popupBackground" id="imageWrapper" ref="imageWrapper">
-        <img :src="backgroundImg" style="width: 100%;height: 100%;" />
+        <img :src="backgroundImg" @load="imgback = true" style="width: 100%;height: 100%;" />
         <img class="image" :src="ImgUrl" @load="imgload = true" />
         <div class="projectName">{{ProjectName}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
@@ -14,12 +14,15 @@
 
 <script>
 import { UploadPhysical } from "@/api/project";
-import html2canvas from "html2canvas";
+import { isIos } from "@/utils/common";
+// import html2canvas from "html2canvas";
+import html2canvas from "@/utils/html2canvas";
 import QRCode from "qrcodejs2";
 export default {
   data() {
     return {
       showShare: true,
+      imgback: false,
       imgload: false,
       backgroundImg: require("@/assets/images/share.jpg"),
       icon: require("@/assets/images/shareButton.png"),
@@ -40,9 +43,15 @@ export default {
       default: false
     }
   },
+  computed: {
+    imgloadOver() {
+      return this.imgback && this.imgload;
+    }
+  },
   watch: {
-    imgload() {
-      if (this.imgload) {
+    imgloadOver() {
+      if (this.imgloadOver) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.createPicture(); // 二维码生成后，执行生成图片
       }
     }
@@ -52,6 +61,7 @@ export default {
     this.Id = Id;
     this.ProjectName = ProjectName;
     this.ImgUrl = ImgUrl;
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     this.bindQRCode();
   },
   methods: {
@@ -71,7 +81,6 @@ export default {
     },
     // 从 canvas 提取图片 image
     createPicture(canvas, herfText) {
-      // window.scroll(0, 0);
       var canvas2 = document.createElement("canvas");
       // DOM节点主体
       let main = document.querySelector("#imageWrapper");
@@ -84,16 +93,21 @@ export default {
       canvas2.style.height = h + "px";
       var context = canvas2.getContext("2d");
       context.scale(0.5, 0.5);
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop; // 获取滚动轴滚动的长度
       //useCORS允许网络地址图片跨域
-      html2canvas(this.$refs.imageWrapper, {
-        canvas: canvas2,
-        useCORS: true,
-        width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
-        height: h
-      }).then(canvas => {
-        let base64ImgSrc = canvas.toDataURL("image/png");
-        let file = this.base64ToFile(base64ImgSrc, "QRCode");
-      });
+      window
+        .html2canvas(this.$refs.imageWrapper, {
+          canvas: canvas2,
+          useCORS: true,
+          width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
+          height: h
+        })
+        .then(canvas => {
+          this.showShare = false;
+          let base64ImgSrc = canvas.toDataURL("image/png");
+          let file = this.base64ToFile(base64ImgSrc, "QRCode");
+        });
     },
     phone() {
       if (navigator.userAgent.match("Android")) {
@@ -103,7 +117,7 @@ export default {
       } else if (navigator.userAgent.match("iPad")) {
         this.sys = "iPad";
       } else {
-        alert(navigator.userAgent);
+        // alert(navigator.userAgent);
       }
     },
     openShare() {
@@ -124,13 +138,16 @@ export default {
       let file = new File([u8arr], `${filename}.${suffix}`, { type: mime });
       let formdata = new FormData();
       formdata.append("files", file);
-      UploadPhysical(formdata).then(res => {
-        let url =
-          "http://ccreportfiles.chuanchengfc.com" +
-          res.Result.fileNames[0].replace(/\\/g, "/");
-        this.$emit("update:imgshareUrl", url);
-        this.showShare = false;
-      });
+      UploadPhysical(formdata)
+        .then(res => {
+          let url =
+            "http://ccreportfiles.chuanchengfc.com" +
+            res.Result.fileNames[0].replace(/\\/g, "/");
+          this.$emit("update:imgshareUrl", url);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
@@ -162,10 +179,9 @@ export default {
   left: 50%;
   margin-top: -250px;
   margin-left: -150px;
-  &.opacityPopup {
-    opacity: 0;
-    z-index: 1;
-  }
+  opacity: 0;
+  z-index: 0;
+  transform: translateZ(0px);
 }
 
 .popupBackground {

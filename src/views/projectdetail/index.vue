@@ -2,6 +2,7 @@
   <div class="commonBase">
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
+      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
       <showLoading :showLoading="showLoading"></showLoading>
       <div ref="contentform" class="detailContent">
         <van-row>
@@ -51,16 +52,15 @@
       >
         <linkageRules></linkageRules>
       </van-dialog>
-      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
-      <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
-        <div v-if="imgshareUrl" class="setBase">
-          <img class="shareImg" :src="imgshareUrl" />
-        </div>
-        <div v-else class="loadingBase">
-          <van-loading size="24px" color="#fff">分享图片加载中...</van-loading>
-        </div>
-      </van-overlay>
     </div>
+    <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
+      <div v-if="imgshareUrl" class="setBase">
+        <img class="shareImg" :src="imgshareUrl" />
+      </div>
+      <div v-else class="loadingBase">
+        <van-loading size="24px" color="#fff">分享图片加载中...</van-loading>
+      </div>
+    </van-overlay>
   </div>
 </template>
 <script>
@@ -97,6 +97,7 @@ export default {
     share
   },
   mounted() {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     if (
       Object.keys(this.detailCurr).length == 0 &&
       Object.keys(this.$route.params).length == 0
@@ -205,35 +206,27 @@ export default {
     word-wrap: break-word;
   }
   .auth-form {
+    z-index: 2;
     // overflow-y: scroll;
     // -webkit-overflow-scrolling: touch;
   }
 }
-.setBase {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  margin-top: -250px;
-  margin-left: -150px;
-  .shareImg {
-    width: 300px;
-    height: 500px;
-    z-index: 999;
-  }
-}
-.loadingBase {
-  position: relative;
+/deep/.van-overlay {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 300px;
-  height: 500px;
-  top: 50%;
-  left: 50%;
-  margin-top: -250px;
-  margin-left: -150px;
-  /deep/ .van-loading__text {
-    color: #fff;
+  justify-content: center;
+  z-index: 10;
+  .setBase {
+    .shareImg {
+      width: 300px;
+      height: 500px;
+      z-index: 999;
+    }
+  }
+  .loadingBase {
+    /deep/ .van-loading__text {
+      color: #fff;
+    }
   }
 }
 </style>
