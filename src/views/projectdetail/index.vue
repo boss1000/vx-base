@@ -2,7 +2,7 @@
   <div class="commonBase">
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
-      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
+      <!-- <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share> -->
       <showLoading :showLoading="showloading"></showLoading>
       <div ref="contentform" class="detailContent">
         <van-row>
@@ -53,14 +53,15 @@
         <linkageRules></linkageRules>
       </van-dialog>
     </div>
-    <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
+
+    <!-- <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
       <div v-if="imgshareUrl" class="setBase">
-        <img class="shareImg" :src="imgshareUrl" />
+        <img class="shareImg" style="width: 100%;height: 100%;" :src="imgshareUrl" />
       </div>
       <div v-else class="loadingBase">
         <van-loading size="24px" color="#fff">分享图片加载中...</van-loading>
       </div>
-    </van-overlay>
+    </van-overlay>-->
   </div>
 </template>
 <script>
@@ -88,7 +89,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["detailCurr"])
+    ...mapGetters(["detailCurr"]),
+    imgWidth() {
+      // return ((window.screen.width * 0.8) / 37.5).toFixed(6);
+      // console.log(window.innerHeight)
+      // console.log(window.innerWidth)
+      alert(screen.width);
+      alert(window.devicePixelRatio);
+      return (window.screen.width / window.devicePixelRatio) * 0.8;
+    },
+    imgHeight() {
+      // return ((window.screen.height * 0.7) / 37.5).toFixed(6);
+      return (window.screen.height / window.devicePixelRatio) * 0.7;
+    }
   },
   components: {
     linkageRules,
@@ -99,13 +112,25 @@ export default {
   watch: {
     imgshareUrl: {
       handler() {
-        if (this.imgshareUrl) {
-          this.showloading = false;
-        } else {
-          this.showloading = true;
-        }
+        // if (this.imgshareUrl) {
+        //   this.showloading = false;
+        // } else {
+        //   this.showloading = true;
+        // }
       },
       immediate: true
+    },
+    showShareImg() {
+      if (this.showShareImg) {
+        ImagePreview({
+          images: [this.imgshareUrl],
+          className: "showSharePoup",
+          showIndex: false,
+          onClose: () => {
+            this.showShareImg = false;
+          }
+        });
+      }
     }
   },
   mounted() {
@@ -229,10 +254,13 @@ export default {
   justify-content: center;
   z-index: 10;
   .setBase {
+    width: 80%;
+    height: 75%;
     .shareImg {
-      width: 300px;
-      height: 500px;
       z-index: 999;
+      min-width: 100%;
+      min-height: 100%;
+      objec-fit: cover;
     }
   }
   .loadingBase {
@@ -250,4 +278,9 @@ pre {
   white-space: -o-pre-wrap;
   word-wrap: break-word;
 }
-</style>>
+.showSharePoup {
+  .van-image-preview__image {
+    display: flex;
+  }
+}
+</style>

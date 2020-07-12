@@ -99,9 +99,9 @@ export default {
       window
         .html2canvas(this.$refs.imageWrapper, {
           canvas: canvas2,
-          useCORS: true,
-          width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
-          height: h
+          useCORS: true
+          // width: w, //设置canvas尺寸与所截图尺寸相同，防止白边
+          // height: h
         })
         .then(canvas => {
           this.showShare = false;
