@@ -106,10 +106,10 @@
           v-if="dialogForm.Status == 8"
           :label-width="setlabelWidth"
           v-model="dialogForm.HourseCode"
-          name="门店名称"
-          label="门店名称"
-          placeholder="请输入门店名称"
-          :rules="[{ required: true, message: '请输入门店名称' }]"
+          name="房号名称"
+          label="房号名称"
+          placeholder="请输入房号名称"
+          :rules="[{ required: true, message: '请输入房号名称' }]"
         />
       </van-form>
     </van-dialog>
@@ -147,7 +147,7 @@ export default {
       showModify: false,
       defaultIndex: null,
       orginHourseCode: "",
-      setlabelWidth: "80px",
+      setlabelWidth: "100px",
       showpopup: false,
       destoryPoupState: false,
       dialogForm: {
@@ -206,6 +206,7 @@ export default {
       let satevIndex = 0;
       this.dialogForm.ReportId = data.Id;
       this.orginHourseCode = data.HourseCode;
+      this.dialogForm.HourseCode = data.HourseCode
       this.sateList.find((item, index) => {
         if (item.label == data.StatusName) {
           this.defaultIndex = index;
