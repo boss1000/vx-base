@@ -228,7 +228,7 @@ export default {
   }
   .phoneAndName {
     position: absolute;
-    top: 398px;
+    top: 400px;
     font-family: pingfangg;
     color: #fff;
     &.Name {

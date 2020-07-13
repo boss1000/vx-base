@@ -130,3 +130,11 @@ export function DeleteArea(data) {
     data,
   });
 }
+// 获取项目联动规则
+export function GetLinkAgeRules(data) {
+  return request({
+    url: "/api/Project/GetLinkAgeRules",
+    method: "get",
+    params: data,
+  });
+}

@@ -104,7 +104,8 @@ service.interceptors.response.use(
       } else if (error.toString().indexOf("500") > 0) {
         Toast("出错了");
       } else {
-        Toast(error.response.data);
+        Toast(error.toString());
+        // Toast(error.response.data);
       }
     }
     return Promise.reject(error);

@@ -38,7 +38,13 @@
 <script>
 import infoview from "./components/infoview";
 import cahangeData from "./components/cahangeData";
-import { getProjectList, GetAreaList, getEditProject } from "@/api/project";
+import {
+  getProjectList,
+  GetAreaList,
+  getEditProject,
+  GetDetail,
+  GetLinkAgeRules
+} from "@/api/project";
 import { getLocalStore, removeLocalStore } from "@/config/global.js";
 export default {
   components: { infoview, cahangeData },
@@ -144,14 +150,14 @@ export default {
     },
     redirected(Id) {
       this.isRedirected = true;
-      getEditProject({ Id: Number(Id) })
+      GetDetail({ ProjectID: Number(Id) })
         .then(data => {
           let currData = data.Result;
           this.$refs.infoview.opendetail(currData);
-          removeLocalStore("saveRedirected")
+          removeLocalStore("saveRedirected");
         })
         .catch(error => {
-          console.log(error);
+          removeLocalStore("saveRedirected");
         });
     }
   }
