@@ -6,6 +6,8 @@
         <img :src="backgroundImg" @load="imgback = true" style="width: 100%;height: 100%;" />
         <img class="image" :src="ImgUrl" @load="imgload = true" />
         <div class="projectName">{{ProjectName}}</div>
+        <div class="phoneAndName Name">{{shareInfo.PrincipalerName}}</div>
+        <div class="phoneAndName Phone">{{shareInfo.PrincipalerMobile}}</div>
         <div ref="qrCodeDiv" id="qrCode" class="qrCode" style="width: 80px;height: 80px"></div>
       </div>
     </div>
@@ -34,10 +36,6 @@ export default {
     };
   },
   props: {
-    imgshareUrl: {
-      type: String,
-      default: ""
-    },
     showShareImg: {
       type: Boolean,
       default: false
@@ -46,6 +44,13 @@ export default {
   computed: {
     imgloadOver() {
       return this.imgback && this.imgload;
+    },
+    shareInfo() {
+      let { PrincipalerName, PrincipalerMobile, ...other } = this.$route.params;
+      return {
+        PrincipalerName: PrincipalerName,
+        PrincipalerMobile: PrincipalerMobile
+      };
     }
   },
   watch: {
@@ -92,7 +97,9 @@ export default {
       canvas2.style.width = w + "px";
       canvas2.style.height = h + "px";
       var context = canvas2.getContext("2d");
-      context.scale(0.5, 0.5);
+      const devicePixelRatio = window.devicePixelRatio;
+      let scale = 1.5 / devicePixelRatio;
+      context.scale(scale, scale);
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop; // 获取滚动轴滚动的长度
       //useCORS允许网络地址图片跨域
@@ -106,6 +113,7 @@ export default {
         .then(canvas => {
           this.showShare = false;
           let base64ImgSrc = canvas.toDataURL("image/png");
+          this.$emit("update:imgshareUrl", base64ImgSrc);
           let file = this.base64ToFile(base64ImgSrc, "QRCode");
         });
     },
@@ -117,7 +125,7 @@ export default {
       } else if (navigator.userAgent.match("iPad")) {
         this.sys = "iPad";
       } else {
-        // alert(navigator.userAgent);
+        alert(navigator.userAgent);
       }
     },
     openShare() {
@@ -175,9 +183,9 @@ export default {
 .popupSet {
   position: absolute;
   z-index: 100;
-  top: 50%;
+  top: 100%;
   left: 50%;
-  margin-top: -250px;
+  // margin-top: -250px;
   margin-left: -150px;
   opacity: 0;
   z-index: 0;
@@ -216,6 +224,21 @@ export default {
     img {
       padding: 4px;
       background: #fff;
+    }
+  }
+  .phoneAndName {
+    position: absolute;
+    top: 398px;
+    font-family: pingfangg;
+    color: #fff;
+    &.Name {
+      left: 35px;
+      font-size: 15px;
+    }
+    &.Phone {
+      margin-top: 2px;
+      left: 95px;
+      font-size: 13px;
     }
   }
 }

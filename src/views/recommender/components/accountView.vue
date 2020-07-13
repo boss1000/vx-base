@@ -244,6 +244,7 @@ export default {
     .van-field__value .van-field__control {
       border: solid 1px #ccc;
       padding-left: 5px;
+      margin-right: 5px;
     }
   }
 }

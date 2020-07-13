@@ -188,6 +188,7 @@ export default {
         Status: satevalue.value
       }).then(() => {
         this.showModify = !this.showModify;
+        // 本地修改不走请求
         this.$emit("ChangeStatus", {
           ReportId: this.currIndex,
           Status: satevalue.label

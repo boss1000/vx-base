@@ -11,6 +11,82 @@ const state = {
   device: "desktop",
   size: Cookies.get("size") || "medium",
   isPhone: true,
+  sateAllList: [
+    {
+      value: null,
+      label: "全部",
+    },
+    {
+      value: 1,
+      label: "界定中",
+    },
+    {
+      value: 2,
+      label: "有效推荐",
+    },
+    {
+      value: 3,
+      label: "无效推荐",
+    },
+    {
+      value: 4,
+      label: "有效带看",
+    },
+    {
+      value: 5,
+      label: "有效到访",
+    },
+    {
+      value: 6,
+      label: "认筹",
+    },
+    {
+      value: 7,
+      label: "认购",
+    },
+    {
+      value: 8,
+      label: "成交",
+    },
+  ],
+  sateList: [
+    {
+      value: null,
+      label: "全部",
+    },
+    {
+      value: 1,
+      label: "界定中",
+    },
+    {
+      value: 2,
+      label: "有效推荐",
+    },
+    {
+      value: 3,
+      label: "无效推荐",
+    },
+    {
+      value: 4,
+      label: "有效带看",
+    },
+    {
+      value: 5,
+      label: "有效到访",
+    },
+    {
+      value: 6,
+      label: "认筹",
+    },
+    {
+      value: 7,
+      label: "认购",
+    },
+    {
+      value: 8,
+      label: "成交",
+    },
+  ],
 };
 
 const mutations = {

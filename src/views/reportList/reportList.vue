@@ -46,7 +46,7 @@
             <van-col span="8">报备时间</van-col>
             <van-col span="16">{{ item.CreateTime }}</van-col>
           </van-row>
-                    <van-row>
+          <van-row>
             <van-col span="8">报备状态</van-col>
             <van-col span="16">{{ item.StatusName }}</van-col>
           </van-row>
@@ -58,27 +58,54 @@
             <van-col span="8">备注</van-col>
             <van-col span="16">{{ item.Remark }}</van-col>
           </van-row>
+          <van-row type="flex" justify="end">
+            <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
+          </van-row>
         </div>
       </van-list>
     </div>
     <div class="mainContent noData" v-else>暂无报备数据</div>
+    <van-popup v-if="destoryPoupState" v-model="showModify" position="bottom" @closed="destoryPoup">
+      <van-picker
+        :default-index="defaultIndex"
+        :columns="hanlersateList"
+        show-toolbar
+        title="修改状态"
+        @cancel="showModify = !showModify"
+        @confirm="onConfirm"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script type="text/javascript">
 import { Dialog } from "vant";
 import { GetReportListByUserId, GetReportListByProjectId } from "@/api/report";
+import { mapGetters } from "vuex";
 export default {
   name: "reportList",
   data() {
     return {
       title: this.$route.params.name || "未知",
+      defaultIndex: false,
+      destoryPoupState: true,
+      defaultIndex: 0,
       listData: [],
       PageIndex: 1,
       PageSize: 10,
       finished: false,
       loading: false
     };
+  },
+  computed: {
+    ...mapGetters(["roles", "sateList"]),
+    hanlersateList() {
+      let label = [];
+      label = this.sateList.map(item => {
+        return item.label;
+      });
+      return label;
+    }
   },
   mounted() {
     this.getReport();
@@ -127,6 +154,22 @@ export default {
           }
         });
       }
+    },
+    changeSate(data) {
+      let satevIndex = 0;
+      this.destoryPoupState = true;
+      this.sateList.find((item, index) => {
+        if (item.label == data.StatusName) {
+          satevIndex = index;
+        }
+      });
+      this.defaultIndex = satevIndex;
+      this.$nextTick(() => {
+        this.showModify = true;
+      });
+    },
+    destoryPoup() {
+      this.destoryPoupState = false;
     }
   }
 };

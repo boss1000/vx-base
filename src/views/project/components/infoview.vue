@@ -53,7 +53,7 @@
           <van-row>
             <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
             <van-button
-              v-if="roles == '2'"
+              v-if="roles == '2'  && item.IsOwnProjec"
               class="buttonRight"
               type="info"
               size="mini"

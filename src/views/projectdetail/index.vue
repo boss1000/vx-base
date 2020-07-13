@@ -2,8 +2,7 @@
   <div class="commonBase">
     <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="title" />
     <div ref="authform" class="auth-form">
-      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
-      <showLoading :showLoading="showloading"></showLoading>
+      <showLoading :showLoading="showLoading"></showLoading>
       <div ref="contentform" class="detailContent">
         <van-row>
           <van-col
@@ -52,15 +51,16 @@
       >
         <linkageRules></linkageRules>
       </van-dialog>
+      <share :showShareImg.sync="showShareImg" :imgshareUrl.sync="imgshareUrl"></share>
+      <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
+        <div v-if="imgshareUrl" class="setBase">
+          <img class="shareImg" :src="imgshareUrl" />
+        </div>
+        <div v-else class="loadingBase">
+          <van-loading size="24px" color="#fff">分享图片生成中...</van-loading>
+        </div>
+      </van-overlay>
     </div>
-    <van-overlay :show="showShareImg" @click="showShareImg = false" @touchmove.prevent>
-      <div v-if="imgshareUrl" class="setBase">
-        <img class="shareImg" :src="imgshareUrl" />
-      </div>
-      <div v-else class="loadingBase">
-        <van-loading size="24px" color="#fff">分享图片加载中...</van-loading>
-      </div>
-    </van-overlay>
   </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export default {
       reportShow: false,
       showMap: false,
       showbigMap: false,
-      showloading: false,
+      showLoading: false,
       showImg: false,
       title: "",
       showShareImg: false,
@@ -96,20 +96,7 @@ export default {
     showLoading,
     share
   },
-  watch: {
-    imgshareUrl: {
-      handler() {
-        if (this.imgshareUrl) {
-          this.showloading = false;
-        } else {
-          this.showloading = true;
-        }
-      },
-      immediate: true
-    }
-  },
   mounted() {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
     if (
       Object.keys(this.detailCurr).length == 0 &&
       Object.keys(this.$route.params).length == 0
@@ -121,13 +108,13 @@ export default {
   },
   methods: {
     getdetail() {
-      // this.showloading = true;
+      this.showLoading = true;
       GetDetail({
         projectID: this.$route.params.Id || this.detailCurr.projectID
       }).then(res => {
         this.detailForm = res.Result;
         this.title = this.$route.params.ProjectName || this.detailCurr.title;
-        // this.showloading = false;
+        this.showLoading = false;
         this.$store.dispatch("user/detailCurr", {
           projectID: this.$route.params.Id,
           title: this.$route.params.ProjectName
@@ -218,27 +205,35 @@ export default {
     word-wrap: break-word;
   }
   .auth-form {
-    z-index: 2;
     // overflow-y: scroll;
     // -webkit-overflow-scrolling: touch;
   }
 }
-/deep/.van-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  .setBase {
-    .shareImg {
-      width: 300px;
-      height: 500px;
-      z-index: 999;
-    }
+.setBase {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -150px;
+  .shareImg {
+    width: 300px;
+    height: 500px;
+    z-index: 999;
   }
-  .loadingBase {
-    /deep/ .van-loading__text {
-      color: #fff;
-    }
+}
+.loadingBase {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -150px;
+  /deep/ .van-loading__text {
+    color: #fff;
   }
 }
 </style>
