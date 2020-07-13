@@ -75,19 +75,51 @@
             <van-col class="name" span="8">备注</van-col>
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
+          <!-- -->
           <van-row v-if="roles == '2'" class="controlBox" type="flex" justify="end">
             <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
           </van-row>
         </div>
       </div>
     </div>
-    <van-popup v-if="destoryPoupState" v-model="showModify" position="bottom" @closed="destoryPoup">
+
+    <van-dialog
+      v-model="showModify"
+      show-cancel-button
+      confirm-button-text="确认修改"
+      :before-close="onBeforeClose"
+      @confirm="postModify"
+    >
+      <van-form ref="postModify" class="auth-form">
+        <van-field
+          :label-width="setlabelWidth"
+          v-model="dialogForm.StatusName"
+          name="状态枚举"
+          label="状态枚举"
+          placeholder="选择状态枚举"
+          readonly
+          @click="opemPopup"
+          right-icon="arrow-down"
+          :rules="[{ required: true, message: '选择状态枚举' }]"
+        />
+        <van-field
+          v-if="dialogForm.Status == 8"
+          :label-width="setlabelWidth"
+          v-model="dialogForm.HourseCode"
+          name="房号名称"
+          label="房号名称"
+          placeholder="请输入房号名称"
+          :rules="[{ required: true, message: '请输入房号名称' }]"
+        />
+      </van-form>
+    </van-dialog>
+    <van-popup v-if="destoryPoupState" v-model="showpopup" position="bottom" @closed="destoryPoup">
       <van-picker
         :default-index="defaultIndex"
         :columns="hanlersateList"
         show-toolbar
         title="修改状态"
-        @cancel="showModify = !showModify"
+        @cancel="showpopup = !showpopup"
         @confirm="onConfirm"
       />
     </van-popup>
@@ -113,9 +145,17 @@ export default {
   data() {
     return {
       showModify: false,
-      destoryPoupState: true,
-      defaultIndex: "0",
-      currIndex: 0,
+      defaultIndex: null,
+      orginHourseCode: "",
+      setlabelWidth: "100px",
+      showpopup: false,
+      destoryPoupState: false,
+      dialogForm: {
+        ReportId: 0,
+        Status: 0,
+        StatusName: "",
+        HourseCode: ""
+      },
       satelabel: "请选择",
       currReport: {},
       modify: {
@@ -132,6 +172,7 @@ export default {
     ...mapGetters(["roles"]),
     hanlersateList() {
       let label = [];
+      this.sateList.shift();
       label = this.sateList.map(item => {
         return item.label;
       });
@@ -163,40 +204,64 @@ export default {
     },
     changeSate(data) {
       let satevIndex = 0;
-      this.destoryPoupState = true;
-      this.currIndex = data.Id;
+      this.dialogForm.ReportId = data.Id;
+      this.orginHourseCode = data.HourseCode;
+      this.dialogForm.HourseCode = data.HourseCode
       this.sateList.find((item, index) => {
         if (item.label == data.StatusName) {
-          satevIndex = index;
+          this.defaultIndex = index;
+          this.dialogForm.Status = item.value;
+          this.dialogForm.StatusName = item.label;
         }
       });
-      this.defaultIndex = satevIndex;
       this.$nextTick(() => {
         this.showModify = true;
       });
     },
-    onBeforeClose(action, done) {},
-    postModify() {},
+    onBeforeClose(action, done) {
+      if (action === "confirm") {
+        return done(false);
+      } else {
+        // 重置表单校验
+
+        this.$refs["postModify"].resetValidation();
+        return done();
+      }
+    },
+    postModify(item) {
+      ChangeStatus({
+        ReportId: this.dialogForm.ReportId,
+        Status: this.dialogForm.Status,
+        HourseCode:
+          this.dialogForm.Status == 8
+            ? this.dialogForm.HourseCode
+            : this.orginHourseCode
+      }).then(() => {
+        this.showModify = !this.showModify;
+        // 本地修改不走请求
+        this.$emit("ChangeStatus", {
+          ReportId: this.dialogForm.ReportId,
+          Status: this.dialogForm.Status
+        });
+        Toast.success("状态修改成功");
+      });
+    },
     onConfirm(value) {
       let satevalue = this.sateList.find((item, index) => {
         if (item.label == value) {
           return item;
         }
       });
-      ChangeStatus({
-        ReportId: this.currIndex,
-        Status: satevalue.value
-      }).then(() => {
-        this.showModify = !this.showModify;
-        // 本地修改不走请求
-        this.$emit("ChangeStatus", {
-          ReportId: this.currIndex,
-          Status: satevalue.label
-        });
-        Toast.success("状态修改成功");
-      });
+      this.dialogForm.Status = satevalue.value;
+      this.dialogForm.StatusName = satevalue.label;
+      this.showpopup = false;
+    },
+    opemPopup() {
+      this.showpopup = true;
+      this.destoryPoupState = true;
     },
     destoryPoup() {
+      this.showpopup = false;
       this.destoryPoupState = false;
     }
   }
@@ -278,6 +343,17 @@ export default {
 }
 .auth-form {
   padding-bottom: 0;
+  /deep/.van-field__value {
+    border: solid 1px #ccc;
+    padding-left: 5px;
+    margin-right: 5px;
+    .van-field__control {
+      border: none;
+    }
+    .van-field__right-icon {
+      margin-right: 5px;
+    }
+  }
   .van-cell:last-child {
     padding: 0;
   }

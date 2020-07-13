@@ -88,7 +88,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["detailCurr"])
+    ...mapGetters(["detailCurr"]),
+    imgWidth() {
+      // return ((window.screen.width * 0.8) / 37.5).toFixed(6);
+      // console.log(window.innerHeight)
+      // console.log(window.innerWidth)
+      alert(screen.width);
+      alert(window.devicePixelRatio);
+      return (window.screen.width / window.devicePixelRatio) * 0.8;
+    },
+    imgHeight() {
+      // return ((window.screen.height * 0.7) / 37.5).toFixed(6);
+      return (window.screen.height / window.devicePixelRatio) * 0.7;
+    }
   },
   components: {
     linkageRules,
@@ -245,4 +257,9 @@ pre {
   white-space: -o-pre-wrap;
   word-wrap: break-word;
 }
-</style>>
+.showSharePoup {
+  .van-image-preview__image {
+    display: flex;
+  }
+}
+</style>

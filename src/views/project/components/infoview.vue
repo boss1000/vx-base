@@ -51,24 +51,24 @@
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <van-row>
-            <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
+            <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">报备</van-button>
             <van-button
               v-if="roles == '2'  && item.IsOwnProjec"
               class="buttonRight"
               type="info"
-              size="mini"
+              size="small"
               @click="openReportList(item)"
             >数据</van-button>
             <van-button
               :class="{buttonRight: roles == '2'}"
               type="info"
-              size="mini"
+              size="small"
               @click="opendetail(item)"
             >详情</van-button>
             <van-button
               v-if="roles == '2' && item.IsOwnProjec"
               type="info"
-              size="mini"
+              size="small"
               @click="changeData(item)"
             >修改</van-button>
           </van-row>
