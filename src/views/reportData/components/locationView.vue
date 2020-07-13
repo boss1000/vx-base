@@ -76,7 +76,7 @@
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <!-- -->
-          <van-row v-if="roles == '2'" class="controlBox" type="flex" justify="end">
+          <van-row v-if="roles == '2'"  class="controlBox" type="flex" justify="end">
             <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
           </van-row>
         </div>

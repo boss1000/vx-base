@@ -130,8 +130,9 @@ import { IdCardValidate } from "../../utils/validate";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { register, getCode } from "../../api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
+import { setLocalStore, getLocalStore } from "@/config/global.js";
 import md5 from "js-md5";
-
+let Base64 = require("js-base64").Base64;
 export default {
   data() {
     return {
@@ -196,6 +197,16 @@ export default {
       }
     }
   },
+  created() {
+    let loginInfo = getLocalStore("loginInfo");
+    if (loginInfo) {
+      let setloginInfo = loginInfo.split("&*&");
+      this.loginData.account = Base64.decode(setloginInfo[0]);
+      this.loginData.password = Base64.decode(setloginInfo[1]);
+    }
+    // console.log(Base64.encode("123456"));
+    // console.log(Base64.decode('MTIzNDU2'))
+  },
   methods: {
     switchLogin() {
       this.isShowSMSLogin = !this.isShowSMSLogin;
@@ -233,6 +244,10 @@ export default {
         .dispatch("user/login", this.loginData)
         .then(data => {
           Toast.success("登录成功");
+          let setloginInfo = `${Base64.encode(
+            this.loginData.account
+          )}&*&${Base64.encode(this.loginData.password)}`;
+          setLocalStore("loginInfo", setloginInfo);
           this.loginloading = false;
           this.$router.push({ path: "/" });
         })
