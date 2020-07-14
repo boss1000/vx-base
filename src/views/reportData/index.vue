@@ -36,8 +36,7 @@
               <van-calendar
                 v-model="timeStart"
                 title="开始"
-                :min-date="minDate"
-                :max-date="maxDate"
+                :round="false"
                 :border="false"
                 @confirm="onConfirmStart"
               />
@@ -53,10 +52,9 @@
               />
               <van-calendar
                 v-model="timeEnd"
-                :border="false"
                 title="截至"
-                :min-date="minDate"
-                :max-date="maxDate"
+                :round="false"
+                :border="false"
                 @confirm="onConfirmEnd"
               />
             </van-col>
@@ -101,7 +99,7 @@ export default {
       timeEnd: false,
       finished: false,
       loading: false,
-      minDate: new Date(2018, 0, 1),
+      minDate: new Date(2020, 0, 1),
       showList: false,
       searchForm: {
         Status: null,
