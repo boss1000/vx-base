@@ -60,6 +60,10 @@
             >{{ item.ReporterMobile }}</van-col>
           </van-row>
           <van-row class="halfBorder">
+            <van-col class="name" span="8">房号</van-col>
+            <van-col class="content" span="16">{{item.HourseCode}}</van-col>
+          </van-row>
+          <van-row class="halfBorder">
             <van-col class="name" span="8">报备时间</van-col>
             <van-col class="content" span="16">{{ item.CreateTime }}</van-col>
           </van-row>
@@ -76,7 +80,7 @@
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
           <!-- -->
-          <van-row v-if="roles == '2'"  class="controlBox" type="flex" justify="end">
+          <van-row v-if="roles == '2'" class="controlBox" type="flex" justify="end">
             <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
           </van-row>
         </div>
@@ -206,7 +210,7 @@ export default {
       let satevIndex = 0;
       this.dialogForm.ReportId = data.Id;
       this.orginHourseCode = data.HourseCode;
-      this.dialogForm.HourseCode = data.HourseCode
+      this.dialogForm.HourseCode = data.HourseCode;
       this.sateList.find((item, index) => {
         if (item.label == data.StatusName) {
           this.defaultIndex = index;

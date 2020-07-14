@@ -43,6 +43,10 @@
             <van-col span="16">{{ item.ReporterMobile }}</van-col>
           </van-row>
           <van-row>
+            <van-col span="8">房号</van-col>
+            <van-col span="16">{{ item.HourseCode }}</van-col>
+          </van-row>
+          <van-row>
             <van-col span="8">报备时间</van-col>
             <van-col span="16">{{ item.CreateTime }}</van-col>
           </van-row>
@@ -58,7 +62,7 @@
             <van-col span="8">备注</van-col>
             <van-col span="16">{{ item.Remark }}</van-col>
           </van-row>
-          <van-row v-if="roles == '2'"  type="flex" justify="end">
+          <van-row v-if="roles == '2'" type="flex" justify="end">
             <van-button class="buttonRight" type="info" size="small" @click="changeSate(item)">修改状态</van-button>
           </van-row>
         </div>
