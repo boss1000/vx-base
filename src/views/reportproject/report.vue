@@ -100,12 +100,25 @@
         :rules="[{ required: true, message: '请输入所在门店' }]"
       />
       <van-field-select-picker
+        v-if="isPhone"
         class="setBorder"
         label="推荐人"
-        placeholder="请选择"
+        placeholder="请选择推荐人"
         v-model="AccountTypelabel"
         :columns="handeraccountList"
       />
+      <van-field v-model="AccountTypelabel" v-else name="推荐人" label="推荐人" :border="false">
+        <template #input>
+          <el-select v-model="fromData.ReferrerId" placeholder="请选择推荐人">
+            <el-option
+              v-for="item in AccountTypeList"
+              :key="item.Id"
+              :label="item.UserName"
+              :value="item.Id"
+            ></el-option>
+          </el-select>
+        </template>
+      </van-field>
       <van-field
         v-model="fromData.Remark"
         name="备注"
@@ -179,7 +192,7 @@ export default {
         ReporterMobile: "", // 中介电话
         StoreName: "", // 所在门店
         Remark: "", //备注
-        ReferrerId: 0 // 推荐人id
+        ReferrerId: "" // 推荐人id
       },
       validator: {
         phoneMessage: "请输入手机号码",
@@ -188,7 +201,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["otherData", "roles"]),
+    ...mapGetters(["otherData", "roles", "isPhone"]),
     handeraccountList() {
       let label = [];
       label = this.AccountTypeList.map(item => {
@@ -199,7 +212,7 @@ export default {
   },
   mounted() {
     this.getAccountTypeList();
-    console.log(this.otherData)
+    console.log(this.otherData);
     this.fromData.CompanyId = this.otherData.company_Id;
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {

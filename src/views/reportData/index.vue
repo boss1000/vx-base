@@ -11,12 +11,25 @@
       <div ref="search" class="searchForm" v-if="roles !== '3'">
         <van-cell-group :border="false">
           <van-field-select-picker
+            v-if="isPhone"
             label="状态"
             placeholder="请选择"
             :border="false"
             v-model="satelabel"
             :columns="hanlersateList"
           />
+          <van-field v-model="satelabel" v-else name="状态" label="状态" :border="false">
+            <template #input>
+              <el-select v-model="searchForm.Status" placeholder="请选择状态">
+                <el-option
+                  v-for="item in sateList"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </template>
+          </van-field>
           <van-field
             v-model="searchForm.Q"
             :border="false"
@@ -151,7 +164,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["roles", "isPhone"]),
     maxDate() {
       let date = formatDate(Date.now(), "yyyy-MM-dd")
         .split("-")

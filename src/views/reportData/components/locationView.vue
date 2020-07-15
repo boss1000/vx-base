@@ -96,6 +96,7 @@
     >
       <van-form ref="postModify" class="auth-form">
         <van-field
+          v-if="isPhone"
           :label-width="setlabelWidth"
           v-model="dialogForm.StatusName"
           name="状态枚举"
@@ -106,6 +107,25 @@
           right-icon="arrow-down"
           :rules="[{ required: true, message: '选择状态枚举' }]"
         />
+        <van-field
+          v-model="satelabel"
+          v-else
+          :label-width="setlabelWidth"
+          :border="false"
+          name="状态枚举"
+          label="状态枚举"
+        >
+          <template #input>
+            <el-select ref="StatusNameSelect" v-model="dialogForm.Status" placeholder="请选择状态枚举">
+              <el-option
+                v-for="item in sateList"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </template>
+        </van-field>
         <van-field
           v-if="dialogForm.Status == 8"
           :label-width="setlabelWidth"
@@ -168,12 +188,24 @@ export default {
       }
     };
   },
-  watch: {},
+  watch: {
+    showModify() {
+      if (this.showModify) {
+        this.$nextTick(() => {
+          // 第一次打开options的时候 z-index 小于弹窗得z-index 导致 option被覆盖 需要默认打开一次
+          this.$refs.StatusNameSelect.visible = true;
+          setTimeout(() => {
+            this.$refs.StatusNameSelect.visible = false;
+          },0);
+        });
+      }
+    }
+  },
   components: {
     VanFieldSelectPicker
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["roles", "isPhone"]),
     hanlersateList() {
       let label = [];
       this.sateList.shift();

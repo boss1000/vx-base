@@ -111,7 +111,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles", "ruleData",'isPhone'])
+    ...mapGetters(["roles", "ruleData", "isPhone"])
   },
   mounted() {
     this.getFollowList();

@@ -6,11 +6,24 @@
         <van-field v-model="searchData.Mobile" :border="false" label="手机号" placeholder="请输入手机号" />
         <van-field v-model="searchData.Store" :border="false" label="门店" placeholder="请输入门店" />
         <van-field-select-picker
+          v-if="isPhone"
           label="账号类型"
           placeholder="请选择"
           v-model="AccountTypelabel"
           :columns="handeraccountList"
         />
+        <van-field v-model="satelabel" v-else name="账号类型" label="账号类型" :border="false">
+          <template #input>
+            <el-select v-model="searchData.AccountType" placeholder="请选择账号类型">
+              <el-option
+                v-for="item in AccountTypeList"
+                :key="item.label"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </template>
+        </van-field>
       </van-cell-group>
 
       <van-row class="controlBox">
@@ -74,7 +87,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["roles", "isPhone"]),
     handeraccountList() {
       let label = [];
       label = this.AccountTypeList.map(item => {

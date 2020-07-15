@@ -78,6 +78,7 @@
     >
       <van-form ref="postModify" class="auth-form">
         <van-field
+          v-if="isPhone"
           :label-width="setlabelWidth"
           v-model="dialogForm.StatusName"
           name="状态枚举"
@@ -88,6 +89,25 @@
           right-icon="arrow-down"
           :rules="[{ required: true, message: '选择状态枚举' }]"
         />
+        <van-field
+          v-else
+          v-model="satelabel"
+          :label-width="setlabelWidth"
+          :border="false"
+          name="状态枚举"
+          label="状态枚举"
+        >
+          <template #input>
+            <el-select ref="StatusNameSelect" v-model="dialogForm.Status" placeholder="请选择状态枚举">
+              <el-option
+                v-for="item in sateList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </template>
+        </van-field>
         <van-field
           v-if="dialogForm.Status == 8"
           :label-width="setlabelWidth"
@@ -137,6 +157,7 @@ export default {
       PageSize: 10,
       finished: false,
       loading: false,
+      satelabel: '',
       dialogForm: {
         ReportId: 0,
         Status: 0,
@@ -146,13 +167,26 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["roles", "sateList"]),
+    ...mapGetters(["roles", "sateList", "isPhone"]),
     hanlersateList() {
       let label = [];
       label = this.sateList.map(item => {
         return item.label;
       });
       return label;
+    }
+  },
+  watch: {
+    showModify() {
+      if (this.showModify) {
+        this.$nextTick(() => {
+          // 第一次打开options的时候 z-index 小于弹窗得z-index 导致 option被覆盖 需要默认打开一次
+          this.$refs.StatusNameSelect.visible = true;
+          setTimeout(() => {
+            this.$refs.StatusNameSelect.visible = false;
+          }, 0);
+        });
+      }
     }
   },
   mounted() {
