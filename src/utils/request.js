@@ -22,10 +22,6 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       // xhr.setRequestHeader("Authorization", "Bearer " + $.cookie("xzb_token"));
       config.headers["Authorization"] = "Bearer " + getToken();
-      // config.headers["origin"] = "http://ccreportapp.chuanchengfc.com";
-      // config.headers["Access-Control-Allow-Origin"] = "http://ccreportapp.chuanchengfc.com";
-      // config.headers["Access-Control-Allow-Headers"] = "X-Requested-With,Content-Type";
-      // config.headers["Access-Control-Allow-Methods"] = "PUT,POST,GET,DELETE,OPTIONS";
     }
 
     // 去除空字符串
