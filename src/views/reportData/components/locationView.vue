@@ -190,13 +190,13 @@ export default {
   },
   watch: {
     showModify() {
-      if (this.showModify) {
+      if (this.showModify && !this.isPhone) {
         this.$nextTick(() => {
           // 第一次打开options的时候 z-index 小于弹窗得z-index 导致 option被覆盖 需要默认打开一次
           this.$refs.StatusNameSelect.visible = true;
           setTimeout(() => {
             this.$refs.StatusNameSelect.visible = false;
-          },0);
+          }, 0);
         });
       }
     }
@@ -277,7 +277,8 @@ export default {
         // 本地修改不走请求
         this.$emit("ChangeStatus", {
           ReportId: this.dialogForm.ReportId,
-          Status: this.dialogForm.Status
+          Status: this.dialogForm.Status,
+          StatusName: this.dialogForm.StatusName
         });
         Toast.success("状态修改成功");
       });

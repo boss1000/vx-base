@@ -229,10 +229,10 @@ export default {
       });
     },
     ChangeStatus(data) {
-      let { ReportId, Status } = data;
+      let { ReportId, Status, StatusName } = data;
       this.locationList.map(item => {
         if (item.Id == ReportId) {
-          item.StatusName = Status;
+          item.StatusName = StatusName;
         }
       });
     }
