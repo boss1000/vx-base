@@ -77,7 +77,7 @@ export default {
     ...mapGetters(["otherData"])
   },
   mounted() {
-    this.fromData.Company = this.otherData.name;
+    this.fromData.Company = this.otherData.company_Name;
   },
   methods: {
     openphone(phone) {

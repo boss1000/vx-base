@@ -28,7 +28,8 @@ service.interceptors.request.use(
     // get请求
     if (config.params && Object.keys(config.params).length > 0) {
       // 判断是否为数组
-      let isArray = (Object.prototype.toString.call(config.data) === '[object Array]')
+      let isArray =
+        Object.prototype.toString.call(config.data) === "[object Array]";
       if (!isArray) {
         let setParams = {};
         for (let index in config.params) {
@@ -43,7 +44,8 @@ service.interceptors.request.use(
     // post 请求
     if (config.data && Object.keys(config.data).length > 0) {
       // 判断是否为数组
-      let isArray = (Object.prototype.toString.call(config.data) === '[object Array]')
+      let isArray =
+        Object.prototype.toString.call(config.data) === "[object Array]";
       if (!isArray) {
         let setDatas = {};
         for (let index in config.data) {
@@ -54,7 +56,6 @@ service.interceptors.request.use(
         }
         config.data = setDatas;
       }
-
     }
     return config;
   },
@@ -99,6 +100,8 @@ service.interceptors.response.use(
         }, 1000);
       } else if (error.toString().indexOf("500") > 0) {
         Toast("出错了");
+      } else if (error.toString().indexOf("400") > 0) {
+        Toast("账号或密码错误");
       } else {
         Toast(error.toString());
         // Toast(error.response.data);
