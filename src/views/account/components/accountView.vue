@@ -59,6 +59,14 @@
         />
       </van-form>
     </van-dialog>
+    <van-dialog
+      v-model="showChangePass"
+      show-cancel-button
+      confirm-button-text="重置"
+      @confirm="changePass"
+    >
+      <van-form ref="postModify" class="auth-form">是否重置密码</van-form>
+    </van-dialog>
   </div>
 </template>
 <script>
@@ -70,17 +78,19 @@ export default {
   props: {
     accountList: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
       showModify: false,
+      showChangePass: false,
       currReport: {},
       labelWidth: "90px",
+      changeItem: {},
       modify: {
-        StoreName: ""
-      }
+        StoreName: "",
+      },
     };
   },
   computed: {
@@ -88,7 +98,7 @@ export default {
       let labelWidth = Number(this.labelWidth.replace(/[a-zA-Z]+/g, ""));
       let conversion = (labelWidth / 37.5).toFixed(1) + "rem";
       return conversion;
-    }
+    },
   },
   watch: {
     showModify() {
@@ -101,7 +111,7 @@ export default {
 
         this.$refs["postModify"].resetValidation();
       }
-    }
+    },
   },
   components: { reportLink },
   mounted() {},
@@ -109,7 +119,7 @@ export default {
     openphone(phone) {
       Dialog.confirm({
         title: "是否拨打电话",
-        message: `电话:${phone}`
+        message: `电话:${phone}`,
       })
         .then(() => {
           window.location.href = `tel://${phone}`;
@@ -123,16 +133,21 @@ export default {
         name: "reportList",
         params: {
           id: item.Id,
-          name: item.UserName
-        }
+          name: item.UserName,
+        },
       });
     },
     resetPass(item) {
-      ResetPassword({ Id: item.Id })
-        .then(res => {
+      this.showChangePass = true;
+      this.changeItem = item;
+    },
+    changePass() {
+      ResetPassword({ Id: this.changeItem.Id })
+        .then((res) => {
+          this.showChangePass = false;
           Toast("密码重置成功");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -152,7 +167,7 @@ export default {
     },
     postModify() {
       this.currReport = Object.assign({}, this.currReport, this.modify);
-      ModifyAccount(this.currReport).then(data => {
+      ModifyAccount(this.currReport).then((data) => {
         this.showModify = false;
         this.$emit("onSearch");
       });
@@ -160,8 +175,8 @@ export default {
     saveProject(data) {
       this.currReport.ResponsibleProjects = data.ResponsibleProjects;
       this.currReport.ResponsibleProjectsName = data.ResponsibleProjectsName;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
