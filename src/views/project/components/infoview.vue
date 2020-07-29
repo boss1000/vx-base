@@ -50,7 +50,7 @@
             <van-col class="name" span="8">特别说明</van-col>
             <van-col class="content notice" span="16">{{item.Remark}}</van-col>
           </van-row>
-          <van-row>
+          <van-row class="listButton">
             <van-button class="buttonRight" type="info" size="small" @click="openReport(item)">报备</van-button>
             <van-button
               v-if="roles == '2'  && item.IsOwnProjec"
@@ -269,6 +269,11 @@ export default {
           width: 100%;
         }
       }
+    }
+  }
+  .listButton {
+    /deep/.van-button {
+      min-width: 38px;
     }
   }
   .reprotSet {

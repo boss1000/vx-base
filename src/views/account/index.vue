@@ -56,11 +56,12 @@ export default {
   data() {
     return {
       showLoading: false,
+      satelabel: "",
       searchData: {
         UserName: "",
         Mobile: "",
         Store: "",
-        AccountType: null
+        AccountType: null,
       },
       loading: false,
       finished: false,
@@ -68,11 +69,11 @@ export default {
       AccountTypeList: [
         {
           label: "全部",
-          value: null
+          value: null,
         },
         {
           label: "公司账户",
-          value: 1
+          value: 1,
         },
         // {
         //   label: "项目驻场",
@@ -80,28 +81,28 @@ export default {
         // },
         {
           label: "中介",
-          value: 3
-        }
+          value: 3,
+        },
       ],
-      accountList: []
+      accountList: [],
     };
   },
   computed: {
     ...mapGetters(["roles", "isPhone"]),
     handeraccountList() {
       let label = [];
-      label = this.AccountTypeList.map(item => {
+      label = this.AccountTypeList.map((item) => {
         return item.label;
       });
       return label;
-    }
+    },
   },
   watch: {
     AccountTypelabel() {
       this.searchData.AccountType = this.AccountTypeList.find(
-        item => item.label == this.AccountTypelabel
+        (item) => item.label == this.AccountTypelabel
       ).value;
-    }
+    },
   },
   mounted() {
     this.onSearch();
@@ -109,7 +110,7 @@ export default {
   methods: {
     onSearch() {
       this.showLoading = true;
-      GetAccountList(this.searchData).then(res => {
+      GetAccountList(this.searchData).then((res) => {
         this.showLoading = false;
         this.accountList = res.Result;
       });
@@ -135,11 +136,11 @@ export default {
     accountAdd() {
       this.$router.push({
         name: "accountAdd",
-        params: {}
+        params: {},
       });
     },
-    changeDropdown() {}
-  }
+    changeDropdown() {},
+  },
 };
 </script>
 <style lang="less" scoped>
