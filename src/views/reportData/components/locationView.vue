@@ -22,6 +22,16 @@
             </van-col>
           </van-row>
           <van-row class="halfBorder">
+            <van-col class="name" span="8">项目驻场</van-col>
+            <van-col class="content" span="16">
+              {{item.ResidenterName}} -
+              <span
+                class="phone"
+                @click="openphone(item.ResidenterMobile)"
+              >{{item.ResidenterMobile}}</span>
+            </van-col>
+          </van-row>
+          <van-row class="halfBorder">
             <van-col class="name" span="8">客户姓名</van-col>
             <van-col class="content" span="16">{{item.CustomerName}}</van-col>
           </van-row>
@@ -159,12 +169,12 @@ export default {
   props: {
     locationList: {
       type: Array,
-      default: []
+      default: [],
     },
     sateList: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
@@ -178,14 +188,14 @@ export default {
         ReportId: 0,
         Status: 0,
         StatusName: "",
-        HourseCode: ""
+        HourseCode: "",
       },
       satelabel: "请选择",
       currReport: {},
       modify: {
         name: "",
-        system: ""
-      }
+        system: "",
+      },
     };
   },
   watch: {
@@ -199,28 +209,28 @@ export default {
           }, 0);
         });
       }
-    }
+    },
   },
   components: {
-    VanFieldSelectPicker
+    VanFieldSelectPicker,
   },
   computed: {
     ...mapGetters(["roles", "isPhone"]),
     hanlersateList() {
       let label = [];
       this.sateList.shift();
-      label = this.sateList.map(item => {
+      label = this.sateList.map((item) => {
         return item.label;
       });
       return label;
-    }
+    },
   },
   mounted() {},
   methods: {
     openphone(phone) {
       Dialog.confirm({
         title: "是否拨打电话",
-        message: `电话:${phone}`
+        message: `电话:${phone}`,
       })
         .then(() => {
           window.location.href = `tel://${phone}`;
@@ -234,8 +244,8 @@ export default {
         name: "reportList",
         params: {
           id: item.id,
-          name: item.name
-        }
+          name: item.name,
+        },
       });
     },
     changeSate(data) {
@@ -271,14 +281,14 @@ export default {
         HourseCode:
           this.dialogForm.Status == 8
             ? this.dialogForm.HourseCode
-            : this.orginHourseCode
+            : this.orginHourseCode,
       }).then(() => {
         this.showModify = !this.showModify;
         // 本地修改不走请求
         this.$emit("ChangeStatus", {
           ReportId: this.dialogForm.ReportId,
           Status: this.dialogForm.Status,
-          StatusName: this.dialogForm.StatusName
+          StatusName: this.dialogForm.StatusName,
         });
         Toast.success("状态修改成功");
       });
@@ -300,8 +310,8 @@ export default {
     destoryPoup() {
       this.showpopup = false;
       this.destoryPoupState = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

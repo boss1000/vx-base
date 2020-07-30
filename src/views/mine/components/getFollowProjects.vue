@@ -40,6 +40,16 @@
                 </van-col>
               </van-row>
               <van-row>
+                <van-col class="name" span="8">项目驻场</van-col>
+                <van-col class="content" span="16">
+                  {{item.ResidenterName}} -
+                  <span
+                    class="phone"
+                    @click="openphone(item.ResidenterMobile)"
+                  >{{item.ResidenterMobile}}</span>
+                </van-col>
+              </van-row>
+              <van-row>
                 <van-col class="name" span="8">折扣</van-col>
                 <van-col class="content" span="16">{{item.Discount}}</van-col>
               </van-row>
@@ -62,11 +72,11 @@
               <van-row>
                 <van-button class="buttonRight" type="info" size="mini" @click="openReport(item)">报备</van-button>
                 <van-button
-                  v-if="roles == '2'"
+                  v-if="roles == '2'  && item.IsOwnProjec"
                   class="buttonRight"
                   type="info"
                   size="mini"
-                  @click="openData(item)"
+                  @click="openReportList(item)"
                 >数据</van-button>
                 <van-button
                   :class="{buttonRight: roles == '2'}"
@@ -74,7 +84,12 @@
                   size="mini"
                   @click="opendetail(item)"
                 >详情</van-button>
-                <van-button v-if="roles == '2'" type="info" size="mini" @click="changeData(item)">修改</van-button>
+                <van-button
+                  v-if="roles == '2'  && item.IsOwnProjec"
+                  type="info"
+                  size="mini"
+                  @click="changeData(item)"
+                >修改</van-button>
               </van-row>
             </div>
           </div>
@@ -107,41 +122,41 @@ export default {
       loading: false,
       finished: false,
       infoList: [],
-      currReport: {}
+      currReport: {},
     };
   },
   computed: {
-    ...mapGetters(["roles", "ruleData", "isPhone"])
+    ...mapGetters(["roles", "ruleData", "isPhone"]),
   },
   mounted() {
     this.getFollowList();
   },
   methods: {
     getFollowList() {
-      getFollowProjects().then(data => {
+      getFollowProjects().then((data) => {
         this.infoList = data.Result;
         this.loading = false;
         this.finished = true;
       });
     },
     openReport(item) {
-      this.$store.dispatch("user/saveRules", item.LinkAgeRules);
-      this.currReport = item;
-      this.$nextTick(() => {
-        this.reportShow = true;
-      });
+      // this.$store.dispatch("user/saveRules", item.LinkAgeRules);
+      // this.currReport = item;
+      // this.$nextTick(() => {
+      //   this.reportShow = true;
+      // });
     },
     changeData() {
       if (this.isPhone) {
         Toast({
-          message: "请使用电脑端操作该功能"
+          message: "请使用电脑端操作该功能",
         });
       } else {
         EditProject({ projectId: item.id })
-          .then(res => {
+          .then((res) => {
             console.log(res);
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
@@ -151,7 +166,7 @@ export default {
         Id,
         ProjectName,
         PrincipalerName,
-        PrincipalerMobile
+        PrincipalerMobile,
       } = this.currReport;
       this.$router.push({
         name: "report",
@@ -159,8 +174,8 @@ export default {
           Id,
           ProjectName,
           PrincipalerName,
-          PrincipalerMobile
-        }
+          PrincipalerMobile,
+        },
       });
     },
     onClickLeft() {
@@ -169,7 +184,7 @@ export default {
     followStart(item) {
       // 1 为关注 2 取消关系
       FollowProject({ ProjectId: item.Id, Type: item.IsFollow ? "2" : "1" })
-        .then(res => {
+        .then((res) => {
           let deleteIndex = 0;
           this.infoList.find((data, index) => {
             if (data.Id == item.Id) {
@@ -178,22 +193,54 @@ export default {
           });
           this.infoList.splice(deleteIndex, 1);
           Toast({
-            message: "已取消关注"
+            message: "已取消关注",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     opendetail(item) {
+      let {
+        Id,
+        ProjectName,
+        PrincipalerName,
+        PrincipalerMobile,
+        ImgUrl,
+      } = item;
+      this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
         name: "projectdetail",
         params: {
-          id: item.Id
-        }
+          Id: Id,
+          ProjectName,
+          PrincipalerName,
+          PrincipalerMobile,
+          ImgUrl,
+        },
       });
-    }
-  }
+    },
+    openReportList(item) {
+      this.$router.push({
+        name: "reportList",
+        params: {
+          ProjectId: item.Id,
+          name: item.UserName,
+        },
+      });
+    },
+    changeData(item) {
+      if (this.isPhone) {
+        Toast({
+          message: "请使用电脑端操作该功能",
+        });
+      } else {
+        this.$emit("openChange", {
+          projectId: item.Id,
+        });
+      }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

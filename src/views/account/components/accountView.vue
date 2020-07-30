@@ -72,6 +72,7 @@
 <script>
 import { Dialog, Toast } from "vant";
 import { ResetPassword, ModifyAccount } from "@/api/account";
+import { mapState, mapGetters, mapActions } from "vuex";
 import reportLink from "@/components/reportLink/project";
 export default {
   name: "accountList",
@@ -94,6 +95,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["roles", "isPhone"]),
     setlabelWidth() {
       let labelWidth = Number(this.labelWidth.replace(/[a-zA-Z]+/g, ""));
       let conversion = (labelWidth / 37.5).toFixed(1) + "rem";

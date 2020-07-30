@@ -89,7 +89,7 @@
         label="中介电话"
         placeholder="中介电话"
         :border="false"
-        :rules="[{ required: true, validator: phoneValidator, message: validator.phoneMessage }]"
+        :rules="[{ required: true, validator: phoneValidator2, message: validator.phoneMessage2 }]"
       />
       <van-field
         v-model="fromData.StoreName"
@@ -164,7 +164,7 @@ export default {
   components: {
     linkageRules,
     reportLink,
-    VanFieldSelectPicker
+    VanFieldSelectPicker,
   },
   data() {
     return {
@@ -192,27 +192,27 @@ export default {
         ReporterMobile: "", // 中介电话
         StoreName: "", // 所在门店
         Remark: "", //备注
-        ReferrerId: "" // 推荐人id
+        ReferrerId: "", // 推荐人id
       },
       validator: {
         phoneMessage: "请输入手机号码",
-        cardMessage: "请输入身份证号"
-      }
+        phoneMessage2: "请输入手机号码",
+        cardMessage: "请输入身份证号",
+      },
     };
   },
   computed: {
     ...mapGetters(["otherData", "roles", "isPhone"]),
     handeraccountList() {
       let label = [];
-      label = this.AccountTypeList.map(item => {
+      label = this.AccountTypeList.map((item) => {
         return item.UserName;
       });
       return label;
-    }
+    },
   },
   mounted() {
     this.getAccountTypeList();
-    console.log(this.otherData);
     this.fromData.CompanyId = this.otherData.company_Id;
     this.fromData.CompanyName = this.otherData.company_Name;
     if (this.roles == 3) {
@@ -232,15 +232,15 @@ export default {
     },
     AccountTypelabel() {
       this.fromData.ReferrerId = this.AccountTypeList.find(
-        item => item.UserName == this.AccountTypelabel
+        (item) => item.UserName == this.AccountTypelabel
       ).Id;
-    }
+    },
   },
   methods: {
     openphone(phone) {
       Dialog.confirm({
         title: "是否拨打电话",
-        message: `电话:${phone}`
+        message: `电话:${phone}`,
       })
         .then(() => {
           window.location.href = `tel://${phone}`;
@@ -256,6 +256,16 @@ export default {
         return isTest;
       } else {
         this.validator.phoneMessage = `请输入手机号码`;
+        return false;
+      }
+    },
+    phoneValidator2(value, rule) {
+      if (value.length > 0) {
+        let isTest = validPhone(value);
+        this.validator.phoneMessage2 = !isTest ? `手机号码错误，请检查` : "";
+        return isTest;
+      } else {
+        this.validator.phoneMessage2 = `请输入手机号码`;
         return false;
       }
     },
@@ -293,7 +303,7 @@ export default {
       return timeValue;
     },
     postForm() {
-      AddReport(this.fromData).then(res => {
+      AddReport(this.fromData).then((res) => {
         Toast("报备成功");
         this.onClickLeft();
       });
@@ -307,8 +317,8 @@ export default {
     saveProject(data) {
       this.fromData.ProjectIds = [this.$route.params.Id];
       this.fromData.ProjectIds = [
-        ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects))
-      ].filter(item => item);
+        ...new Set(this.fromData.ProjectIds.concat(data.ResponsibleProjects)),
+      ].filter((item) => item);
       this.IsEnableIdCard = data.IsEnableIdCard;
     },
     getAccountTypeList() {
@@ -318,12 +328,12 @@ export default {
         Store: "",
         Status: "",
         AccountType: "",
-        IsReferrer: true
-      }).then(res => {
+        IsReferrer: true,
+      }).then((res) => {
         this.AccountTypeList = res.Result;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

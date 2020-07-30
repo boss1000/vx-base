@@ -14,7 +14,7 @@
       <van-dropdown-menu>
         <van-dropdown-item
           v-model="searchData.Area"
-          :options="areaList"
+          :options="areagroupList"
           title="地区"
           @change="getDataList()"
         />

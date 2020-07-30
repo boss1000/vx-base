@@ -1,6 +1,6 @@
 <template>
   <div :class="['commonBase', {noData: listData.length == 0}]">
-    <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="`${title}的报备`" />
+    <van-nav-bar left-arrow class="commonTitle" @click-left="onClickLeft" :title="`${title}`" />
     <div class="mainContent" v-if="listData.length > 0">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <div class="aloneReport" v-for="(item,index) in listData" :key="index">
@@ -18,6 +18,16 @@
               >{{item.PrincipalerMobile}}</span>
             </van-col>
           </van-row>
+          <!-- <van-row>
+            <van-col class="name" span="8">项目驻场</van-col>
+            <van-col class="content" span="16">
+              {{item.ResidenterName}} -
+              <span
+                class="phone"
+                @click="openphone(item.ResidenterMobile)"
+              >{{item.ResidenterMobile}}</span>
+            </van-col>
+          </van-row>-->
           <van-row>
             <van-col span="8">客户姓名</van-col>
             <van-col span="16">{{ item.CustomerName }}</van-col>
@@ -32,7 +42,7 @@
           </van-row>
           <van-row>
             <van-col span="8">体系</van-col>
-            <van-col span="16">{{ item.CustomerName }}</van-col>
+            <van-col span="16">{{ item.CompanyName }}</van-col>
           </van-row>
           <van-row>
             <van-col span="8">报备人</van-col>
@@ -40,7 +50,12 @@
           </van-row>
           <van-row>
             <van-col span="8">报备人电话</van-col>
-            <van-col span="16">{{ item.ReporterMobile }}</van-col>
+            <van-col span="16">
+              <span
+                class="phone redcol"
+                @click="openphone(item.ReporterMobile)"
+              >{{item.ReporterMobile}}</span>
+            </van-col>
           </van-row>
           <van-row>
             <van-col span="8">房号</van-col>
@@ -137,14 +152,14 @@ import { Dialog, Toast } from "vant";
 import {
   GetReportListByUserId,
   GetReportListByProjectId,
-  ChangeStatus
+  ChangeStatus,
 } from "@/api/report";
 import { mapGetters } from "vuex";
 export default {
   name: "reportList",
   data() {
     return {
-      title: this.$route.params.name || "未知",
+      title: this.$route.params.name || "报备详情",
       defaultIndex: false,
       destoryPoupState: true,
       showpopup: false,
@@ -157,28 +172,28 @@ export default {
       PageSize: 10,
       finished: false,
       loading: false,
-      satelabel: '',
+      satelabel: "",
       dialogForm: {
         ReportId: 0,
         Status: 0,
         StatusName: "",
-        HourseCode: ""
-      }
+        HourseCode: "",
+      },
     };
   },
   computed: {
     ...mapGetters(["roles", "sateList", "isPhone"]),
     hanlersateList() {
       let label = [];
-      label = this.sateList.map(item => {
+      label = this.sateList.map((item) => {
         return item.label;
       });
       return label;
-    }
+    },
   },
   watch: {
     showModify() {
-      if (this.showModify) {
+      if (this.showModify && !this.isPhone) {
         this.$nextTick(() => {
           // 第一次打开options的时候 z-index 小于弹窗得z-index 导致 option被覆盖 需要默认打开一次
           this.$refs.StatusNameSelect.visible = true;
@@ -187,7 +202,7 @@ export default {
           }, 0);
         });
       }
-    }
+    },
   },
   mounted() {
     this.getReport();
@@ -196,7 +211,7 @@ export default {
     openphone(phone) {
       Dialog.confirm({
         title: "是否拨打电话",
-        message: `电话:${phone}`
+        message: `电话:${phone}`,
       })
         .then(() => {
           window.location.href = `tel://${phone}`;
@@ -229,7 +244,7 @@ export default {
     },
     getReport() {
       if (this.$route.params.id) {
-        GetReportListByUserId({ UserId: this.$route.params.id }).then(res => {
+        GetReportListByUserId({ UserId: this.$route.params.id }).then((res) => {
           this.listData = res.Result;
           this.finished = true;
         });
@@ -237,8 +252,8 @@ export default {
         GetReportListByProjectId({
           ProjectId: this.$route.params.ProjectId,
           PageIndex: this.PageIndex,
-          PageSize: this.PageSize
-        }).then(res => {
+          PageSize: this.PageSize,
+        }).then((res) => {
           this.listData = this.listData.concat(res.Result);
           if (res.Result.length < this.PageSize) {
             this.finished = true;
@@ -280,13 +295,13 @@ export default {
         HourseCode:
           this.dialogForm.Status == 8
             ? this.dialogForm.HourseCode
-            : this.orginHourseCode
+            : this.orginHourseCode,
       }).then(() => {
         this.showModify = !this.showModify;
         // 本地修改不走请求
         this.$emit("ChangeStatus", {
           ReportId: this.dialogForm.ReportId,
-          Status: this.dialogForm.Status
+          Status: this.dialogForm.Status,
         });
         Toast.success("状态修改成功");
       });
@@ -298,8 +313,8 @@ export default {
     destoryPoup() {
       this.showpopup = false;
       this.destoryPoupState = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

@@ -31,6 +31,16 @@
             </van-col>
           </van-row>
           <van-row>
+            <van-col class="name" span="8">项目驻场</van-col>
+            <van-col class="content" span="16">
+              {{item.ResidenterName}} -
+              <span
+                class="phone"
+                @click="openphone(item.ResidenterMobile)"
+              >{{item.ResidenterMobile}}</span>
+            </van-col>
+          </van-row>
+          <van-row>
             <van-col class="name" span="8">折扣</van-col>
             <van-col class="content" span="16">{{item.Discount}}</van-col>
           </van-row>
@@ -97,27 +107,27 @@ export default {
   props: {
     infoList: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   components: {
-    linkageRules
+    linkageRules,
   },
   data() {
     return {
       reportShow: false,
-      currReport: {}
+      currReport: {},
     };
   },
   computed: {
-    ...mapGetters(["roles", "ruleData", "isPhone"])
+    ...mapGetters(["roles", "ruleData", "isPhone"]),
   },
   mounted() {},
   methods: {
     openphone(phone) {
       Dialog.confirm({
         title: "是否拨打电话",
-        message: `电话:${phone}`
+        message: `电话:${phone}`,
       })
         .then(() => {
           window.location.href = `tel://${phone}`;
@@ -139,7 +149,8 @@ export default {
         ProjectName,
         PrincipalerName,
         PrincipalerMobile,
-        ImgUrl
+        ImgUrl,
+        IsEnableIdCard,
       } = item;
       this.$store.dispatch("user/saveRules", item.LinkAgeRules);
       this.$router.push({
@@ -149,8 +160,9 @@ export default {
           ProjectName,
           PrincipalerName,
           PrincipalerMobile,
-          ImgUrl
-        }
+          ImgUrl,
+          IsEnableIdCard,
+        },
       });
     },
     agreeReportShow() {
@@ -159,7 +171,7 @@ export default {
         ProjectName,
         PrincipalerName,
         PrincipalerMobile,
-        IsEnableIdCard
+        IsEnableIdCard,
       } = this.currReport;
       this.$router.push({
         name: "report",
@@ -168,38 +180,38 @@ export default {
           ProjectName,
           PrincipalerName,
           PrincipalerMobile,
-          IsEnableIdCard
-        }
+          IsEnableIdCard,
+        },
       });
     },
     changeData(item) {
       if (this.isPhone) {
         Toast({
-          message: "请使用电脑端操作该功能"
+          message: "请使用电脑端操作该功能",
         });
       } else {
         this.$emit("openChange", {
-          projectId: item.Id
+          projectId: item.Id,
         });
       }
     },
     followStart(item) {
       // 1 为关注 2 取消关系
       FollowProject({ ProjectId: item.Id, Type: item.IsFollow ? "2" : "1" })
-        .then(res => {
+        .then((res) => {
           if (item.IsFollow) {
             Toast({
-              message: "已取消关注"
+              message: "已取消关注",
             });
           } else {
             Toast({
-              message: "已关注"
+              message: "已关注",
             });
           }
 
           item.IsFollow = !item.IsFollow;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -208,11 +220,11 @@ export default {
         name: "reportList",
         params: {
           ProjectId: item.Id,
-          name: item.UserName
-        }
+          name: item.UserName,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

@@ -147,7 +147,8 @@ export default {
         Id,
         ProjectName,
         PrincipalerName,
-        PrincipalerMobile
+        PrincipalerMobile,
+        IsEnableIdCard
       } = this.$route.params;
 
       this.$router.push({
@@ -156,7 +157,8 @@ export default {
           Id,
           ProjectName,
           PrincipalerName,
-          PrincipalerMobile
+          PrincipalerMobile,
+          IsEnableIdCard
         }
       });
     },
