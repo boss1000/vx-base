@@ -21,7 +21,7 @@
               >{{item.PrincipalerMobile}}</span>
             </van-col>
           </van-row>
-          <van-row class="halfBorder">
+          <!-- <van-row class="halfBorder">
             <van-col class="name" span="8">项目驻场</van-col>
             <van-col class="content" span="16">
               {{item.ResidenterName}} -
@@ -30,7 +30,7 @@
                 @click="openphone(item.ResidenterMobile)"
               >{{item.ResidenterMobile}}</span>
             </van-col>
-          </van-row>
+          </van-row> -->
           <van-row class="halfBorder">
             <van-col class="name" span="8">客户姓名</van-col>
             <van-col class="content" span="16">{{item.CustomerName}}</van-col>

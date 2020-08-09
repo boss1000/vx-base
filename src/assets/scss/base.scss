@@ -75,17 +75,17 @@ img {
 
 @font-face {
   font-family: pingfangg;
-  src: url('../fonts/苹方港中黑体.otf')
+  src: url("../fonts/苹方港中黑体.otf");
 }
 
 @font-face {
   font-family: adihaus;
-  src: url('../fonts/adihaus.ttf')
+  src: url("../fonts/adihaus.ttf");
 }
 
 @font-face {
   font-family: pingFang;
-  src: url('../fonts/PingFang.otf')
+  src: url("../fonts/PingFang.otf");
 }
 
 .commonBase {
@@ -199,13 +199,24 @@ img {
         padding: 0;
       }
     }
-
     .van-field__right-icon {
       margin-right: 5px;
     }
   }
 }
-
+.datetime {
+  /deep/ .el-date-editor {
+    .el-input__inner {
+      height: 23px;
+      line-height: 23px;
+      border: none;
+      padding: 0;
+    }
+    .el-icon-time {
+      display: none;
+    }
+  }
+}
 .loadingWrapper {
   display: flex;
   height: 100%;

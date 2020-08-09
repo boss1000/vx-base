@@ -62,7 +62,7 @@
           />
           <van-calendar v-model="showDate" title="来访日期" @confirm="onConfirm" :round="false" />
         </van-col>
-        <van-col span="8">
+        <van-col span="8" v-if="isPhone">
           <van-field
             readonly
             name="datetimePicker"
@@ -72,6 +72,22 @@
             @click-input="showPicker = true"
             :rules="[{ required: true, message: '请选择时间' }]"
           />
+        </van-col>
+        <van-col span="8" v-else>
+          <van-field v-model="AccountTypelabel" name label :border="false">
+            <template #input>
+              <el-time-picker
+                v-model="preparietaltime"
+                value-format="HH:mm"
+                clear-icon
+                prefix-icon
+                :picker-options="{
+                  selectableRange: '08:00:00 - 20:00:00'
+                }"
+                placeholder="请选择时间"
+              ></el-time-picker>
+            </template>
+          </van-field>
         </van-col>
       </van-row>
       <van-field v-model="fromData.CompanyName" disabled name="体系" label="体系" placeholder="请输入体系" />
@@ -176,6 +192,7 @@ export default {
       AccountTypelabel: "",
       AccountTypeList: [], // 推荐人列表
       IsEnableIdCard: false, // 判断是否显示身份证
+      dateFormat: "HH:mm",
       fromData: {
         ProjectIds: this.$route.params.Id ? [this.$route.params.Id] : [], // 项目Id
         ProjectName: this.$route.params.ProjectName || "", // 项目名称
