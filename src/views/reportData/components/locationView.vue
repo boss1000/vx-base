@@ -30,7 +30,7 @@
                 @click="openphone(item.ResidenterMobile)"
               >{{item.ResidenterMobile}}</span>
             </van-col>
-          </van-row> -->
+          </van-row>-->
           <van-row class="halfBorder">
             <van-col class="name" span="8">客户姓名</van-col>
             <van-col class="content" span="16">{{item.CustomerName}}</van-col>
@@ -50,6 +50,10 @@
             >{{ item.CustomerMobile.substr(0, 3) + '****' + item.CustomerMobile.substr(7) }}</van-col>
           </van-row>
           <van-row class="halfBorder">
+            <van-col class="name" span="8">客户身份证</van-col>
+            <van-col class="content" span="16">{{item.CustomerIdCard}}</van-col>
+          </van-row>
+          <van-row class="halfBorder">
             <van-col class="name" span="8">预约来访日期</van-col>
             <van-col class="content" span="16">{{item.ArriveDateTime}}</van-col>
           </van-row>
@@ -58,11 +62,11 @@
             <van-col class="content" span="16">{{ item.CompanyName }}</van-col>
           </van-row>
           <van-row class="halfBorder">
-            <van-col class="name" span="8">报备人</van-col>
+            <van-col class="name" span="8">经纪人</van-col>
             <van-col class="content" span="16">{{item.ReporterName}}</van-col>
           </van-row>
           <van-row class="halfBorder">
-            <van-col class="name" span="8">报备电话</van-col>
+            <van-col class="name" span="8">经纪人电话</van-col>
             <van-col
               class="content phone"
               span="16"

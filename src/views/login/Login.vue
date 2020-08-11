@@ -6,7 +6,7 @@
         <van-tabs v-model="active">
           <van-tab :title="loginPage.title">
             <!-- 账号密码登录 -->
-            <van-form @submit="loginForm">
+            <van-form ref="loginPage" @submit="loginForm">
               <van-cell-group>
                 <van-field
                   v-model="loginData.account"
@@ -141,17 +141,17 @@ export default {
       loginloading: false,
       loginPage: {
         title: "登录",
-        resgin: "注册"
+        resgin: "注册",
       },
       validator: {
         phoneMessage: "请输入手机号",
         passeMessage: "请输入密码",
-        cardMessage: "请输入身份证号码"
+        cardMessage: "请输入身份证号码",
       },
       loginData: {
         wxCode: "",
         account: "", // 用户名
-        password: "" // 用户密码
+        password: "", // 用户密码
       },
       register: {
         mobile: "", // 手机号
@@ -160,13 +160,13 @@ export default {
         storeName: "", // 门店
         idCard: "", // 身份证
         orginpassWord: "", // 密码
-        passWord: ""
+        passWord: "",
       },
       imgCaptcha: "", // 图片验证码
       smsCaptcha: "", // 短信验证码
       isShowSMSLogin: true, // 是否短信登录
       smsCaptchaResult: null,
-      userInfo: null
+      userInfo: null,
     };
   },
   computed: {
@@ -188,14 +188,17 @@ export default {
         return true;
       }
     },
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles"]),
   },
   watch: {
     active() {
       if (this.$refs.registerPage) {
         this.$refs.registerPage.resetValidation();
       }
-    }
+      if (this.$refs.loginPage) {
+        this.$refs.loginPage.resetValidation();
+      }
+    },
   },
   created() {
     let loginInfo = getLocalStore("loginInfo");
@@ -242,7 +245,7 @@ export default {
       this.loginData.wxCode = this.getQueryString("code");
       this.$store
         .dispatch("user/login", this.loginData)
-        .then(data => {
+        .then((data) => {
           Toast.success("登录成功");
           let setloginInfo = `${Base64.encode(
             this.loginData.account
@@ -251,7 +254,7 @@ export default {
           this.loginloading = false;
           this.$router.push({ path: "/" });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.loginloading = false;
           // Toast({
@@ -266,7 +269,7 @@ export default {
         .validate()
         .then(() => {
           register(this.register)
-            .then(data => {
+            .then((data) => {
               Toast.success("注册成功，请等待验证");
               this.register = Object.assign(
                 {},
@@ -275,11 +278,11 @@ export default {
               );
               this.active = 1;
             })
-            .catch(error => {
+            .catch((error) => {
               console.log(error);
             });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -318,8 +321,8 @@ export default {
       var r = window.location.search.substr(1).match(reg);
       if (r != null) return unescape(r[2]);
       return null;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
