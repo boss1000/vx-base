@@ -270,13 +270,15 @@ export default {
         .then(() => {
           register(this.register)
             .then((data) => {
-              Toast.success("注册成功，请等待验证");
-              this.register = Object.assign(
-                {},
-                this.$data.register,
-                this.$options.data().register
-              );
-              this.active = 1;
+              Toast("注册成功，请等待验证");
+              setTimeout(() => {
+                this.active = 1;
+                this.register = Object.assign(
+                  {},
+                  this.$data.register,
+                  this.$options.data().register
+                );
+              }, 1000);
             })
             .catch((error) => {
               console.log(error);

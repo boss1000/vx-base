@@ -100,13 +100,11 @@ service.interceptors.response.use(
         }, 1000);
       } else if (error.toString().indexOf("500") > 0) {
         Toast("出错了");
-      } else if (error.toString().indexOf("400") > 0) {
-        Toast("账号或密码错误");
       } else {
-        Toast(error.toString());
-        // Toast(error.response.data);
+        Toast(error.response.data)
       }
     }
+
     return Promise.reject(error);
   }
 );

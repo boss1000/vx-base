@@ -88,7 +88,7 @@ export default {
           this.tabbars.splice(1, 1);
           break;
         case "3":
-          // 经济人
+          // 经纪人
           this.tabbars.splice(1, 1);
           break;
         default:
