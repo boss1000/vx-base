@@ -5,11 +5,11 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <div class="aloneReport" v-for="(item,index) in listData" :key="index">
           <van-row>
-            <van-col span="8">报备项目</van-col>
+            <van-col span="8">报备项目：</van-col>
             <van-col span="16">{{ item.ProjectName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">负责人</van-col>
+            <van-col span="8">负责人：</van-col>
             <van-col span="16">
               {{item.PrincipalerName}} -
               <span
@@ -29,31 +29,31 @@
             </van-col>
           </van-row>-->
           <van-row>
-            <van-col span="8">客户姓名</van-col>
+            <van-col span="8">客户姓名：</van-col>
             <van-col span="16">{{ item.CustomerName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">客户电话</van-col>
+            <van-col span="8">客户电话：</van-col>
             <van-col span="16">{{ item.CustomerMobile }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">客户身份证</van-col>
+            <van-col span="8">客户身份证：</van-col>
             <van-col span="16">{{ item.CustomerIdCard }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">预约来访日期</van-col>
+            <van-col span="8">预约来访日期：</van-col>
             <van-col span="16">{{ item.ArriveDateTime }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">体系</van-col>
+            <van-col span="8">体系：</van-col>
             <van-col span="16">{{ item.CompanyName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">经纪人</van-col>
+            <van-col span="8">经纪人：</van-col>
             <van-col span="16">{{ item.ReporterName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">经纪人电话</van-col>
+            <van-col span="8">经纪人电话：</van-col>
             <van-col span="16">
               <span
                 class="phone redcol"
@@ -62,23 +62,23 @@
             </van-col>
           </van-row>
           <van-row>
-            <van-col span="8">房号</van-col>
+            <van-col span="8">房号：</van-col>
             <van-col span="16">{{ item.HourseCode }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">报备时间</van-col>
+            <van-col span="8">报备时间：</van-col>
             <van-col span="16">{{ item.CreateTime }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">报备状态</van-col>
+            <van-col span="8">报备状态：</van-col>
             <van-col span="16">{{ item.StatusName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">所在门店</van-col>
+            <van-col span="8">所在门店：</van-col>
             <van-col span="16">{{ item.StoreName }}</van-col>
           </van-row>
           <van-row>
-            <van-col span="8">备注</van-col>
+            <van-col span="8">备注：</van-col>
             <van-col span="16">{{ item.Remark }}</van-col>
           </van-row>
           <van-row v-if="roles == '2'" type="flex" justify="end">
